@@ -21,15 +21,17 @@ const actionWrap     = document.getElementById('actionWrap');
 const downloadBtn    = document.getElementById('downloadBtn');
 const resetBtn       = document.getElementById('resetBtn');
 const rrnOptionWrap  = document.getElementById('rrnOptionWrap');
+const addrOptionWrap = document.getElementById('addrOptionWrap');
 
 // ============================
 // 2. 상태 관리
 // ============================
-let originalImage = null;            // 업로드된 원본 Image 객체
-let maskRegions   = [];              // 마스킹 영역 목록 [{ x, y, w, h, type, active }]
-let isDrawing     = false;           // 수동 마스킹 드래그 중 여부
-let dragStart     = { x: 0, y: 0 }; // 드래그 시작 좌표
-let rrnMode       = 'full';          // 주민번호 마스킹 모드: full | back | back6
+let originalImage = null;
+let maskRegions   = [];
+let isDrawing     = false;
+let dragStart     = { x: 0, y: 0 };
+let rrnMode       = 'full';   // full | back | back6
+let addrMode      = 'full';   // full | sigungu | dong
 
 // ============================
 // 3. 정규식 패턴
@@ -52,6 +54,37 @@ const PATTERNS = [
     regex: /\d{3,6}-\d{2,6}-\d{4,6}(-\d{2})?/g,
   },
 ];
+
+// ============================
+// 3-1. 주소 탐지용 상수
+// ============================
+
+// 시/도 키워드 (OCR 오인식 감안해 축약형도 포함)
+const SIDO_KEYWORDS = [
+  '서울특별시', '서울시', '서울',
+  '부산광역시', '부산시', '부산',
+  '대구광역시', '대구시', '대구',
+  '인천광역시', '인천시', '인천',
+  '광주광역시', '광주시', '광주',
+  '대전광역시', '대전시', '대전',
+  '울산광역시', '울산시', '울산',
+  '세종특별자치시', '세종시', '세종',
+  '경기도', '경기',
+  '강원특별자치도', '강원도', '강원',
+  '충청북도', '충북',
+  '충청남도', '충남',
+  '전북특별자치도', '전라북도', '전북',
+  '전라남도', '전남',
+  '경상북도', '경북',
+  '경상남도', '경남',
+  '제주특별자치도', '제주도', '제주',
+];
+
+// 시/구/군 접미사
+const SIGUNGU_SUFFIXES = ['시', '구', '군'];
+
+// 읍/면/동/로/길 접미사 (주소임을 확신하는 단어)
+const ADDR_SUFFIXES = ['읍', '면', '동', '로', '길', '가'];
 
 // ============================
 // 4. 업로드 존 이벤트
@@ -79,13 +112,24 @@ uploadZone.addEventListener('drop', (e) => {
   if (file && file.type.startsWith('image/')) handleFile(file);
 });
 
-// 주민번호 마스킹 옵션 버튼
+// 주민번호 옵션 버튼
 document.querySelectorAll('.rrn-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.rrn-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     rrnMode = btn.dataset.mode;
     applyRrnMode();
+    redrawMasked();
+  });
+});
+
+// 주소 옵션 버튼
+document.querySelectorAll('.addr-btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.addr-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    addrMode = btn.dataset.mode;
+    applyAddrMode();
     redrawMasked();
   });
 });
@@ -211,6 +255,7 @@ async function runOCR(file, onProgress) {
 function detectPrivateInfo(words) {
   maskRegions = [];
 
+  // 줄 단위 그루핑
   const lines = {};
   words.forEach((word) => {
     const lineNum = word.line_num ?? word.bbox.y0;
@@ -218,7 +263,10 @@ function detectPrivateInfo(words) {
     lines[lineNum].push(word);
   });
 
-  Object.values(lines).forEach((lineWords) => {
+  const lineList = Object.values(lines);
+
+  // 정규식 패턴 탐지 (주민번호, 전화번호, 이메일, 계좌번호)
+  lineList.forEach((lineWords) => {
     const lineText = lineWords.map(w => w.text).join(' ');
 
     PATTERNS.forEach((pattern) => {
@@ -253,10 +301,67 @@ function detectPrivateInfo(words) {
       }
     });
   });
+
+  // 주소 탐지
+  detectAddress(lineList);
 }
 
 // ============================
-// 9-1. 주민번호 모드 재적용
+// 9-1. 주소 탐지
+// ============================
+function detectAddress(lineList) {
+  lineList.forEach((lineWords) => {
+    if (lineWords.length === 0) return;
+
+    const lineText = lineWords.map(w => w.text).join(' ');
+
+    // 조건 1: 시/도 키워드 포함 여부 확인
+    const sidoKeyword = SIDO_KEYWORDS.find(k => lineText.includes(k));
+    if (!sidoKeyword) return;
+
+    // 조건 2: 번지/호수 숫자 또는 읍/면/동/로/길 포함 여부 확인
+    const hasAddrSuffix = ADDR_SUFFIXES.some(s =>
+      lineWords.some(w => w.text.endsWith(s))
+    );
+    const hasNumber = lineWords.some(w => /\d+/.test(w.text));
+    if (!hasAddrSuffix && !hasNumber) return;
+
+    // 주소로 판단 → 전체 줄 bbox 계산
+    const x0 = Math.min(...lineWords.map(w => w.bbox.x0));
+    const y0 = Math.min(...lineWords.map(w => w.bbox.y0));
+    const x1 = Math.max(...lineWords.map(w => w.bbox.x1));
+    const y1 = Math.max(...lineWords.map(w => w.bbox.y1));
+
+    const padding = 4;
+
+    // 시/도 단어 위치 찾기 (모드 전환용)
+    const sidoWordIdx = lineWords.findIndex(w => w.text.includes(sidoKeyword) || sidoKeyword.includes(w.text));
+
+    // 시/구/군 단어 위치 찾기
+    const sigunguWordIdx = lineWords.findIndex((w, i) =>
+      i > sidoWordIdx && SIGUNGU_SUFFIXES.some(s => w.text.endsWith(s))
+    );
+
+    maskRegions.push({
+      x:             x0 - padding,
+      y:             y0 - padding,
+      w:             (x1 - x0) + padding * 2,
+      h:             (y1 - y0) + padding * 2,
+      type:          '주소',
+      value:         lineText.trim(),
+      active:        true,
+      maskMode:      addrMode,
+      // 주소 전용 원본 데이터
+      addrLineWords: lineWords,
+      addrSidoIdx:   sidoWordIdx,
+      addrSigunguIdx: sigunguWordIdx,
+      origX0: x0, origY0: y0, origX1: x1, origY1: y1,
+    });
+  });
+}
+
+// ============================
+// 9-2. 주민번호 모드 재적용
 // ============================
 function applyRrnMode() {
   maskRegions.forEach((region) => {
@@ -269,18 +374,56 @@ function applyRrnMode() {
     if (rrnMode === 'full') {
       region.x = region.origX0 - padding;
       region.w = fullW + padding * 2;
-
     } else if (rrnMode === 'back') {
-      // 하이픈 포함 뒤 8자 (8/14 비율)
       const backW  = Math.floor(fullW * (8 / 14));
       region.x = region.origX1 - backW - padding;
       region.w = backW + padding * 2;
-
     } else if (rrnMode === 'back6') {
-      // 뒷자리 6자리 (6/14 비율)
       const back6W = Math.floor(fullW * (6 / 14));
       region.x = region.origX1 - back6W - padding;
       region.w = back6W + padding * 2;
+    }
+  });
+}
+
+// ============================
+// 9-3. 주소 모드 재적용
+// ============================
+function applyAddrMode() {
+  const padding = 4;
+
+  maskRegions.forEach((region) => {
+    if (region.type !== '주소') return;
+    region.maskMode = addrMode;
+
+    const lineWords     = region.addrLineWords;
+    const sidoIdx       = region.addrSidoIdx;
+    const sigunguIdx    = region.addrSigunguIdx;
+
+    if (addrMode === 'full') {
+      // 전체 가리기 — 줄 전체 bbox
+      region.x = region.origX0 - padding;
+      region.w = (region.origX1 - region.origX0) + padding * 2;
+
+    } else if (addrMode === 'sigungu') {
+      // 시/도 이후 가리기 — 시/도 단어 다음부터 끝까지
+      const startIdx = sidoIdx + 1;
+      if (startIdx >= lineWords.length) return;
+      const maskWords = lineWords.slice(startIdx);
+      const mx0 = Math.min(...maskWords.map(w => w.bbox.x0));
+      const mx1 = Math.max(...maskWords.map(w => w.bbox.x1));
+      region.x = mx0 - padding;
+      region.w = (mx1 - mx0) + padding * 2;
+
+    } else if (addrMode === 'dong') {
+      // 시/구/군 이후 가리기 — 시/구/군 단어 다음부터 끝까지
+      const startIdx = sigunguIdx >= 0 ? sigunguIdx + 1 : sidoIdx + 1;
+      if (startIdx >= lineWords.length) return;
+      const maskWords = lineWords.slice(startIdx);
+      const mx0 = Math.min(...maskWords.map(w => w.bbox.x0));
+      const mx1 = Math.max(...maskWords.map(w => w.bbox.x1));
+      region.x = mx0 - padding;
+      region.w = (mx1 - mx0) + padding * 2;
     }
   });
 }
@@ -291,9 +434,11 @@ function applyRrnMode() {
 function renderDetectedList() {
   detectedList.innerHTML = '';
 
-  // 주민번호 탐지 여부에 따라 옵션 패널 표시
-  const hasRRN = maskRegions.some(r => r.type === '주민등록번호');
-  rrnOptionWrap.style.display = hasRRN ? 'block' : 'none';
+  const hasRRN  = maskRegions.some(r => r.type === '주민등록번호');
+  const hasAddr = maskRegions.some(r => r.type === '주소');
+
+  rrnOptionWrap.style.display  = hasRRN  ? 'block' : 'none';
+  addrOptionWrap.style.display = hasAddr ? 'block' : 'none';
 
   if (maskRegions.length === 0) {
     detectedList.innerHTML = '<li style="color:var(--subtext);font-size:14px;">탐지된 개인정보가 없습니다.</li>';
@@ -419,23 +564,27 @@ resetBtn.addEventListener('click', () => {
   maskRegions   = [];
   isDrawing     = false;
   rrnMode       = 'full';
+  addrMode      = 'full';
 
   [originalCanvas, maskedCanvas].forEach((c) => {
     c.getContext('2d').clearRect(0, 0, c.width, c.height);
   });
 
-  fileInput.value            = '';
-  detectedList.innerHTML     = '';
-  uploadZone.style.display   = 'block';
-  progressWrap.style.display = 'none';
-  previewWrap.style.display  = 'none';
-  detectedWrap.style.display = 'none';
-  rrnOptionWrap.style.display = 'none';
-  actionWrap.style.display   = 'none';
+  fileInput.value             = '';
+  detectedList.innerHTML      = '';
+  uploadZone.style.display    = 'block';
+  progressWrap.style.display  = 'none';
+  previewWrap.style.display   = 'none';
+  detectedWrap.style.display  = 'none';
+  rrnOptionWrap.style.display  = 'none';
+  addrOptionWrap.style.display = 'none';
+  actionWrap.style.display    = 'none';
 
-  // 주민번호 옵션 버튼 초기화
   document.querySelectorAll('.rrn-btn').forEach(b => b.classList.remove('active'));
   document.querySelector('.rrn-btn[data-mode="full"]').classList.add('active');
+
+  document.querySelectorAll('.addr-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.addr-btn[data-mode="full"]').classList.add('active');
 });
 
 // ============================

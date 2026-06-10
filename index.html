@@ -67,17 +67,29 @@
         </div>
       </div>
 
+      <!-- 탐지 항목 목록 -->
       <div class="detected-wrap" id="detectedWrap" style="display:none;">
         <h2 class="detected-title">탐지된 개인정보</h2>
         <ul class="detected-list" id="detectedList"></ul>
       </div>
 
+      <!-- 주민등록번호 마스킹 옵션 -->
       <div class="rrn-option-wrap" id="rrnOptionWrap" style="display:none;">
         <div class="rrn-option-label">주민등록번호 마스킹 방식</div>
         <div class="rrn-option-btns">
           <button class="rrn-btn active" data-mode="full">전체 가리기</button>
           <button class="rrn-btn" data-mode="back">뒷자리 전체 가리기</button>
           <button class="rrn-btn" data-mode="back6">뒷자리 6자리 가리기</button>
+        </div>
+      </div>
+
+      <!-- 주소 마스킹 옵션 -->
+      <div class="rrn-option-wrap" id="addrOptionWrap" style="display:none;">
+        <div class="rrn-option-label">주소 마스킹 방식</div>
+        <div class="rrn-option-btns">
+          <button class="addr-btn active" data-mode="full">전체 가리기</button>
+          <button class="addr-btn" data-mode="sigungu">시/도 이후 가리기</button>
+          <button class="addr-btn" data-mode="dong">시/구/군 이후 가리기</button>
         </div>
       </div>
 
