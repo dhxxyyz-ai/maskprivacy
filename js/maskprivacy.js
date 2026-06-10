@@ -21,7 +21,6 @@ const actionWrap     = document.getElementById('actionWrap');
 const downloadBtn    = document.getElementById('downloadBtn');
 const resetBtn       = document.getElementById('resetBtn');
 const rrnOptionWrap  = document.getElementById('rrnOptionWrap');
-const addrOptionWrap = document.getElementById('addrOptionWrap');
 
 // ============================
 // 2. 상태 관리
@@ -30,8 +29,7 @@ let originalImage = null;
 let maskRegions   = [];
 let isDrawing     = false;
 let dragStart     = { x: 0, y: 0 };
-let rrnMode       = 'full';
-let addrMode      = 'full';
+let rrnMode       = 'full';  // full | back | back6
 
 // ============================
 // 3. 정규식 패턴
@@ -46,9 +44,7 @@ const PATTERNS = [
 // ============================
 // 3-1. 주소 탐지용 상수
 // ============================
-
-// 시/도 키워드 문자열 배열 (공백 제거 후 includes 비교)
-const SIDO_STRINGS = [
+const SIDO_KEYWORDS = [
   '서울특별시', '서울시', '서울',
   '부산광역시', '부산시', '부산',
   '대구광역시', '대구시', '대구',
@@ -68,8 +64,7 @@ const SIDO_STRINGS = [
   '제주특별자치도', '제주도', '제주',
 ];
 
-const SIGUNGU_SUFFIXES = ['시', '구', '군'];
-const ADDR_MAX_LINES   = 3;
+const ADDR_MAX_LINES = 3;
 
 // 오탐 방지 키워드
 const ADDR_EXCLUDE_KEYWORDS = [
@@ -103,22 +98,13 @@ uploadZone.addEventListener('drop', (e) => {
   if (file && file.type.startsWith('image/')) handleFile(file);
 });
 
+// 주민번호 옵션 버튼
 document.querySelectorAll('.rrn-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.rrn-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     rrnMode = btn.dataset.mode;
     applyRrnMode();
-    redrawMasked();
-  });
-});
-
-document.querySelectorAll('.addr-btn').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.addr-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    addrMode = btn.dataset.mode;
-    applyAddrMode();
     redrawMasked();
   });
 });
@@ -276,33 +262,7 @@ function detectPrivateInfo(words) {
 }
 
 // ============================
-// 9-1. 시/도 포함 여부 판단
-// ============================
-function matchSido(lineWords) {
-  // 줄 전체 단어를 공백 제거 후 합친 문자열
-  const lineNoSpc = lineWords.map(w => w.text).join('').replace(/\s/g, '');
-
-  // SIDO_STRINGS 순서대로 비교 (긴 것부터 정렬되어 있어 정확도 높음)
-  const matched = SIDO_STRINGS.find(k => lineNoSpc.includes(k));
-  if (!matched) return { matched: false, sidoWordIdx: -1 };
-
-  // 시/도 키워드가 끝나는 단어 인덱스 찾기
-  // 단어를 누적하며 키워드 전체가 포함되는 시점의 인덱스 반환
-  let accumulated = '';
-  let sidoWordIdx = 0;
-  for (let i = 0; i < lineWords.length; i++) {
-    accumulated += lineWords[i].text.replace(/\s/g, '');
-    if (accumulated.includes(matched)) {
-      sidoWordIdx = i;
-      break;
-    }
-  }
-
-  return { matched: true, sidoWordIdx };
-}
-
-// ============================
-// 9-2. 주소 탐지 (최대 3줄 병합 + 오탐 방지)
+// 9-1. 주소 탐지 (전체 가리기 전용)
 // ============================
 function detectAddress(lineList) {
   const usedLineIdx = new Set();
@@ -313,13 +273,24 @@ function detectAddress(lineList) {
 
     const lineText = lineWords.map(w => w.text).join(' ');
 
-    // 오탐 방지: 제외 키워드 포함 줄 스킵
+    // 오탐 방지
     const hasExclude = ADDR_EXCLUDE_KEYWORDS.some(k => lineText.includes(k));
     if (hasExclude) return;
 
-    // 시/도 키워드 탐지
-    const { matched, sidoWordIdx } = matchSido(lineWords);
-    if (!matched) return;
+    // 시/도 키워드 단어 단위 탐지
+    let sidoWordIdx = -1;
+    for (let i = 0; i < lineWords.length; i++) {
+      const wordText = lineWords[i].text.trim();
+      const found    = SIDO_KEYWORDS.find(k =>
+        wordText.includes(k) || k.includes(wordText)
+      );
+      if (found && wordText.length >= 2) {
+        sidoWordIdx = i;
+        break;
+      }
+    }
+
+    if (sidoWordIdx === -1) return;
     if (lineWords.length < 2) return;
 
     // 최대 3줄 연속 병합
@@ -341,7 +312,10 @@ function detectAddress(lineList) {
       const nextHasExclude = ADDR_EXCLUDE_KEYWORDS.some(k => nextText.includes(k));
       if (nextHasExclude) break;
 
-      const { matched: nextHasSido } = matchSido(nextWords);
+      // 새로운 시/도 키워드 발견 시 중단
+      const nextHasSido = nextWords.some(w =>
+        SIDO_KEYWORDS.some(k => w.text.includes(k) || k.includes(w.text)) && w.text.length >= 2
+      );
       if (nextHasSido) break;
 
       const prevLastY  = Math.max(...mergedLines[mergedLines.length - 1].map(w => w.bbox.y1));
@@ -359,30 +333,19 @@ function detectAddress(lineList) {
     const y1       = Math.max(...allWords.map(w => w.bbox.y1));
     const padding  = 4;
 
-    // 시/구/군 단어 위치 (첫 줄 기준)
-    const sigunguWordIdx = lineWords.findIndex((w, i) =>
-      i > sidoWordIdx && SIGUNGU_SUFFIXES.some(s => w.text.trim().endsWith(s))
-    );
-
     maskRegions.push({
       x: x0 - padding, y: y0 - padding,
       w: (x1 - x0) + padding * 2, h: (y1 - y0) + padding * 2,
-      type:           '주소',
-      value:          allWords.map(w => w.text).join(' ').trim(),
-      active:         true,
-      maskMode:       addrMode,
-      addrFirstLine:  lineWords,
-      addrExtraLines: mergedLines.slice(1),
-      addrAllWords:   allWords,
-      addrSidoIdx:    sidoWordIdx,
-      addrSigunguIdx: sigunguWordIdx,
+      type:    '주소',
+      value:   allWords.map(w => w.text).join(' ').trim(),
+      active:  true,
       origX0: x0, origY0: y0, origX1: x1, origY1: y1,
     });
   });
 }
 
 // ============================
-// 9-3. 주민번호 모드 재적용
+// 9-2. 주민번호 모드 재적용
 // ============================
 function applyRrnMode() {
   maskRegions.forEach((region) => {
@@ -406,65 +369,13 @@ function applyRrnMode() {
 }
 
 // ============================
-// 9-4. 주소 모드 재적용
-// ============================
-function applyAddrMode() {
-  const p = 4;
-
-  maskRegions.forEach((region) => {
-    if (region.type !== '주소') return;
-    region.maskMode = addrMode;
-
-    const firstLine  = region.addrFirstLine;
-    const extraLines = region.addrExtraLines;
-    const sidoIdx    = region.addrSidoIdx;
-    const sigunguIdx = region.addrSigunguIdx;
-    const extraWords = extraLines.flat();
-
-    if (addrMode === 'full') {
-      region.x = region.origX0 - p;
-      region.y = region.origY0 - p;
-      region.w = (region.origX1 - region.origX0) + p * 2;
-      region.h = (region.origY1 - region.origY0) + p * 2;
-
-    } else if (addrMode === 'sigungu') {
-      const firstLineMask = firstLine.slice(sidoIdx + 1);
-      const maskWords     = [...firstLineMask, ...extraWords];
-      if (maskWords.length === 0) return;
-      const mx0 = Math.min(...maskWords.map(w => w.bbox.x0));
-      const my0 = Math.min(...maskWords.map(w => w.bbox.y0));
-      const mx1 = Math.max(...maskWords.map(w => w.bbox.x1));
-      const my1 = Math.max(...maskWords.map(w => w.bbox.y1));
-      region.x = mx0 - p; region.y = my0 - p;
-      region.w = (mx1 - mx0) + p * 2;
-      region.h = (my1 - my0) + p * 2;
-
-    } else if (addrMode === 'dong') {
-      const startIdx      = sigunguIdx >= 0 ? sigunguIdx + 1 : sidoIdx + 1;
-      const firstLineMask = firstLine.slice(startIdx);
-      const maskWords     = [...firstLineMask, ...extraWords];
-      if (maskWords.length === 0) return;
-      const mx0 = Math.min(...maskWords.map(w => w.bbox.x0));
-      const my0 = Math.min(...maskWords.map(w => w.bbox.y0));
-      const mx1 = Math.max(...maskWords.map(w => w.bbox.x1));
-      const my1 = Math.max(...maskWords.map(w => w.bbox.y1));
-      region.x = mx0 - p; region.y = my0 - p;
-      region.w = (mx1 - mx0) + p * 2;
-      region.h = (my1 - my0) + p * 2;
-    }
-  });
-}
-
-// ============================
 // 10. 탐지 항목 목록 렌더링
 // ============================
 function renderDetectedList() {
   detectedList.innerHTML = '';
 
-  const hasRRN  = maskRegions.some(r => r.type === '주민등록번호');
-  const hasAddr = maskRegions.some(r => r.type === '주소');
-  rrnOptionWrap.style.display  = hasRRN  ? 'block' : 'none';
-  addrOptionWrap.style.display = hasAddr ? 'block' : 'none';
+  const hasRRN = maskRegions.some(r => r.type === '주민등록번호');
+  rrnOptionWrap.style.display = hasRRN ? 'block' : 'none';
 
   if (maskRegions.length === 0) {
     detectedList.innerHTML = '<li style="color:var(--subtext);font-size:14px;">탐지된 개인정보가 없습니다.</li>';
@@ -583,26 +494,22 @@ resetBtn.addEventListener('click', () => {
   maskRegions   = [];
   isDrawing     = false;
   rrnMode       = 'full';
-  addrMode      = 'full';
 
   [originalCanvas, maskedCanvas].forEach((c) => {
     c.getContext('2d').clearRect(0, 0, c.width, c.height);
   });
 
-  fileInput.value              = '';
-  detectedList.innerHTML       = '';
-  uploadZone.style.display     = 'block';
-  progressWrap.style.display   = 'none';
-  previewWrap.style.display    = 'none';
-  detectedWrap.style.display   = 'none';
-  rrnOptionWrap.style.display  = 'none';
-  addrOptionWrap.style.display = 'none';
-  actionWrap.style.display     = 'none';
+  fileInput.value             = '';
+  detectedList.innerHTML      = '';
+  uploadZone.style.display    = 'block';
+  progressWrap.style.display  = 'none';
+  previewWrap.style.display   = 'none';
+  detectedWrap.style.display  = 'none';
+  rrnOptionWrap.style.display = 'none';
+  actionWrap.style.display    = 'none';
 
   document.querySelectorAll('.rrn-btn').forEach(b => b.classList.remove('active'));
   document.querySelector('.rrn-btn[data-mode="full"]').classList.add('active');
-  document.querySelectorAll('.addr-btn').forEach(b => b.classList.remove('active'));
-  document.querySelector('.addr-btn[data-mode="full"]').classList.add('active');
 });
 
 // ============================
