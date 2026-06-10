@@ -6,15 +6,12 @@
   <meta name="description" content="이미지 속 개인정보를 브라우저에서 자동으로 감지·마스킹해주는 무료 온라인 도구. 파일이 서버로 전송되지 않습니다." />
   <title>MaskPrivacy — 개인정보 자동 마스킹 도구</title>
   <link rel="stylesheet" href="css/style.css" />
-  <!-- Pretendard 폰트 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
-  <!-- Inter 폰트 -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-  <!-- 헤더 -->
   <header class="header">
     <div class="container">
       <div class="logo">
@@ -25,7 +22,6 @@
     </div>
   </header>
 
-  <!-- 신뢰 뱃지 -->
   <section class="badges">
     <div class="container badges-wrap">
       <span class="badge">🔒 완전 로컬 처리</span>
@@ -34,11 +30,9 @@
     </div>
   </section>
 
-  <!-- 메인 도구 영역 -->
   <main class="main">
     <div class="container">
 
-      <!-- 업로드 존 -->
       <div class="upload-zone" id="uploadZone">
         <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp" hidden />
         <div class="upload-content" id="uploadContent">
@@ -50,7 +44,6 @@
         </div>
       </div>
 
-      <!-- 진행 바 (기본 숨김) -->
       <div class="progress-wrap" id="progressWrap" style="display:none;">
         <div class="progress-label" id="progressLabel">개인정보 탐지 중...</div>
         <div class="progress-bar">
@@ -58,7 +51,6 @@
         </div>
       </div>
 
-      <!-- 미리보기 영역 (기본 숨김) -->
       <div class="preview-wrap" id="previewWrap" style="display:none;">
         <div class="preview-panel">
           <div class="preview-label">원본 이미지</div>
@@ -70,13 +62,20 @@
         </div>
       </div>
 
-      <!-- 탐지 항목 목록 (기본 숨김) -->
       <div class="detected-wrap" id="detectedWrap" style="display:none;">
         <h2 class="detected-title">탐지된 개인정보</h2>
         <ul class="detected-list" id="detectedList"></ul>
       </div>
 
-      <!-- 다운로드 버튼 (기본 숨김) -->
+      <div class="rrn-option-wrap" id="rrnOptionWrap" style="display:none;">
+        <div class="rrn-option-label">주민등록번호 마스킹 방식</div>
+        <div class="rrn-option-btns">
+          <button class="rrn-btn active" data-mode="full">전체 가리기</button>
+          <button class="rrn-btn" data-mode="back">뒷자리 전체 가리기</button>
+          <button class="rrn-btn" data-mode="back6">뒷자리 6자리 가리기</button>
+        </div>
+      </div>
+
       <div class="action-wrap" id="actionWrap" style="display:none;">
         <button class="btn-download" id="downloadBtn">
           ⬇ 마스킹 이미지 다운로드
@@ -89,7 +88,6 @@
     </div>
   </main>
 
-  <!-- 푸터 -->
   <footer class="footer">
     <div class="container">
       <p class="footer-copy">© 2026 MaskPrivacy. 모든 처리는 브라우저 내에서 이루어집니다.</p>
@@ -102,7 +100,7 @@
     </div>
   </footer>
 
-  <script src="js/maskprivacy.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="js/maskprivacy.js"></script>
 </body>
 </html>

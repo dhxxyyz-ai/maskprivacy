@@ -391,6 +391,46 @@ a:hover { color: var(--text); }
 .footer-nav a:hover { color: var(--text); }
 
 /* ============================
+   주민등록번호 옵션
+============================ */
+.rrn-option-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  margin: 20px 0 0;
+}
+.rrn-option-label {
+  font-size: 13px;
+  color: var(--subtext);
+  margin-bottom: 12px;
+}
+.rrn-option-btns {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.rrn-btn {
+  background: var(--bg);
+  color: var(--subtext);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-family: 'Pretendard', sans-serif;
+  cursor: pointer;
+}
+.rrn-btn:hover {
+  border-color: var(--point);
+  color: var(--text);
+}
+.rrn-btn.active {
+  background: linear-gradient(135deg, var(--point), var(--point-hover));
+  color: white;
+  border-color: transparent;
+}
+
+/* ============================
    반응형
 ============================ */
 @media (max-width: 640px) {

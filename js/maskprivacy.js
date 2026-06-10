@@ -20,6 +20,7 @@ const detectedList   = document.getElementById('detectedList');
 const actionWrap     = document.getElementById('actionWrap');
 const downloadBtn    = document.getElementById('downloadBtn');
 const resetBtn       = document.getElementById('resetBtn');
+const rrnOptionWrap  = document.getElementById('rrnOptionWrap');
 
 // ============================
 // 2. 상태 관리
@@ -28,6 +29,7 @@ let originalImage = null;            // 업로드된 원본 Image 객체
 let maskRegions   = [];              // 마스킹 영역 목록 [{ x, y, w, h, type, active }]
 let isDrawing     = false;           // 수동 마스킹 드래그 중 여부
 let dragStart     = { x: 0, y: 0 }; // 드래그 시작 좌표
+let rrnMode       = 'full';          // 주민번호 마스킹 모드: full | back | back6
 
 // ============================
 // 3. 정규식 패턴
@@ -55,15 +57,12 @@ const PATTERNS = [
 // 4. 업로드 존 이벤트
 // ============================
 
-// 클릭 → 파일 선택
 uploadZone.addEventListener('click', () => fileInput.click());
 
-// 파일 선택
 fileInput.addEventListener('change', (e) => {
   if (e.target.files[0]) handleFile(e.target.files[0]);
 });
 
-// 드래그앤드롭
 uploadZone.addEventListener('dragover', (e) => {
   e.preventDefault();
   uploadZone.classList.add('drag-over');
@@ -80,6 +79,17 @@ uploadZone.addEventListener('drop', (e) => {
   if (file && file.type.startsWith('image/')) handleFile(file);
 });
 
+// 주민번호 마스킹 옵션 버튼
+document.querySelectorAll('.rrn-btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.rrn-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    rrnMode = btn.dataset.mode;
+    applyRrnMode();
+    redrawMasked();
+  });
+});
+
 // ============================
 // 5. 파일 처리 메인 흐름
 // ============================
@@ -88,12 +98,10 @@ async function handleFile(file) {
   showProgress(0, '이미지 불러오는 중...');
 
   try {
-    // 원본 이미지 로드 (미리보기용)
     originalImage = await loadImage(file);
     drawOriginal();
     showProgress(10, '개인정보 탐지 중...');
 
-    // OCR은 File 객체 직접 전달 (blob URL 오류 방지)
     const words = await runOCR(file, (p) => {
       showProgress(10 + Math.floor(p * 80), `개인정보 탐지 중... ${Math.floor(p * 100)}%`);
     });
@@ -180,7 +188,6 @@ function animateMask(ctx, region, index) {
 // 8. Tesseract OCR 실행 (v5 호환)
 // ============================
 async function runOCR(file, onProgress) {
-  // File 객체를 직접 전달 — blob URL 오류 방지
   let fakeProgress = 0;
   const interval = setInterval(() => {
     fakeProgress = Math.min(fakeProgress + 4, 92);
@@ -233,16 +240,48 @@ function detectPrivateInfo(words) {
 
         const padding = 4;
         maskRegions.push({
-          x:      x0 - padding,
-          y:      y0 - padding,
-          w:      (x1 - x0) + padding * 2,
-          h:      (y1 - y0) + padding * 2,
-          type:   pattern.type,
-          value:  matchedText,
-          active: true,
+          x:        x0 - padding,
+          y:        y0 - padding,
+          w:        (x1 - x0) + padding * 2,
+          h:        (y1 - y0) + padding * 2,
+          type:     pattern.type,
+          value:    matchedText,
+          active:   true,
+          maskMode: pattern.type === '주민등록번호' ? rrnMode : 'full',
+          origX0: x0, origY0: y0, origX1: x1, origY1: y1,
         });
       }
     });
+  });
+}
+
+// ============================
+// 9-1. 주민번호 모드 재적용
+// ============================
+function applyRrnMode() {
+  maskRegions.forEach((region) => {
+    if (region.type !== '주민등록번호') return;
+    region.maskMode = rrnMode;
+
+    const fullW   = region.origX1 - region.origX0;
+    const padding = 4;
+
+    if (rrnMode === 'full') {
+      region.x = region.origX0 - padding;
+      region.w = fullW + padding * 2;
+
+    } else if (rrnMode === 'back') {
+      // 하이픈 포함 뒤 8자 (8/14 비율)
+      const backW  = Math.floor(fullW * (8 / 14));
+      region.x = region.origX1 - backW - padding;
+      region.w = backW + padding * 2;
+
+    } else if (rrnMode === 'back6') {
+      // 뒷자리 6자리 (6/14 비율)
+      const back6W = Math.floor(fullW * (6 / 14));
+      region.x = region.origX1 - back6W - padding;
+      region.w = back6W + padding * 2;
+    }
   });
 }
 
@@ -251,6 +290,10 @@ function detectPrivateInfo(words) {
 // ============================
 function renderDetectedList() {
   detectedList.innerHTML = '';
+
+  // 주민번호 탐지 여부에 따라 옵션 패널 표시
+  const hasRRN = maskRegions.some(r => r.type === '주민등록번호');
+  rrnOptionWrap.style.display = hasRRN ? 'block' : 'none';
 
   if (maskRegions.length === 0) {
     detectedList.innerHTML = '<li style="color:var(--subtext);font-size:14px;">탐지된 개인정보가 없습니다.</li>';
@@ -321,10 +364,10 @@ maskedCanvas.addEventListener('mousemove', (e) => {
 
 maskedCanvas.addEventListener('mouseup', (e) => {
   if (!isDrawing) return;
-  isDrawing  = false;
-  const pos  = getCanvasPos(maskedCanvas, e);
-  const w    = pos.x - dragStart.x;
-  const h    = pos.y - dragStart.y;
+  isDrawing = false;
+  const pos = getCanvasPos(maskedCanvas, e);
+  const w   = pos.x - dragStart.x;
+  const h   = pos.y - dragStart.y;
 
   if (Math.abs(w) < 5 || Math.abs(h) < 5) return;
 
@@ -375,6 +418,7 @@ resetBtn.addEventListener('click', () => {
   originalImage = null;
   maskRegions   = [];
   isDrawing     = false;
+  rrnMode       = 'full';
 
   [originalCanvas, maskedCanvas].forEach((c) => {
     c.getContext('2d').clearRect(0, 0, c.width, c.height);
@@ -386,7 +430,12 @@ resetBtn.addEventListener('click', () => {
   progressWrap.style.display = 'none';
   previewWrap.style.display  = 'none';
   detectedWrap.style.display = 'none';
+  rrnOptionWrap.style.display = 'none';
   actionWrap.style.display   = 'none';
+
+  // 주민번호 옵션 버튼 초기화
+  document.querySelectorAll('.rrn-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.rrn-btn[data-mode="full"]').classList.add('active');
 });
 
 // ============================
