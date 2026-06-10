@@ -6,48 +6,47 @@
 // ============================
 // 1. 요소 참조
 // ============================
-const uploadZone    = document.getElementById('uploadZone');
-const fileInput     = document.getElementById('fileInput');
-const uploadContent = document.getElementById('uploadContent');
-const progressWrap  = document.getElementById('progressWrap');
-const progressFill  = document.getElementById('progressFill');
-const progressLabel = document.getElementById('progressLabel');
-const previewWrap   = document.getElementById('previewWrap');
+const uploadZone     = document.getElementById('uploadZone');
+const fileInput      = document.getElementById('fileInput');
+const uploadContent  = document.getElementById('uploadContent');
+const progressWrap   = document.getElementById('progressWrap');
+const progressFill   = document.getElementById('progressFill');
+const progressLabel  = document.getElementById('progressLabel');
+const previewWrap    = document.getElementById('previewWrap');
 const originalCanvas = document.getElementById('originalCanvas');
-const maskedCanvas  = document.getElementById('maskedCanvas');
-const detectedWrap  = document.getElementById('detectedWrap');
-const detectedList  = document.getElementById('detectedList');
-const actionWrap    = document.getElementById('actionWrap');
-const downloadBtn   = document.getElementById('downloadBtn');
-const resetBtn      = document.getElementById('resetBtn');
+const maskedCanvas   = document.getElementById('maskedCanvas');
+const detectedWrap   = document.getElementById('detectedWrap');
+const detectedList   = document.getElementById('detectedList');
+const actionWrap     = document.getElementById('actionWrap');
+const downloadBtn    = document.getElementById('downloadBtn');
+const resetBtn       = document.getElementById('resetBtn');
 
 // ============================
 // 2. 상태 관리
 // ============================
-let originalImage = null;   // 업로드된 원본 Image 객체
-let maskRegions   = [];     // 마스킹 영역 목록 [{ x, y, w, h, type, active }]
-let isDrawing     = false;  // 수동 마스킹 드래그 중 여부
-let dragStart     = { x: 0, y: 0 };  // 드래그 시작 좌표
+let originalImage = null;            // 업로드된 원본 Image 객체
+let maskRegions   = [];              // 마스킹 영역 목록 [{ x, y, w, h, type, active }]
+let isDrawing     = false;           // 수동 마스킹 드래그 중 여부
+let dragStart     = { x: 0, y: 0 }; // 드래그 시작 좌표
 
 // ============================
 // 3. 정규식 패턴
 // ============================
 const PATTERNS = [
   {
-    type: '주민등록번호',
+    type:  '주민등록번호',
     regex: /\d{6}-[1-4]\d{6}/g,
   },
   {
-    type: '전화번호',
+    type:  '전화번호',
     regex: /01[0-9]-\d{3,4}-\d{4}/g,
   },
   {
-    type: '이메일',
+    type:  '이메일',
     regex: /[\w.-]+@[\w.-]+\.\w{2,}/g,
   },
   {
-    type: '계좌번호',
-    // 은행별 패턴: 10~14자리 숫자 (하이픈 포함)
+    type:  '계좌번호',
     regex: /\d{3,6}-\d{2,6}-\d{4,6}(-\d{2})?/g,
   },
 ];
@@ -85,35 +84,28 @@ uploadZone.addEventListener('drop', (e) => {
 // 5. 파일 처리 메인 흐름
 // ============================
 async function handleFile(file) {
-  // 업로드 존 숨기고 진행 바 표시
   uploadZone.style.display = 'none';
   showProgress(0, '이미지 불러오는 중...');
 
   try {
     // 원본 이미지 로드
     originalImage = await loadImage(file);
-
-    // 원본 Canvas 렌더링
     drawOriginal();
     showProgress(10, '개인정보 탐지 중...');
 
-    // Tesseract OCR 실행
+    // OCR 실행 (진행률 폴링)
     const words = await runOCR(originalImage, (p) => {
       showProgress(10 + Math.floor(p * 80), `개인정보 탐지 중... ${Math.floor(p * 100)}%`);
     });
 
     showProgress(90, '마스킹 적용 중...');
 
-    // 정규식으로 개인정보 탐지
     detectPrivateInfo(words);
-
-    // 마스킹 Canvas 렌더링
     drawMasked();
     renderDetectedList();
 
     showProgress(100, '완료!');
 
-    // UI 전환
     setTimeout(() => {
       progressWrap.style.display = 'none';
       previewWrap.style.display  = 'grid';
@@ -124,6 +116,8 @@ async function handleFile(file) {
   } catch (err) {
     console.error('처리 중 오류 발생:', err);
     progressLabel.textContent = '오류가 발생했습니다. 다시 시도해주세요.';
+    uploadZone.style.display  = 'block';
+    progressWrap.style.display = 'none';
   }
 }
 
@@ -157,71 +151,68 @@ function drawMasked() {
   const ctx = maskedCanvas.getContext('2d');
   maskedCanvas.width  = originalImage.width;
   maskedCanvas.height = originalImage.height;
-
-  // 원본 이미지 그리기
   ctx.drawImage(originalImage, 0, 0);
 
-  // 활성화된 마스킹 영역 적용
   maskRegions.forEach((region, index) => {
     if (!region.active) return;
-
-    // fade-in 효과를 위한 requestAnimationFrame
     animateMask(ctx, region, index);
   });
 }
 
 function animateMask(ctx, region, index) {
-  let opacity = 0;
-  const duration = 300; // ms
-  const start = performance.now();
+  const duration = 300;
+  const start    = performance.now();
 
   function step(now) {
-    opacity = Math.min((now - start) / duration, 1);
+    const opacity = Math.min((now - start) / duration, 1);
     ctx.save();
     ctx.globalAlpha = opacity;
-    ctx.fillStyle = '#000000';
+    ctx.fillStyle   = '#000000';
     ctx.fillRect(region.x, region.y, region.w, region.h);
     ctx.restore();
     if (opacity < 1) requestAnimationFrame(step);
   }
 
-  // 순차적 딜레이 (탐지 항목이 여러 개일 때 순서대로 나타남)
   setTimeout(() => requestAnimationFrame(step), index * 80);
 }
 
 // ============================
-// 8. Tesseract OCR 실행
+// 8. Tesseract OCR 실행 (v5 호환)
 // ============================
 async function runOCR(img, onProgress) {
-  const worker = await Tesseract.createWorker('kor+eng', {
-    logger: (m) => {
-      if (m.status === 'recognizing text') {
-        onProgress(m.progress);
-      }
-    },
-  });
+  // v5에서 logger는 Worker 스레드로 직렬화 불가 → Tesseract.recognize() 직접 사용
+  // progress는 가상 인터벌로 UI에 반영
+  let fakeProgress = 0;
+  const interval = setInterval(() => {
+    fakeProgress = Math.min(fakeProgress + 5, 95);
+    onProgress(fakeProgress / 100);
+  }, 400);
 
-  const { data } = await worker.recognize(img);
-  await worker.terminate();
-
-  return data.words;
+  try {
+    const { data } = await Tesseract.recognize(img, 'kor+eng');
+    clearInterval(interval);
+    onProgress(1);
+    return data.words;
+  } catch (err) {
+    clearInterval(interval);
+    throw err;
+  }
 }
 
 // ============================
-// 9. 개인정보 탐지 (줄 단위 보완)
+// 9. 개인정보 탐지 (줄 단위)
 // ============================
 function detectPrivateInfo(words) {
   maskRegions = [];
 
-  // words를 line_num 기준으로 줄 단위로 묶기
+  // line_num 기준으로 줄 단위 그루핑
   const lines = {};
   words.forEach((word) => {
-    const lineNum = word.line_num ?? word.bbox.y0; // line_num 없으면 y좌표로 그루핑
+    const lineNum = word.line_num ?? word.bbox.y0;
     if (!lines[lineNum]) lines[lineNum] = [];
     lines[lineNum].push(word);
   });
 
-  // 줄 단위로 텍스트 합치고 정규식 매칭
   Object.values(lines).forEach((lineWords) => {
     const lineText = lineWords.map(w => w.text).join(' ');
 
@@ -230,21 +221,18 @@ function detectPrivateInfo(words) {
       let match;
 
       while ((match = pattern.regex.exec(lineText)) !== null) {
-        // 매칭된 텍스트가 포함된 단어들의 bbox를 합산
-        const matchedText = match[0];
+        const matchedText  = match[0];
         const matchedWords = lineWords.filter(w =>
           matchedText.includes(w.text.trim()) && w.text.trim().length > 0
         );
 
         if (matchedWords.length === 0) return;
 
-        // 매칭된 단어들의 전체 bbox 계산
         const x0 = Math.min(...matchedWords.map(w => w.bbox.x0));
         const y0 = Math.min(...matchedWords.map(w => w.bbox.y0));
         const x1 = Math.max(...matchedWords.map(w => w.bbox.x1));
         const y1 = Math.max(...matchedWords.map(w => w.bbox.y1));
 
-        // 패딩 추가 (마스킹 영역을 살짝 넓게)
         const padding = 4;
         maskRegions.push({
           x:      x0 - padding,
@@ -287,7 +275,6 @@ function renderDetectedList() {
     detectedList.appendChild(li);
   });
 
-  // 토글 이벤트
   detectedList.querySelectorAll('input[type="checkbox"]').forEach((checkbox) => {
     checkbox.addEventListener('change', (e) => {
       const idx = parseInt(e.target.dataset.index);
@@ -297,7 +284,6 @@ function renderDetectedList() {
   });
 }
 
-// 개인정보 값 부분 마스킹 표시 (목록용)
 function maskValue(value) {
   if (value.length <= 4) return '****';
   return value.slice(0, 2) + '*'.repeat(value.length - 4) + value.slice(-2);
@@ -323,38 +309,27 @@ function redrawMasked() {
 // ============================
 maskedCanvas.addEventListener('mousedown', (e) => {
   isDrawing = true;
-  const pos = getCanvasPos(maskedCanvas, e);
-  dragStart = pos;
+  dragStart = getCanvasPos(maskedCanvas, e);
 });
 
 maskedCanvas.addEventListener('mousemove', (e) => {
   if (!isDrawing) return;
   const pos = getCanvasPos(maskedCanvas, e);
-
-  // 드래그 중 실시간 미리보기
   redrawMasked();
   const ctx = maskedCanvas.getContext('2d');
   ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
-  ctx.fillRect(
-    dragStart.x,
-    dragStart.y,
-    pos.x - dragStart.x,
-    pos.y - dragStart.y
-  );
+  ctx.fillRect(dragStart.x, dragStart.y, pos.x - dragStart.x, pos.y - dragStart.y);
 });
 
 maskedCanvas.addEventListener('mouseup', (e) => {
   if (!isDrawing) return;
   isDrawing = false;
   const pos = getCanvasPos(maskedCanvas, e);
+  const w   = pos.x - dragStart.x;
+  const h   = pos.y - dragStart.y;
 
-  const w = pos.x - dragStart.x;
-  const h = pos.y - dragStart.y;
-
-  // 너무 작은 영역 무시
   if (Math.abs(w) < 5 || Math.abs(h) < 5) return;
 
-  // 수동 마스킹 영역 추가
   maskRegions.push({
     x:      Math.min(dragStart.x, pos.x),
     y:      Math.min(dragStart.y, pos.y),
@@ -370,9 +345,8 @@ maskedCanvas.addEventListener('mouseup', (e) => {
   detectedWrap.style.display = 'block';
 });
 
-// Canvas 내 실제 좌표 계산 (CSS 크기 vs 실제 크기 보정)
 function getCanvasPos(canvas, e) {
-  const rect  = canvas.getBoundingClientRect();
+  const rect   = canvas.getBoundingClientRect();
   const scaleX = canvas.width  / rect.width;
   const scaleY = canvas.height / rect.height;
   return {
@@ -385,12 +359,11 @@ function getCanvasPos(canvas, e) {
 // 13. 다운로드
 // ============================
 downloadBtn.addEventListener('click', () => {
-  const link = document.createElement('a');
+  const link    = document.createElement('a');
   link.download = 'maskprivacy_result.png';
-  link.href = maskedCanvas.toDataURL('image/png');
+  link.href     = maskedCanvas.toDataURL('image/png');
   link.click();
 
-  // pulse 효과
   downloadBtn.style.animation = 'none';
   requestAnimationFrame(() => {
     downloadBtn.style.animation = 'pulse 0.3s ease';
@@ -405,16 +378,13 @@ resetBtn.addEventListener('click', () => {
   maskRegions   = [];
   isDrawing     = false;
 
-  // Canvas 초기화
   [originalCanvas, maskedCanvas].forEach((c) => {
-    const ctx = c.getContext('2d');
-    ctx.clearRect(0, 0, c.width, c.height);
+    c.getContext('2d').clearRect(0, 0, c.width, c.height);
   });
 
-  // UI 초기화
-  fileInput.value       = '';
-  detectedList.innerHTML = '';
-  uploadZone.style.display  = 'block';
+  fileInput.value            = '';
+  detectedList.innerHTML     = '';
+  uploadZone.style.display   = 'block';
   progressWrap.style.display = 'none';
   previewWrap.style.display  = 'none';
   detectedWrap.style.display = 'none';
