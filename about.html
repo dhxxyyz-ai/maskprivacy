@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="MaskPrivacy 서비스 소개 — 완전 로컬 처리 방식의 무료 개인정보 마스킹 도구입니다." />
+  <title>서비스 소개 — MaskPrivacy</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* 공통 doc 스타일 */
+    .doc-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--subtext);
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+    .back-link:hover { color: var(--text); }
+
+    /* 히어로 */
+    .about-hero {
+      text-align: center;
+      padding: 48px 0 56px;
+    }
+    .about-hero-icon {
+      font-size: 56px;
+      margin-bottom: 20px;
+    }
+    .about-hero h1 {
+      font-size: 36px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--point), var(--point-hover));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .about-hero p {
+      color: var(--subtext);
+      font-size: 16px;
+      line-height: 1.8;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* 핵심 특징 카드 */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin: 48px 0;
+    }
+    .feature-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      text-align: center;
+    }
+    .feature-card:hover {
+      border-color: var(--point);
+      box-shadow: 0 0 16px var(--glow);
+    }
+    .feature-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+    .feature-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .feature-desc {
+      font-size: 13px;
+      color: var(--subtext);
+      line-height: 1.7;
+    }
+
+    /* 작동 방식 */
+    .how-section {
+      margin: 56px 0;
+    }
+    .how-section h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 32px;
+      text-align: center;
+    }
+    .how-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .how-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 24px;
+    }
+    .how-step:hover { border-color: var(--point); }
+    .step-num {
+      min-width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--point), var(--point-hover));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      color: white;
+      flex-shrink: 0;
+    }
+    .step-content h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text);
+    }
+    .step-content p {
+      font-size: 14px;
+      color: var(--subtext);
+      line-height: 1.7;
+    }
+
+    /* 비교표 */
+    .compare-section {
+      margin: 56px 0;
+    }
+    .compare-section h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 24px;
+      text-align: center;
+    }
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    .compare-table th {
+      background: var(--card);
+      padding: 14px 16px;
+      text-align: center;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+    .compare-table th:first-child { text-align: left; }
+    .compare-table td {
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      color: var(--subtext);
+      text-align: center;
+    }
+    .compare-table td:first-child {
+      text-align: left;
+      color: var(--text);
+    }
+    .compare-table tr:hover td { background: rgba(108, 99, 255, 0.04); }
+    .check { color: var(--success); font-size: 16px; }
+    .cross { color: #EF4444; font-size: 16px; }
+    .th-us { color: var(--point-hover) !important; }
+
+    /* CTA */
+    .cta-section {
+      text-align: center;
+      margin: 56px 0 0;
+      padding: 48px 32px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .cta-section h2 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .cta-section p {
+      color: var(--subtext);
+      font-size: 15px;
+      margin-bottom: 28px;
+    }
+    .btn-cta {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--point), var(--point-hover));
+      color: white;
+      border-radius: 12px;
+      padding: 14px 36px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Pretendard', sans-serif;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--glow);
+      color: white;
+    }
+
+    /* 반응형 */
+    @media (max-width: 640px) {
+      .features { grid-template-columns: 1fr; }
+      .about-hero h1 { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 헤더 -->
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <span class="logo-icon">🔒</span>
+        <span class="logo-text">MaskPrivacy</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="doc-wrap">
+
+    <a href="index.html" class="back-link">← 메인으로 돌아가기</a>
+
+    <!-- 히어로 -->
+    <section class="about-hero">
+      <div class="about-hero-icon">🔒</div>
+      <h1>개인정보, 안전하게 가리세요</h1>
+      <p>MaskPrivacy는 이미지 속 개인정보를 브라우저에서 자동으로 감지·마스킹하는 완전 무료 도구입니다. 파일이 서버로 전송되지 않아 유출 걱정이 없습니다.</p>
+    </section>
+
+    <!-- 핵심 특징 -->
+    <section class="features">
+      <div class="feature-card">
+        <div class="feature-icon">🖥️</div>
+        <div class="feature-title">완전 로컬 처리</div>
+        <div class="feature-desc">모든 이미지 처리가 브라우저 안에서만 이루어집니다. 서버로 전송되는 데이터가 없습니다.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">무료 사용</div>
+        <div class="feature-desc">회원가입 없이 즉시 사용 가능합니다. 영구 무료로 제공됩니다.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <div class="feature-title">자동 탐지</div>
+        <div class="feature-desc">주민번호, 전화번호, 이메일, 계좌번호를 자동으로 감지하고 마스킹합니다.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">✏️</div>
+        <div class="feature-title">수동 마스킹</div>
+        <div class="feature-desc">자동 탐지 외에도 원하는 영역을 드래그하여 직접 마스킹할 수 있습니다.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <div class="feature-title">개별 ON/OFF</div>
+        <div class="feature-desc">탐지된 항목을 개별적으로 켜고 끌 수 있어 세밀한 조정이 가능합니다.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📥</div>
+        <div class="feature-title">즉시 다운로드</div>
+        <div class="feature-desc">마스킹 완료된 이미지를 PNG 형식으로 즉시 저장할 수 있습니다.</div>
+      </div>
+    </section>
+
+    <!-- 작동 방식 -->
+    <section class="how-section">
+      <h2>어떻게 작동하나요?</h2>
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h3>이미지 업로드</h3>
+            <p>마스킹이 필요한 이미지를 드래그하거나 클릭하여 업로드합니다. PNG, JPG, WEBP 형식을 지원합니다.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h3>자동 개인정보 탐지</h3>
+            <p>Tesseract.js OCR 엔진이 브라우저 내에서 이미지를 분석하고, 정규식 패턴으로 주민번호·전화번호·이메일·계좌번호를 탐지합니다.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h3>마스킹 확인 및 조정</h3>
+            <p>탐지된 항목을 목록에서 확인하고 개별 ON/OFF로 조정합니다. 누락된 영역은 드래그로 직접 추가할 수 있습니다.</p>
+          </div>
+        </div>
+        <div class="how-step">
+          <div class="step-num">4</div>
+          <div class="step-content">
+            <h3>다운로드</h3>
+            <p>마스킹 완료된 이미지를 PNG로 즉시 다운로드합니다. 원본 이미지는 어디에도 저장되지 않습니다.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 비교표 -->
+    <section class="compare-section">
+      <h2>다른 서비스와 비교</h2>
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>항목</th>
+            <th class="th-us">MaskPrivacy</th>
+            <th>일반 편집 도구</th>
+            <th>유료 마스킹 서비스</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>완전 무료</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>서버 전송 없음</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>자동 개인정보 탐지</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>설치 불필요</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>수동 마스킹</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+          </tr>
+          <tr>
+            <td>회원가입 불필요</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+      <h2>지금 바로 시작하세요</h2>
+      <p>설치도, 회원가입도, 비용도 없습니다.<br />이미지만 올리면 바로 사용할 수 있습니다.</p>
+      <a href="index.html" class="btn-cta">무료로 마스킹 시작하기</a>
+    </section>
+
+  </div>
+
+  <!-- 푸터 -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">© 2026 MaskPrivacy. 모든 처리는 브라우저 내에서 이루어집니다.</p>
+      <nav class="footer-nav">
+        <a href="privacy.html">개인정보 처리방침</a>
+        <a href="terms.html">이용약관</a>
+        <a href="about.html">서비스 소개</a>
+        <a href="blog/index.html">블로그</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>

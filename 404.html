@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="MaskPrivacy — 페이지를 찾을 수 없습니다." />
+  <title>404 — MaskPrivacy</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    .error-wrap {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+    }
+    .error-code {
+      font-size: 96px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      line-height: 1;
+      background: linear-gradient(135deg, var(--point), var(--point-hover));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 16px;
+    }
+    .error-icon {
+      font-size: 48px;
+      margin-bottom: 24px;
+    }
+    .error-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+    .error-desc {
+      font-size: 15px;
+      color: var(--subtext);
+      line-height: 1.8;
+      max-width: 400px;
+      margin: 0 auto 36px;
+    }
+    .error-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-home {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--point), var(--point-hover));
+      color: white;
+      border-radius: 12px;
+      padding: 13px 28px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Pretendard', sans-serif;
+      text-decoration: none;
+    }
+    .btn-home:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--glow);
+      color: white;
+    }
+    .btn-back {
+      display: inline-block;
+      background: var(--card);
+      color: var(--subtext);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 13px 28px;
+      font-size: 15px;
+      font-family: 'Pretendard', sans-serif;
+      text-decoration: none;
+    }
+    .btn-back:hover {
+      transform: translateY(-2px);
+      color: var(--text);
+      border-color: var(--point);
+    }
+    .error-links {
+      margin-top: 48px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .error-links a {
+      color: var(--subtext);
+      font-size: 14px;
+    }
+    .error-links a:hover { color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <!-- 헤더 -->
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <a href="index.html" style="-webkit-text-fill-color: unset; text-decoration: none;">
+          <div class="logo" style="justify-content: center;">
+            <span class="logo-icon">🔒</span>
+            <span class="logo-text">MaskPrivacy</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 에러 본문 -->
+  <div class="error-wrap">
+    <div class="error-icon">🔍</div>
+    <div class="error-code">404</div>
+    <h1 class="error-title">페이지를 찾을 수 없습니다</h1>
+    <p class="error-desc">
+      요청하신 페이지가 존재하지 않거나 이동되었습니다.<br />
+      주소를 다시 확인하거나 아래 버튼으로 돌아가세요.
+    </p>
+    <div class="error-actions">
+      <a href="index.html" class="btn-home">🔒 마스킹 도구로 이동</a>
+      <a href="javascript:history.back()" class="btn-back">← 이전 페이지</a>
+    </div>
+    <nav class="error-links">
+      <a href="index.html">메인</a>
+      <a href="about.html">서비스 소개</a>
+      <a href="blog/index.html">블로그</a>
+      <a href="privacy.html">개인정보 처리방침</a>
+      <a href="terms.html">이용약관</a>
+    </nav>
+  </div>
+
+  <!-- 푸터 -->
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">© 2026 MaskPrivacy. 모든 처리는 브라우저 내에서 이루어집니다.</p>
+      <nav class="footer-nav">
+        <a href="privacy.html">개인정보 처리방침</a>
+        <a href="terms.html">이용약관</a>
+        <a href="about.html">서비스 소개</a>
+        <a href="blog/index.html">블로그</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>
