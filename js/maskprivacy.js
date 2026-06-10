@@ -30,29 +30,17 @@ let originalImage = null;
 let maskRegions   = [];
 let isDrawing     = false;
 let dragStart     = { x: 0, y: 0 };
-let rrnMode       = 'full';   // full | back | back6
-let addrMode      = 'full';   // full | sigungu | dong
+let rrnMode       = 'full';
+let addrMode      = 'full';
 
 // ============================
 // 3. 정규식 패턴
 // ============================
 const PATTERNS = [
-  {
-    type:  '주민등록번호',
-    regex: /\d{6}-[1-4]\d{6}/g,
-  },
-  {
-    type:  '전화번호',
-    regex: /01[0-9]-\d{3,4}-\d{4}/g,
-  },
-  {
-    type:  '이메일',
-    regex: /[\w.-]+@[\w.-]+\.\w{2,}/g,
-  },
-  {
-    type:  '계좌번호',
-    regex: /\d{3,6}-\d{2,6}-\d{4,6}(-\d{2})?/g,
-  },
+  { type: '주민등록번호', regex: /\d{6}-[1-4]\d{6}/g },
+  { type: '전화번호',     regex: /01[0-9]-\d{3,4}-\d{4}/g },
+  { type: '이메일',       regex: /[\w.-]+@[\w.-]+\.\w{2,}/g },
+  { type: '계좌번호',     regex: /\d{3,6}-\d{2,6}-\d{4,6}(-\d{2})?/g },
 ];
 
 // ============================
@@ -80,14 +68,17 @@ const SIDO_KEYWORDS = [
 
 const SIGUNGU_SUFFIXES = ['시', '구', '군'];
 const ADDR_SUFFIXES    = ['읍', '면', '동', '로', '길', '가'];
+const ADDR_MAX_LINES   = 3;
 
-// 최대 연속 병합 줄 수
-const ADDR_MAX_LINES = 3;
+// 오탐 방지 키워드 — 이 단어가 줄에 포함되면 주소로 판단하지 않음
+const ADDR_EXCLUDE_KEYWORDS = [
+  '구청', '시청', '경찰청', '경찰서', '주민센터', '동사무소',
+  '소방서', '법원', '검찰청', '교육청', '보건소',
+];
 
 // ============================
 // 4. 업로드 존 이벤트
 // ============================
-
 uploadZone.addEventListener('click', () => fileInput.click());
 
 fileInput.addEventListener('change', (e) => {
@@ -110,7 +101,6 @@ uploadZone.addEventListener('drop', (e) => {
   if (file && file.type.startsWith('image/')) handleFile(file);
 });
 
-// 주민번호 옵션 버튼
 document.querySelectorAll('.rrn-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.rrn-btn').forEach(b => b.classList.remove('active'));
@@ -121,7 +111,6 @@ document.querySelectorAll('.rrn-btn').forEach((btn) => {
   });
 });
 
-// 주소 옵션 버튼
 document.querySelectorAll('.addr-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.addr-btn').forEach(b => b.classList.remove('active'));
@@ -149,11 +138,9 @@ async function handleFile(file) {
     });
 
     showProgress(90, '마스킹 적용 중...');
-
     detectPrivateInfo(words);
     drawMasked();
     renderDetectedList();
-
     showProgress(100, '완료!');
 
     setTimeout(() => {
@@ -172,16 +159,13 @@ async function handleFile(file) {
 }
 
 // ============================
-// 6. 이미지 로드 (미리보기용)
+// 6. 이미지 로드
 // ============================
 function loadImage(file) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     const url = URL.createObjectURL(file);
-    img.onload = () => {
-      URL.revokeObjectURL(url);
-      resolve(img);
-    };
+    img.onload = () => { URL.revokeObjectURL(url); resolve(img); };
     img.onerror = reject;
     img.src = url;
   });
@@ -202,7 +186,6 @@ function drawMasked() {
   maskedCanvas.width  = originalImage.width;
   maskedCanvas.height = originalImage.height;
   ctx.drawImage(originalImage, 0, 0);
-
   maskRegions.forEach((region, index) => {
     if (!region.active) return;
     animateMask(ctx, region, index);
@@ -212,7 +195,6 @@ function drawMasked() {
 function animateMask(ctx, region, index) {
   const duration = 300;
   const start    = performance.now();
-
   function step(now) {
     const opacity = Math.min((now - start) / duration, 1);
     ctx.save();
@@ -222,12 +204,11 @@ function animateMask(ctx, region, index) {
     ctx.restore();
     if (opacity < 1) requestAnimationFrame(step);
   }
-
   setTimeout(() => requestAnimationFrame(step), index * 80);
 }
 
 // ============================
-// 8. Tesseract OCR 실행 (v5 호환)
+// 8. Tesseract OCR
 // ============================
 async function runOCR(file, onProgress) {
   let fakeProgress = 0;
@@ -235,7 +216,6 @@ async function runOCR(file, onProgress) {
     fakeProgress = Math.min(fakeProgress + 4, 92);
     onProgress(fakeProgress / 100);
   }, 400);
-
   try {
     const { data } = await Tesseract.recognize(file, 'kor+eng');
     clearInterval(interval);
@@ -248,7 +228,7 @@ async function runOCR(file, onProgress) {
 }
 
 // ============================
-// 9. 개인정보 탐지 (줄 단위)
+// 9. 개인정보 탐지
 // ============================
 function detectPrivateInfo(words) {
   maskRegions = [];
@@ -264,33 +244,25 @@ function detectPrivateInfo(words) {
 
   lineList.forEach((lineWords) => {
     const lineText = lineWords.map(w => w.text).join(' ');
-
     PATTERNS.forEach((pattern) => {
       pattern.regex.lastIndex = 0;
       let match;
-
       while ((match = pattern.regex.exec(lineText)) !== null) {
         const matchedText  = match[0];
         const matchedWords = lineWords.filter(w =>
           matchedText.includes(w.text.trim()) && w.text.trim().length > 0
         );
-
         if (matchedWords.length === 0) return;
 
         const x0 = Math.min(...matchedWords.map(w => w.bbox.x0));
         const y0 = Math.min(...matchedWords.map(w => w.bbox.y0));
         const x1 = Math.max(...matchedWords.map(w => w.bbox.x1));
         const y1 = Math.max(...matchedWords.map(w => w.bbox.y1));
-
         const padding = 4;
         maskRegions.push({
-          x:        x0 - padding,
-          y:        y0 - padding,
-          w:        (x1 - x0) + padding * 2,
-          h:        (y1 - y0) + padding * 2,
-          type:     pattern.type,
-          value:    matchedText,
-          active:   true,
+          x: x0 - padding, y: y0 - padding,
+          w: (x1 - x0) + padding * 2, h: (y1 - y0) + padding * 2,
+          type: pattern.type, value: matchedText, active: true,
           maskMode: pattern.type === '주민등록번호' ? rrnMode : 'full',
           origX0: x0, origY0: y0, origX1: x1, origY1: y1,
         });
@@ -302,20 +274,23 @@ function detectPrivateInfo(words) {
 }
 
 // ============================
-// 9-1. 주소 탐지 (최대 3줄 연속 병합)
+// 9-1. 주소 탐지 (최대 3줄 병합 + 오탐 방지)
 // ============================
 function detectAddress(lineList) {
-  // 처리 완료된 줄 인덱스 추적 (중복 탐지 방지)
   const usedLineIdx = new Set();
 
   lineList.forEach((lineWords, lineIdx) => {
     if (usedLineIdx.has(lineIdx)) return;
     if (lineWords.length === 0) return;
 
-    // 시/도 키워드 단어 단위 탐지
-    let sidoWordIdx    = -1;
-    let matchedKeyword = null;
+    const lineText = lineWords.map(w => w.text).join(' ');
 
+    // 오탐 방지: 제외 키워드 포함 줄 스킵
+    const hasExclude = ADDR_EXCLUDE_KEYWORDS.some(k => lineText.includes(k));
+    if (hasExclude) return;
+
+    // 시/도 키워드 단어 단위 탐지
+    let sidoWordIdx = -1;
     for (let i = 0; i < lineWords.length; i++) {
       const wordText = lineWords[i].text.trim();
       const found    = SIDO_KEYWORDS.find(k =>
@@ -324,8 +299,7 @@ function detectAddress(lineList) {
         wordText.replace(/\s/g, '').includes(k.replace(/\s/g, ''))
       );
       if (found && wordText.length >= 2) {
-        sidoWordIdx    = i;
-        matchedKeyword = found;
+        sidoWordIdx = i;
         break;
       }
     }
@@ -333,76 +307,64 @@ function detectAddress(lineList) {
     if (sidoWordIdx === -1) return;
     if (lineWords.length < 2) return;
 
-    // ============================
-    // 핵심: 최대 ADDR_MAX_LINES줄 연속 병합
-    // ============================
-    const mergedLines  = [lineWords];   // 병합된 줄 목록
+    // 최대 3줄 연속 병합
+    const mergedLines = [lineWords];
     usedLineIdx.add(lineIdx);
 
-    // 첫 줄 높이 계산 (간격 임계값 기준)
-    const firstLineH = Math.max(...lineWords.map(w => w.bbox.y1))
-                     - Math.min(...lineWords.map(w => w.bbox.y0));
-    const lineGapThreshold = firstLineH * 2.5; // 줄 높이의 2.5배 초과 시 다른 문단
+    const firstLineH       = Math.max(...lineWords.map(w => w.bbox.y1))
+                           - Math.min(...lineWords.map(w => w.bbox.y0));
+    const lineGapThreshold = firstLineH * 2.5;
 
     for (let next = lineIdx + 1; next < lineList.length; next++) {
-      // 최대 줄 수 도달 시 중단
       if (mergedLines.length >= ADDR_MAX_LINES) break;
-
       const nextWords = lineList[next];
       if (!nextWords || nextWords.length === 0) break;
 
-      // 빈 줄 중단
       const nextText = nextWords.map(w => w.text.trim()).join('').trim();
       if (!nextText) break;
 
-      // 새로운 시/도 키워드 발견 시 중단 (새 주소 시작)
+      // 제외 키워드 포함 줄은 병합하지 않음
+      const nextHasExclude = ADDR_EXCLUDE_KEYWORDS.some(k => nextText.includes(k));
+      if (nextHasExclude) break;
+
+      // 새로운 시/도 키워드 발견 시 중단
       const hasNewSido = nextWords.some(w =>
-        SIDO_KEYWORDS.some(k =>
-          w.text.includes(k) || k.includes(w.text)
-        ) && w.text.length >= 2
+        SIDO_KEYWORDS.some(k => w.text.includes(k) || k.includes(w.text)) && w.text.length >= 2
       );
       if (hasNewSido) break;
 
-      // y좌표 간격 체크 — 너무 멀면 다른 문단
+      // y좌표 간격 초과 시 중단
       const prevLastY  = Math.max(...mergedLines[mergedLines.length - 1].map(w => w.bbox.y1));
       const nextFirstY = Math.min(...nextWords.map(w => w.bbox.y0));
       if (nextFirstY - prevLastY > lineGapThreshold) break;
 
-      // 조건 통과 → 다음 줄 병합
       mergedLines.push(nextWords);
       usedLineIdx.add(next);
     }
 
-    // 병합된 전체 줄의 words 합치기
     const allWords = mergedLines.flat();
-
-    // 전체 bbox 계산
     const x0 = Math.min(...allWords.map(w => w.bbox.x0));
     const y0 = Math.min(...allWords.map(w => w.bbox.y0));
     const x1 = Math.max(...allWords.map(w => w.bbox.x1));
     const y1 = Math.max(...allWords.map(w => w.bbox.y1));
-
     const padding = 4;
 
-    // 시/구/군 단어 위치 찾기 (첫 줄 기준)
+    // 시/구/군 단어 위치 (첫 줄 기준)
     const sigunguWordIdx = lineWords.findIndex((w, i) =>
       i > sidoWordIdx && SIGUNGU_SUFFIXES.some(s => w.text.trim().endsWith(s))
     );
 
-    // 전체 합친 텍스트
-    const fullValue = allWords.map(w => w.text).join(' ').trim();
-
     maskRegions.push({
-      x:              x0 - padding,
-      y:              y0 - padding,
-      w:              (x1 - x0) + padding * 2,
-      h:              (y1 - y0) + padding * 2,
+      x: x0 - padding, y: y0 - padding,
+      w: (x1 - x0) + padding * 2, h: (y1 - y0) + padding * 2,
       type:           '주소',
-      value:          fullValue,
+      value:          allWords.map(w => w.text).join(' ').trim(),
       active:         true,
       maskMode:       addrMode,
-      addrLineWords:  lineWords,   // 모드 전환용: 첫 줄 단어만 사용
-      addrAllWords:   allWords,    // 전체 병합 단어
+      // 모드 전환용 데이터
+      addrFirstLine:  lineWords,          // 첫 줄 단어
+      addrExtraLines: mergedLines.slice(1), // 2번째 줄 이후
+      addrAllWords:   allWords,
       addrSidoIdx:    sidoWordIdx,
       addrSigunguIdx: sigunguWordIdx,
       origX0: x0, origY0: y0, origX1: x1, origY1: y1,
@@ -417,21 +379,19 @@ function applyRrnMode() {
   maskRegions.forEach((region) => {
     if (region.type !== '주민등록번호') return;
     region.maskMode = rrnMode;
-
-    const fullW   = region.origX1 - region.origX0;
-    const padding = 4;
-
+    const fullW = region.origX1 - region.origX0;
+    const p     = 4;
     if (rrnMode === 'full') {
-      region.x = region.origX0 - padding;
-      region.w = fullW + padding * 2;
+      region.x = region.origX0 - p;
+      region.w = fullW + p * 2;
     } else if (rrnMode === 'back') {
-      const backW  = Math.floor(fullW * (8 / 14));
-      region.x = region.origX1 - backW - padding;
-      region.w = backW + padding * 2;
+      const bw = Math.floor(fullW * (8 / 14));
+      region.x = region.origX1 - bw - p;
+      region.w = bw + p * 2;
     } else if (rrnMode === 'back6') {
-      const back6W = Math.floor(fullW * (6 / 14));
-      region.x = region.origX1 - back6W - padding;
-      region.w = back6W + padding * 2;
+      const bw = Math.floor(fullW * (6 / 14));
+      region.x = region.origX1 - bw - p;
+      region.w = bw + p * 2;
     }
   });
 }
@@ -440,60 +400,61 @@ function applyRrnMode() {
 // 9-3. 주소 모드 재적용
 // ============================
 function applyAddrMode() {
-  const padding = 4;
+  const p = 4;
 
   maskRegions.forEach((region) => {
     if (region.type !== '주소') return;
     region.maskMode = addrMode;
 
-    const lineWords  = region.addrLineWords;  // 첫 줄 단어 (시/도, 시/구/군 인덱스 기준)
-    const allWords   = region.addrAllWords;   // 병합된 전체 단어
+    const firstLine  = region.addrFirstLine;   // 첫 줄 단어
+    const extraLines = region.addrExtraLines;  // 2번째 줄 이후 단어 배열
     const sidoIdx    = region.addrSidoIdx;
     const sigunguIdx = region.addrSigunguIdx;
 
+    // 2번째 줄 이후 모든 단어 합치기
+    const extraWords = extraLines.flat();
+
     if (addrMode === 'full') {
-      // 전체 가리기 — 병합된 전체 bbox
-      region.x = region.origX0 - padding;
-      region.y = region.origY0 - padding;
-      region.w = (region.origX1 - region.origX0) + padding * 2;
-      region.h = (region.origY1 - region.origY0) + padding * 2;
+      // 전체 가리기 — 병합된 전체 bbox 그대로
+      region.x = region.origX0 - p;
+      region.y = region.origY0 - p;
+      region.w = (region.origX1 - region.origX0) + p * 2;
+      region.h = (region.origY1 - region.origY0) + p * 2;
 
     } else if (addrMode === 'sigungu') {
-      // 시/도 이후 가리기 — 첫 줄에서 시/도 다음 단어부터 + 이후 병합된 줄 전체
-      const firstLineAfterSido = lineWords.slice(sidoIdx + 1);
-      const remainingWords     = [
-        ...firstLineAfterSido,
-        ...allWords.filter(w => !lineWords.includes(w)), // 2번째 줄 이후
-      ];
-      if (remainingWords.length === 0) return;
+      // 시/도 이후 가리기
+      // → 첫 줄: 시/도 단어 다음부터
+      // → 2번째 줄 이후: 전체
+      const firstLineMask = firstLine.slice(sidoIdx + 1);
+      const maskWords     = [...firstLineMask, ...extraWords];
+      if (maskWords.length === 0) return;
 
-      const mx0 = Math.min(...remainingWords.map(w => w.bbox.x0));
-      const my0 = Math.min(...remainingWords.map(w => w.bbox.y0));
-      const mx1 = Math.max(...remainingWords.map(w => w.bbox.x1));
-      const my1 = Math.max(...remainingWords.map(w => w.bbox.y1));
-      region.x = mx0 - padding;
-      region.y = my0 - padding;
-      region.w = (mx1 - mx0) + padding * 2;
-      region.h = (my1 - my0) + padding * 2;
+      const mx0 = Math.min(...maskWords.map(w => w.bbox.x0));
+      const my0 = Math.min(...maskWords.map(w => w.bbox.y0));
+      const mx1 = Math.max(...maskWords.map(w => w.bbox.x1));
+      const my1 = Math.max(...maskWords.map(w => w.bbox.y1));
+      region.x = mx0 - p;
+      region.y = my0 - p;
+      region.w = (mx1 - mx0) + p * 2;
+      region.h = (my1 - my0) + p * 2;
 
     } else if (addrMode === 'dong') {
-      // 시/구/군 이후 가리기 — 첫 줄에서 시/구/군 다음 단어부터 + 이후 병합된 줄 전체
-      const startIdx           = sigunguIdx >= 0 ? sigunguIdx + 1 : sidoIdx + 1;
-      const firstLineAfterSigungu = lineWords.slice(startIdx);
-      const remainingWords     = [
-        ...firstLineAfterSigungu,
-        ...allWords.filter(w => !lineWords.includes(w)), // 2번째 줄 이후
-      ];
-      if (remainingWords.length === 0) return;
+      // 시/구/군 이후 가리기
+      // → 첫 줄: 시/구/군 단어 다음부터 (없으면 시/도 다음부터)
+      // → 2번째 줄 이후: 전체
+      const startIdx      = sigunguIdx >= 0 ? sigunguIdx + 1 : sidoIdx + 1;
+      const firstLineMask = firstLine.slice(startIdx);
+      const maskWords     = [...firstLineMask, ...extraWords];
+      if (maskWords.length === 0) return;
 
-      const mx0 = Math.min(...remainingWords.map(w => w.bbox.x0));
-      const my0 = Math.min(...remainingWords.map(w => w.bbox.y0));
-      const mx1 = Math.max(...remainingWords.map(w => w.bbox.x1));
-      const my1 = Math.max(...remainingWords.map(w => w.bbox.y1));
-      region.x = mx0 - padding;
-      region.y = my0 - padding;
-      region.w = (mx1 - mx0) + padding * 2;
-      region.h = (my1 - my0) + padding * 2;
+      const mx0 = Math.min(...maskWords.map(w => w.bbox.x0));
+      const my0 = Math.min(...maskWords.map(w => w.bbox.y0));
+      const mx1 = Math.max(...maskWords.map(w => w.bbox.x1));
+      const my1 = Math.max(...maskWords.map(w => w.bbox.y1));
+      region.x = mx0 - p;
+      region.y = my0 - p;
+      region.w = (mx1 - mx0) + p * 2;
+      region.h = (my1 - my0) + p * 2;
     }
   });
 }
@@ -506,7 +467,6 @@ function renderDetectedList() {
 
   const hasRRN  = maskRegions.some(r => r.type === '주민등록번호');
   const hasAddr = maskRegions.some(r => r.type === '주소');
-
   rrnOptionWrap.style.display  = hasRRN  ? 'block' : 'none';
   addrOptionWrap.style.display = hasAddr ? 'block' : 'none';
 
@@ -552,7 +512,6 @@ function redrawMasked() {
   const ctx = maskedCanvas.getContext('2d');
   ctx.clearRect(0, 0, maskedCanvas.width, maskedCanvas.height);
   ctx.drawImage(originalImage, 0, 0);
-
   maskRegions.forEach((region) => {
     if (!region.active) return;
     ctx.fillStyle = '#000000';
@@ -583,17 +542,12 @@ maskedCanvas.addEventListener('mouseup', (e) => {
   const pos = getCanvasPos(maskedCanvas, e);
   const w   = pos.x - dragStart.x;
   const h   = pos.y - dragStart.y;
-
   if (Math.abs(w) < 5 || Math.abs(h) < 5) return;
 
   maskRegions.push({
-    x:      Math.min(dragStart.x, pos.x),
-    y:      Math.min(dragStart.y, pos.y),
-    w:      Math.abs(w),
-    h:      Math.abs(h),
-    type:   '수동 마스킹',
-    value:  '직접 지정',
-    active: true,
+    x: Math.min(dragStart.x, pos.x), y: Math.min(dragStart.y, pos.y),
+    w: Math.abs(w), h: Math.abs(h),
+    type: '수동 마스킹', value: '직접 지정', active: true,
   });
 
   redrawMasked();
@@ -619,7 +573,6 @@ downloadBtn.addEventListener('click', () => {
   link.download = 'maskprivacy_result.png';
   link.href     = maskedCanvas.toDataURL('image/png');
   link.click();
-
   downloadBtn.style.animation = 'none';
   requestAnimationFrame(() => {
     downloadBtn.style.animation = 'pulse 0.3s ease';
@@ -627,7 +580,7 @@ downloadBtn.addEventListener('click', () => {
 });
 
 // ============================
-// 14. 초기화 (처음부터)
+// 14. 초기화
 // ============================
 resetBtn.addEventListener('click', () => {
   originalImage = null;
@@ -652,13 +605,12 @@ resetBtn.addEventListener('click', () => {
 
   document.querySelectorAll('.rrn-btn').forEach(b => b.classList.remove('active'));
   document.querySelector('.rrn-btn[data-mode="full"]').classList.add('active');
-
   document.querySelectorAll('.addr-btn').forEach(b => b.classList.remove('active'));
   document.querySelector('.addr-btn[data-mode="full"]').classList.add('active');
 });
 
 // ============================
-// 15. 진행 바 업데이트
+// 15. 진행 바
 // ============================
 function showProgress(percent, label) {
   progressWrap.style.display = 'block';
