@@ -154,6 +154,21 @@ a:hover { color: var(--text); }
 }
 
 /* ============================
+   안내 문구
+============================ */
+.notice {
+  margin-top: 14px;
+  padding: 12px 16px;
+  background: rgba(108, 99, 255, 0.07);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 13px;
+  color: var(--subtext);
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* ============================
    진행 바
 ============================ */
 .progress-wrap {
@@ -400,16 +415,19 @@ a:hover { color: var(--text); }
   padding: 16px 20px;
   margin: 20px 0 0;
 }
+
 .rrn-option-label {
   font-size: 13px;
   color: var(--subtext);
   margin-bottom: 12px;
 }
+
 .rrn-option-btns {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
 }
+
 .rrn-btn {
   background: var(--bg);
   color: var(--subtext);
@@ -420,10 +438,12 @@ a:hover { color: var(--text); }
   font-family: 'Pretendard', sans-serif;
   cursor: pointer;
 }
+
 .rrn-btn:hover {
   border-color: var(--point);
   color: var(--text);
 }
+
 .rrn-btn.active {
   background: linear-gradient(135deg, var(--point), var(--point-hover));
   color: white;
