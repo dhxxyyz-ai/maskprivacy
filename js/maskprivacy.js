@@ -193,7 +193,7 @@ function animateMask(ctx, region, index) {
 // 8. Tesseract OCR 실행
 // ============================
 async function runOCR(img, onProgress) {
-  const worker = await Tesseract.createWorker('kor+eng', 1, {
+  const worker = await Tesseract.createWorker('kor+eng', {
     logger: (m) => {
       if (m.status === 'recognizing text') {
         onProgress(m.progress);
@@ -204,7 +204,6 @@ async function runOCR(img, onProgress) {
   const { data } = await worker.recognize(img);
   await worker.terminate();
 
-  // 단어 단위 결과 반환 (text + bbox)
   return data.words;
 }
 
