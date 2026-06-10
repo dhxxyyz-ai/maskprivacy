@@ -46,34 +46,42 @@ const PATTERNS = [
 // ============================
 // 3-1. 주소 탐지용 상수
 // ============================
-const SIDO_KEYWORDS = [
-  '서울특별시', '서울시', '서울',
-  '부산광역시', '부산시', '부산',
-  '대구광역시', '대구시', '대구',
-  '인천광역시', '인천시', '인천',
-  '광주광역시', '광주시', '광주',
-  '대전광역시', '대전시', '대전',
-  '울산광역시', '울산시', '울산',
-  '세종특별자치시', '세종시', '세종',
-  '경기도', '경기',
-  '강원특별자치도', '강원도', '강원',
-  '충청북도', '충북',
-  '충청남도', '충남',
-  '전북특별자치도', '전라북도', '전북',
-  '전라남도', '전남',
-  '경상북도', '경북',
-  '경상남도', '경남',
-  '제주특별자치도', '제주도', '제주',
+
+// 줄 전체 텍스트에서 공백 제거 후 매칭하는 시/도 패턴
+const SIDO_PATTERNS = [
+  /서울특별시|서울시|서울/,
+  /부산광역시|부산시|부산/,
+  /대구광역시|대구시|대구/,
+  /인천광역시|인천시|인천/,
+  /광주광역시|광주시|광주/,
+  /대전광역시|대전시|대전/,
+  /울산광역시|울산시|울산/,
+  /세종특별자치시|세종시|세종/,
+  /경기도|경기/,
+  /강원특별자치도|강원도|강원/,
+  /충청북도|충북/,
+  /충청남도|충남/,
+  /전북특별자치도|전라북도|전북/,
+  /전라남도|전남/,
+  /경상북도|경북/,
+  /경상남도|경남/,
+  /제주특별자치도|제주도|제주/,
 ];
 
+// 시/구/군 접미사
 const SIGUNGU_SUFFIXES = ['시', '구', '군'];
-const ADDR_SUFFIXES    = ['읍', '면', '동', '로', '길', '가'];
-const ADDR_MAX_LINES   = 3;
 
-// 오탐 방지 키워드 — 이 단어가 줄에 포함되면 주소로 판단하지 않음
+// 주소 확신 접미사
+const ADDR_SUFFIXES = ['읍', '면', '동', '로', '길', '가'];
+
+// 최대 연속 병합 줄 수
+const ADDR_MAX_LINES = 3;
+
+// 오탐 방지 키워드
 const ADDR_EXCLUDE_KEYWORDS = [
-  '구청', '시청', '경찰청', '경찰서', '주민센터', '동사무소',
-  '소방서', '법원', '검찰청', '교육청', '보건소',
+  '구청장', '시청장', '경찰청장', '구청', '시청', '경찰청',
+  '경찰서', '주민센터', '동사무소', '소방서', '법원', '검찰청',
+  '교육청', '보건소',
 ];
 
 // ============================
@@ -271,13 +279,40 @@ function detectPrivateInfo(words) {
   });
 
   detectAddress(lineList);
-
-  console.table(lineList.map((lw, i) => ({ 줄: i, 텍스트: lw.map(w => w.text).join(' ') })));
-
 }
 
 // ============================
-// 9-1. 주소 탐지 (최대 3줄 병합 + 오탐 방지)
+// 9-1. 시/도 포함 여부 판단 (핵심 함수)
+// ============================
+function matchSido(lineWords) {
+  // 줄 전체 텍스트에서 공백 제거 후 시/도 패턴 매칭
+  // → OCR이 '서 특별시', '울 별시' 등으로 쪼개도 탐지 가능
+  const lineTextRaw    = lineWords.map(w => w.text).join(' ');
+  const lineTextNoSpc  = lineTextRaw.replace(/\s/g, '');
+
+  for (const pattern of SIDO_PATTERNS) {
+    const m = lineTextNoSpc.match(pattern);
+    if (!m) continue;
+
+    // 매칭된 시/도 텍스트가 포함된 단어 인덱스 찾기
+    // → 단어들을 순서대로 합쳐가며 매칭 위치 추적
+    let accumulated = '';
+    let sidoWordIdx  = -1;
+    for (let i = 0; i < lineWords.length; i++) {
+      accumulated += lineWords[i].text.replace(/\s/g, '');
+      if (pattern.test(accumulated)) {
+        sidoWordIdx = i;
+        break;
+      }
+    }
+
+    return { matched: true, sidoWordIdx: Math.max(sidoWordIdx, 0) };
+  }
+  return { matched: false, sidoWordIdx: -1 };
+}
+
+// ============================
+// 9-2. 주소 탐지 (최대 3줄 병합 + 오탐 방지)
 // ============================
 function detectAddress(lineList) {
   const usedLineIdx = new Set();
@@ -292,22 +327,11 @@ function detectAddress(lineList) {
     const hasExclude = ADDR_EXCLUDE_KEYWORDS.some(k => lineText.includes(k));
     if (hasExclude) return;
 
-    // 시/도 키워드 단어 단위 탐지
-    let sidoWordIdx = -1;
-    for (let i = 0; i < lineWords.length; i++) {
-      const wordText = lineWords[i].text.trim();
-      const found    = SIDO_KEYWORDS.find(k =>
-        wordText.includes(k) ||
-        k.includes(wordText) ||
-        wordText.replace(/\s/g, '').includes(k.replace(/\s/g, ''))
-      );
-      if (found && wordText.length >= 2) {
-        sidoWordIdx = i;
-        break;
-      }
-    }
+    // 시/도 키워드 탐지 (공백 제거 후 줄 전체에서 매칭)
+    const { matched, sidoWordIdx } = matchSido(lineWords);
+    if (!matched) return;
 
-    if (sidoWordIdx === -1) return;
+    // 단어가 최소 2개 이상 (단독 지명 오탐 방지)
     if (lineWords.length < 2) return;
 
     // 최대 3줄 연속 병합
@@ -326,15 +350,13 @@ function detectAddress(lineList) {
       const nextText = nextWords.map(w => w.text.trim()).join('').trim();
       if (!nextText) break;
 
-      // 제외 키워드 포함 줄은 병합하지 않음
+      // 제외 키워드 포함 줄 병합 중단
       const nextHasExclude = ADDR_EXCLUDE_KEYWORDS.some(k => nextText.includes(k));
       if (nextHasExclude) break;
 
       // 새로운 시/도 키워드 발견 시 중단
-      const hasNewSido = nextWords.some(w =>
-        SIDO_KEYWORDS.some(k => w.text.includes(k) || k.includes(w.text)) && w.text.length >= 2
-      );
-      if (hasNewSido) break;
+      const { matched: nextHasSido } = matchSido(nextWords);
+      if (nextHasSido) break;
 
       // y좌표 간격 초과 시 중단
       const prevLastY  = Math.max(...mergedLines[mergedLines.length - 1].map(w => w.bbox.y1));
@@ -352,7 +374,7 @@ function detectAddress(lineList) {
     const y1 = Math.max(...allWords.map(w => w.bbox.y1));
     const padding = 4;
 
-    // 시/구/군 단어 위치 (첫 줄 기준)
+    // 시/구/군 단어 위치 (첫 줄 기준 — sidoWordIdx 이후에서 탐색)
     const sigunguWordIdx = lineWords.findIndex((w, i) =>
       i > sidoWordIdx && SIGUNGU_SUFFIXES.some(s => w.text.trim().endsWith(s))
     );
@@ -364,9 +386,8 @@ function detectAddress(lineList) {
       value:          allWords.map(w => w.text).join(' ').trim(),
       active:         true,
       maskMode:       addrMode,
-      // 모드 전환용 데이터
-      addrFirstLine:  lineWords,          // 첫 줄 단어
-      addrExtraLines: mergedLines.slice(1), // 2번째 줄 이후
+      addrFirstLine:  lineWords,
+      addrExtraLines: mergedLines.slice(1),
       addrAllWords:   allWords,
       addrSidoIdx:    sidoWordIdx,
       addrSigunguIdx: sigunguWordIdx,
@@ -376,7 +397,7 @@ function detectAddress(lineList) {
 }
 
 // ============================
-// 9-2. 주민번호 모드 재적용
+// 9-3. 주민번호 모드 재적용
 // ============================
 function applyRrnMode() {
   maskRegions.forEach((region) => {
@@ -400,7 +421,7 @@ function applyRrnMode() {
 }
 
 // ============================
-// 9-3. 주소 모드 재적용
+// 9-4. 주소 모드 재적용
 // ============================
 function applyAddrMode() {
   const p = 4;
@@ -409,25 +430,20 @@ function applyAddrMode() {
     if (region.type !== '주소') return;
     region.maskMode = addrMode;
 
-    const firstLine  = region.addrFirstLine;   // 첫 줄 단어
-    const extraLines = region.addrExtraLines;  // 2번째 줄 이후 단어 배열
+    const firstLine  = region.addrFirstLine;
+    const extraLines = region.addrExtraLines;
     const sidoIdx    = region.addrSidoIdx;
     const sigunguIdx = region.addrSigunguIdx;
-
-    // 2번째 줄 이후 모든 단어 합치기
     const extraWords = extraLines.flat();
 
     if (addrMode === 'full') {
-      // 전체 가리기 — 병합된 전체 bbox 그대로
       region.x = region.origX0 - p;
       region.y = region.origY0 - p;
       region.w = (region.origX1 - region.origX0) + p * 2;
       region.h = (region.origY1 - region.origY0) + p * 2;
 
     } else if (addrMode === 'sigungu') {
-      // 시/도 이후 가리기
-      // → 첫 줄: 시/도 단어 다음부터
-      // → 2번째 줄 이후: 전체
+      // 첫 줄: 시/도 단어 이후부터 + 나머지 줄 전체
       const firstLineMask = firstLine.slice(sidoIdx + 1);
       const maskWords     = [...firstLineMask, ...extraWords];
       if (maskWords.length === 0) return;
@@ -436,15 +452,12 @@ function applyAddrMode() {
       const my0 = Math.min(...maskWords.map(w => w.bbox.y0));
       const mx1 = Math.max(...maskWords.map(w => w.bbox.x1));
       const my1 = Math.max(...maskWords.map(w => w.bbox.y1));
-      region.x = mx0 - p;
-      region.y = my0 - p;
+      region.x = mx0 - p; region.y = my0 - p;
       region.w = (mx1 - mx0) + p * 2;
       region.h = (my1 - my0) + p * 2;
 
     } else if (addrMode === 'dong') {
-      // 시/구/군 이후 가리기
-      // → 첫 줄: 시/구/군 단어 다음부터 (없으면 시/도 다음부터)
-      // → 2번째 줄 이후: 전체
+      // 첫 줄: 시/구/군 단어 이후부터 + 나머지 줄 전체
       const startIdx      = sigunguIdx >= 0 ? sigunguIdx + 1 : sidoIdx + 1;
       const firstLineMask = firstLine.slice(startIdx);
       const maskWords     = [...firstLineMask, ...extraWords];
@@ -454,8 +467,7 @@ function applyAddrMode() {
       const my0 = Math.min(...maskWords.map(w => w.bbox.y0));
       const mx1 = Math.max(...maskWords.map(w => w.bbox.x1));
       const my1 = Math.max(...maskWords.map(w => w.bbox.y1));
-      region.x = mx0 - p;
-      region.y = my0 - p;
+      region.x = mx0 - p; region.y = my0 - p;
       region.w = (mx1 - mx0) + p * 2;
       region.h = (my1 - my0) + p * 2;
     }
