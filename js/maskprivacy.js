@@ -271,6 +271,9 @@ function detectPrivateInfo(words) {
   });
 
   detectAddress(lineList);
+
+  console.table(lineList.map((lw, i) => ({ 줄: i, 텍스트: lw.map(w => w.text).join(' ') })));
+
 }
 
 // ============================
