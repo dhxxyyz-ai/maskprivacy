@@ -88,13 +88,13 @@ async function handleFile(file) {
   showProgress(0, '이미지 불러오는 중...');
 
   try {
-    // 원본 이미지 로드
+    // 원본 이미지 로드 (미리보기용)
     originalImage = await loadImage(file);
     drawOriginal();
     showProgress(10, '개인정보 탐지 중...');
 
-    // OCR 실행 (진행률 폴링)
-    const words = await runOCR(originalImage, (p) => {
+    // OCR은 File 객체 직접 전달 (blob URL 오류 방지)
+    const words = await runOCR(file, (p) => {
       showProgress(10 + Math.floor(p * 80), `개인정보 탐지 중... ${Math.floor(p * 100)}%`);
     });
 
@@ -115,14 +115,14 @@ async function handleFile(file) {
 
   } catch (err) {
     console.error('처리 중 오류 발생:', err);
-    progressLabel.textContent = '오류가 발생했습니다. 다시 시도해주세요.';
-    uploadZone.style.display  = 'block';
+    progressLabel.textContent  = '오류가 발생했습니다. 다시 시도해주세요.';
+    uploadZone.style.display   = 'block';
     progressWrap.style.display = 'none';
   }
 }
 
 // ============================
-// 6. 이미지 로드
+// 6. 이미지 로드 (미리보기용)
 // ============================
 function loadImage(file) {
   return new Promise((resolve, reject) => {
@@ -179,17 +179,16 @@ function animateMask(ctx, region, index) {
 // ============================
 // 8. Tesseract OCR 실행 (v5 호환)
 // ============================
-async function runOCR(img, onProgress) {
-  // v5에서 logger는 Worker 스레드로 직렬화 불가 → Tesseract.recognize() 직접 사용
-  // progress는 가상 인터벌로 UI에 반영
+async function runOCR(file, onProgress) {
+  // File 객체를 직접 전달 — blob URL 오류 방지
   let fakeProgress = 0;
   const interval = setInterval(() => {
-    fakeProgress = Math.min(fakeProgress + 5, 95);
+    fakeProgress = Math.min(fakeProgress + 4, 92);
     onProgress(fakeProgress / 100);
   }, 400);
 
   try {
-    const { data } = await Tesseract.recognize(img, 'kor+eng');
+    const { data } = await Tesseract.recognize(file, 'kor+eng');
     clearInterval(interval);
     onProgress(1);
     return data.words;
@@ -205,7 +204,6 @@ async function runOCR(img, onProgress) {
 function detectPrivateInfo(words) {
   maskRegions = [];
 
-  // line_num 기준으로 줄 단위 그루핑
   const lines = {};
   words.forEach((word) => {
     const lineNum = word.line_num ?? word.bbox.y0;
@@ -323,10 +321,10 @@ maskedCanvas.addEventListener('mousemove', (e) => {
 
 maskedCanvas.addEventListener('mouseup', (e) => {
   if (!isDrawing) return;
-  isDrawing = false;
-  const pos = getCanvasPos(maskedCanvas, e);
-  const w   = pos.x - dragStart.x;
-  const h   = pos.y - dragStart.y;
+  isDrawing  = false;
+  const pos  = getCanvasPos(maskedCanvas, e);
+  const w    = pos.x - dragStart.x;
+  const h    = pos.y - dragStart.y;
 
   if (Math.abs(w) < 5 || Math.abs(h) < 5) return;
 
