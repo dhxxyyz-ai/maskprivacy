@@ -59,7 +59,7 @@ const PATTERNS = [
 // 3-1. 주소 탐지용 상수
 // ============================
 
-// 시/도 키워드 (OCR 오인식 감안해 축약형도 포함)
+// 시/도 키워드 — 단어 단위 매칭용 (짧은 것부터 정렬해 오인식 방지)
 const SIDO_KEYWORDS = [
   '서울특별시', '서울시', '서울',
   '부산광역시', '부산시', '부산',
@@ -83,7 +83,7 @@ const SIDO_KEYWORDS = [
 // 시/구/군 접미사
 const SIGUNGU_SUFFIXES = ['시', '구', '군'];
 
-// 읍/면/동/로/길 접미사 (주소임을 확신하는 단어)
+// 읍/면/동/로/길 접미사
 const ADDR_SUFFIXES = ['읍', '면', '동', '로', '길', '가'];
 
 // ============================
@@ -255,7 +255,6 @@ async function runOCR(file, onProgress) {
 function detectPrivateInfo(words) {
   maskRegions = [];
 
-  // 줄 단위 그루핑
   const lines = {};
   words.forEach((word) => {
     const lineNum = word.line_num ?? word.bbox.y0;
@@ -265,7 +264,6 @@ function detectPrivateInfo(words) {
 
   const lineList = Object.values(lines);
 
-  // 정규식 패턴 탐지 (주민번호, 전화번호, 이메일, 계좌번호)
   lineList.forEach((lineWords) => {
     const lineText = lineWords.map(w => w.text).join(' ');
 
@@ -302,31 +300,45 @@ function detectPrivateInfo(words) {
     });
   });
 
-  // 주소 탐지
   detectAddress(lineList);
 }
 
 // ============================
-// 9-1. 주소 탐지
+// 9-1. 주소 탐지 (단어 단위 매칭)
 // ============================
 function detectAddress(lineList) {
   lineList.forEach((lineWords) => {
     if (lineWords.length === 0) return;
 
-    const lineText = lineWords.map(w => w.text).join(' ');
+    // 핵심 수정: 합친 텍스트가 아닌 각 단어를 개별로 시/도 키워드와 대조
+    // OCR이 "서울특별시"를 "서울특", "별시"로 쪼개도 탐지 가능하도록
+    // → 단어가 키워드를 포함하거나, 키워드가 단어를 포함하면 매칭
+    let sidoWordIdx = -1;
+    let matchedKeyword = null;
 
-    // 조건 1: 시/도 키워드 포함 여부 확인
-    const sidoKeyword = SIDO_KEYWORDS.find(k => lineText.includes(k));
-    if (!sidoKeyword) return;
+    for (let i = 0; i < lineWords.length; i++) {
+      const wordText = lineWords[i].text.trim();
+      const found = SIDO_KEYWORDS.find(k =>
+        wordText.includes(k) ||      // 단어가 키워드 포함: "서울특별시입니다" → 매칭
+        k.includes(wordText) ||      // 키워드가 단어 포함: OCR이 "서울" 하나만 인식해도 매칭
+        wordText.replace(/\s/g, '').includes(k.replace(/\s/g, '')) // 공백 제거 후 비교
+      );
 
-    // 조건 2: 번지/호수 숫자 또는 읍/면/동/로/길 포함 여부 확인
-    const hasAddrSuffix = ADDR_SUFFIXES.some(s =>
-      lineWords.some(w => w.text.endsWith(s))
-    );
-    const hasNumber = lineWords.some(w => /\d+/.test(w.text));
-    if (!hasAddrSuffix && !hasNumber) return;
+      // 단어가 너무 짧으면 오탐 가능성 높음 (2자 이상)
+      if (found && wordText.length >= 2) {
+        sidoWordIdx    = i;
+        matchedKeyword = found;
+        break;
+      }
+    }
 
-    // 주소로 판단 → 전체 줄 bbox 계산
+    if (sidoWordIdx === -1) return;
+
+    // 조건 완화: 시/도 키워드 발견 시 주소로 간주
+    // (번지/접미사 조건은 OCR 오인식으로 실패하는 경우가 많아 제거)
+    // 단, 줄에 단어가 2개 이상 있어야 주소로 판단 (단독 지명 오탐 방지)
+    if (lineWords.length < 2) return;
+
     const x0 = Math.min(...lineWords.map(w => w.bbox.x0));
     const y0 = Math.min(...lineWords.map(w => w.bbox.y0));
     const x1 = Math.max(...lineWords.map(w => w.bbox.x1));
@@ -334,26 +346,22 @@ function detectAddress(lineList) {
 
     const padding = 4;
 
-    // 시/도 단어 위치 찾기 (모드 전환용)
-    const sidoWordIdx = lineWords.findIndex(w => w.text.includes(sidoKeyword) || sidoKeyword.includes(w.text));
-
     // 시/구/군 단어 위치 찾기
     const sigunguWordIdx = lineWords.findIndex((w, i) =>
-      i > sidoWordIdx && SIGUNGU_SUFFIXES.some(s => w.text.endsWith(s))
+      i > sidoWordIdx && SIGUNGU_SUFFIXES.some(s => w.text.trim().endsWith(s))
     );
 
     maskRegions.push({
-      x:             x0 - padding,
-      y:             y0 - padding,
-      w:             (x1 - x0) + padding * 2,
-      h:             (y1 - y0) + padding * 2,
-      type:          '주소',
-      value:         lineText.trim(),
-      active:        true,
-      maskMode:      addrMode,
-      // 주소 전용 원본 데이터
-      addrLineWords: lineWords,
-      addrSidoIdx:   sidoWordIdx,
+      x:              x0 - padding,
+      y:              y0 - padding,
+      w:              (x1 - x0) + padding * 2,
+      h:              (y1 - y0) + padding * 2,
+      type:           '주소',
+      value:          lineWords.map(w => w.text).join(' ').trim(),
+      active:         true,
+      maskMode:       addrMode,
+      addrLineWords:  lineWords,
+      addrSidoIdx:    sidoWordIdx,
       addrSigunguIdx: sigunguWordIdx,
       origX0: x0, origY0: y0, origX1: x1, origY1: y1,
     });
@@ -396,17 +404,15 @@ function applyAddrMode() {
     if (region.type !== '주소') return;
     region.maskMode = addrMode;
 
-    const lineWords     = region.addrLineWords;
-    const sidoIdx       = region.addrSidoIdx;
-    const sigunguIdx    = region.addrSigunguIdx;
+    const lineWords  = region.addrLineWords;
+    const sidoIdx    = region.addrSidoIdx;
+    const sigunguIdx = region.addrSigunguIdx;
 
     if (addrMode === 'full') {
-      // 전체 가리기 — 줄 전체 bbox
       region.x = region.origX0 - padding;
       region.w = (region.origX1 - region.origX0) + padding * 2;
 
     } else if (addrMode === 'sigungu') {
-      // 시/도 이후 가리기 — 시/도 단어 다음부터 끝까지
       const startIdx = sidoIdx + 1;
       if (startIdx >= lineWords.length) return;
       const maskWords = lineWords.slice(startIdx);
@@ -416,7 +422,6 @@ function applyAddrMode() {
       region.w = (mx1 - mx0) + padding * 2;
 
     } else if (addrMode === 'dong') {
-      // 시/구/군 이후 가리기 — 시/구/군 단어 다음부터 끝까지
       const startIdx = sigunguIdx >= 0 ? sigunguIdx + 1 : sidoIdx + 1;
       if (startIdx >= lineWords.length) return;
       const maskWords = lineWords.slice(startIdx);
@@ -570,15 +575,15 @@ resetBtn.addEventListener('click', () => {
     c.getContext('2d').clearRect(0, 0, c.width, c.height);
   });
 
-  fileInput.value             = '';
-  detectedList.innerHTML      = '';
-  uploadZone.style.display    = 'block';
-  progressWrap.style.display  = 'none';
-  previewWrap.style.display   = 'none';
-  detectedWrap.style.display  = 'none';
+  fileInput.value              = '';
+  detectedList.innerHTML       = '';
+  uploadZone.style.display     = 'block';
+  progressWrap.style.display   = 'none';
+  previewWrap.style.display    = 'none';
+  detectedWrap.style.display   = 'none';
   rrnOptionWrap.style.display  = 'none';
   addrOptionWrap.style.display = 'none';
-  actionWrap.style.display    = 'none';
+  actionWrap.style.display     = 'none';
 
   document.querySelectorAll('.rrn-btn').forEach(b => b.classList.remove('active'));
   document.querySelector('.rrn-btn[data-mode="full"]').classList.add('active');
