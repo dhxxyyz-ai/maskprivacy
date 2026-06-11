@@ -3,4 +3,4 @@ User-agent: *
 Allow: /
 
 # sitemap 위치
-Sitemap: https://browserkit.pages.dev/sitemap.xml
+Sitemap: https://maskprivacy.pages.dev/sitemap.xml

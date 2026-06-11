@@ -1,137 +1,133 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-    http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 
-  <!-- BrowserKit 허브 -->
+  <!-- 메인 -->
   <url>
-    <loc>https://browserkit.pages.dev/</loc>
+    <loc>https://maskprivacy.pages.dev/</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.00</priority>
   </url>
 
-  <!-- MaskPrivacy 서비스 -->
+  <!-- 서브 페이지 -->
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/</loc>
-    <lastmod>2026-06-11</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.90</priority>
-  </url>
-  <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/about.html</loc>
+    <loc>https://maskprivacy.pages.dev/about.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.70</priority>
+    <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/privacy.html</loc>
+    <loc>https://maskprivacy.pages.dev/privacy.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.50</priority>
+    <priority>0.60</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/terms.html</loc>
+    <loc>https://maskprivacy.pages.dev/terms.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.50</priority>
+    <priority>0.60</priority>
   </url>
 
-  <!-- MaskPrivacy 블로그 -->
+  <!-- 블로그 목록 -->
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/index.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/index.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.80</priority>
   </url>
+
+  <!-- 블로그 글 -->
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/01-privacy-law-intro.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/01-privacy-law-intro.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/02-rrn-leak-danger.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/02-rrn-leak-danger.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/03-id-photo-masking.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/03-id-photo-masking.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/04-resume-privacy.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/04-resume-privacy.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/05-privacy-leak-cases.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/05-privacy-leak-cases.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/06-image-masking-guide.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/06-image-masking-guide.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/07-maskprivacy-howto.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/07-maskprivacy-howto.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/08-worker-privacy-law.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/08-worker-privacy-law.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/09-hospital-privacy.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/09-hospital-privacy.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/10-contract-masking.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/10-contract-masking.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/11-kakao-id-photo.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/11-kakao-id-photo.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/12-privacy-policy-guide.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/12-privacy-policy-guide.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/13-masking-tool-compare.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/13-masking-tool-compare.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/14-local-processing.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/14-local-processing.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>
   </url>
   <url>
-    <loc>https://browserkit.pages.dev/maskprivacy/blog/15-privacy-report-guide.html</loc>
+    <loc>https://maskprivacy.pages.dev/blog/15-privacy-report-guide.html</loc>
     <lastmod>2026-06-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.70</priority>

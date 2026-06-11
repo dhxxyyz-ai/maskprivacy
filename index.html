@@ -3,127 +3,263 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="이미지 속 개인정보를 브라우저에서 자동으로 감지·마스킹해주는 무료 온라인 도구. 파일이 서버로 전송되지 않습니다." />
-  <meta name="google-site-verification" content="--DSXHcAhUJxH2gZWj3AozDdRhVNQiTttN7YtJ9oS4w" />
-  <meta name="naver-site-verification" content="e99e8470208345a9b3cf1b0d767fd8ea7e368721" />
-  <!-- Open Graph -->
-  <meta property="og:title" content="MaskPrivacy — 개인정보 자동 마스킹 도구" />
-  <meta property="og:description" content="이미지 속 개인정보를 브라우저에서 자동으로 감지·마스킹해주는 무료 온라인 도구. 파일이 서버로 전송되지 않습니다." />
+  <meta name="description" content="BrowserKit — 브라우저에서 바로 쓰는 무료 도구 모음. 서버 전송 없이 개인정보 마스킹, 이미지 편집, PDF 처리까지." />
+  <meta property="og:title" content="BrowserKit — 브라우저 기반 무료 도구 모음" />
+  <meta property="og:description" content="서버 전송 없이 브라우저에서 바로 쓰는 무료 도구 모음. 개인정보 마스킹, 이미지 편집, PDF 처리." />
   <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://maskprivacy.pages.dev/" />
+  <meta property="og:url" content="https://browserkit.pages.dev/" />
   <meta property="og:locale" content="ko_KR" />
-  <title>MaskPrivacy — 개인정보 자동 마스킹 도구</title>
-  <link rel="stylesheet" href="css/style.css" />
+  <title>BrowserKit — 브라우저 기반 무료 도구 모음</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:          #0F0F13;
+      --card:        #1A1A24;
+      --point:       #6C63FF;
+      --point-hover: #A78BFA;
+      --text:        #F0F0F5;
+      --subtext:     #8B8B9E;
+      --success:     #34D399;
+      --border:      rgba(108, 99, 255, 0.3);
+      --glow:        rgba(108, 99, 255, 0.5);
+      --radius:      16px;
+    }
+
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Pretendard', 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a { color: var(--point-hover); text-decoration: none; }
+    a:hover { color: var(--text); }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* 헤더 */
+    .header {
+      padding: 48px 0 32px;
+      text-align: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .logo-icon { font-size: 36px; }
+
+    .logo-text {
+      font-size: 36px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, var(--point), var(--point-hover));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .header-desc {
+      color: var(--subtext);
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    /* 뱃지 */
+    .badges {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 56px;
+    }
+
+    .badge {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 18px;
+      font-size: 13px;
+      color: var(--subtext);
+    }
+
+    /* 섹션 제목 */
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--subtext);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    /* 서비스 그리드 */
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-bottom: 64px;
+    }
+
+    .tool-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .tool-card:hover {
+      border-color: var(--point);
+      box-shadow: 0 0 20px var(--glow);
+      transform: translateY(-2px);
+      color: var(--text);
+    }
+
+    .tool-card.coming-soon {
+      opacity: 0.5;
+      cursor: default;
+      pointer-events: none;
+    }
+
+    .tool-icon { font-size: 32px; }
+
+    .tool-name {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .tool-desc {
+      font-size: 14px;
+      color: var(--subtext);
+      line-height: 1.7;
+    }
+
+    .tool-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      width: fit-content;
+      margin-top: auto;
+    }
+
+    .tool-badge.live {
+      background: rgba(52, 211, 153, 0.15);
+      color: var(--success);
+      border: 1px solid rgba(52, 211, 153, 0.3);
+    }
+
+    .tool-badge.soon {
+      background: rgba(108, 99, 255, 0.15);
+      color: var(--point-hover);
+      border: 1px solid var(--border);
+    }
+
+    /* 푸터 */
+    .footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 0;
+      text-align: center;
+    }
+
+    .footer-copy {
+      color: var(--subtext);
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+
+    .footer-nav {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-nav a {
+      color: var(--subtext);
+      font-size: 13px;
+    }
+
+    .footer-nav a:hover { color: var(--text); }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .tool-grid { grid-template-columns: 1fr; }
+      .logo-text { font-size: 28px; }
+      .logo-icon { font-size: 28px; }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+      .tool-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+  </style>
 </head>
 <body>
 
   <header class="header">
     <div class="container">
       <div class="logo">
-        <span class="logo-icon">🔒</span>
-        <span class="logo-text">MaskPrivacy</span>
+        <span class="logo-icon">🧰</span>
+        <span class="logo-text">BrowserKit</span>
       </div>
-      <p class="header-desc">이미지 속 개인정보를 브라우저에서 자동으로 감지·마스킹</p>
+      <p class="header-desc">서버 전송 없이 브라우저에서 바로 쓰는 무료 도구 모음</p>
+      <div class="badges">
+        <span class="badge">🔒 완전 로컬 처리</span>
+        <span class="badge">⚡ 무료 사용</span>
+        <span class="badge">🛡️ 서버 전송 없음</span>
+        <span class="badge">📦 설치 불필요</span>
+      </div>
     </div>
   </header>
 
-  <section class="badges">
-    <div class="container badges-wrap">
-      <span class="badge">🔒 완전 로컬 처리</span>
-      <span class="badge">⚡ 무료 사용</span>
-      <span class="badge">🛡️ 서버 전송 없음</span>
-    </div>
-  </section>
-
-  <main class="main">
+  <main>
     <div class="container">
 
-      <div class="upload-zone" id="uploadZone">
-        <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp" hidden />
-        <div class="upload-content" id="uploadContent">
-          <div class="upload-icon">🔒</div>
-          <p class="upload-title">이미지를 드래그하여 놓으세요</p>
-          <p class="upload-sub">또는 클릭하여 파일 선택</p>
-          <p class="upload-formats">PNG, JPG, WEBP 지원</p>
-          <p class="upload-safe">✓ 파일이 서버로 전송되지 않습니다</p>
+      <div class="section-title">🔒 개인정보 보호 도구</div>
+      <div class="tool-grid">
+
+        <a href="maskprivacy/index.html" class="tool-card">
+          <span class="tool-icon">🔒</span>
+          <div class="tool-name">개인정보 마스킹</div>
+          <div class="tool-desc">이미지 속 주민번호, 전화번호, 이메일, 계좌번호를 자동으로 탐지해 마스킹합니다.</div>
+          <span class="tool-badge live">✓ 서비스 중</span>
+        </a>
+
+        <div class="tool-card coming-soon">
+          <span class="tool-icon">📄</span>
+          <div class="tool-name">PDF 마스킹</div>
+          <div class="tool-desc">PDF 문서 속 개인정보를 브라우저에서 바로 마스킹합니다.</div>
+          <span class="tool-badge soon">준비 중</span>
         </div>
-      </div>
 
-      <p class="notice">
-        💡 OCR 특성상 일부 항목이 누락될 수 있어요. 탐지 결과를 확인하고 수동 마스킹으로 보완해 주세요.
-      </p>
-
-      <div class="progress-wrap" id="progressWrap" style="display:none;">
-        <div class="progress-label" id="progressLabel">개인정보 탐지 중...</div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill"></div>
+        <div class="tool-card coming-soon">
+          <span class="tool-icon">🖼️</span>
+          <div class="tool-name">이미지 편집 도구</div>
+          <div class="tool-desc">이미지 크기 조정, 형식 변환, 용량 압축을 브라우저에서 바로 처리합니다.</div>
+          <span class="tool-badge soon">준비 중</span>
         </div>
-      </div>
 
-      <div class="preview-wrap" id="previewWrap" style="display:none;">
-        <div class="preview-panel">
-          <div class="preview-label">원본 이미지</div>
-          <canvas id="originalCanvas"></canvas>
-        </div>
-        <div class="preview-panel">
-          <div class="preview-label">마스킹 결과</div>
-          <canvas id="maskedCanvas"></canvas>
-        </div>
-      </div>
-
-      <!-- 탐지 항목 목록 -->
-      <div class="detected-wrap" id="detectedWrap" style="display:none;">
-        <h2 class="detected-title">탐지된 개인정보</h2>
-        <ul class="detected-list" id="detectedList"></ul>
-      </div>
-
-      <!-- 주민등록번호 마스킹 옵션 -->
-      <div class="rrn-option-wrap" id="rrnOptionWrap" style="display:none;">
-        <div class="rrn-option-label">주민등록번호 마스킹 방식</div>
-        <div class="rrn-option-btns">
-          <button class="rrn-btn active" data-mode="full">전체 가리기</button>
-          <button class="rrn-btn" data-mode="back">뒷자리 전체 가리기</button>
-          <button class="rrn-btn" data-mode="back6">뒷자리 6자리 가리기</button>
-        </div>
-      </div>
-
-      <!-- 전화번호 마스킹 옵션 -->
-      <div class="rrn-option-wrap" id="phoneOptionWrap" style="display:none;">
-        <div class="rrn-option-label">전화번호 마스킹 방식</div>
-        <div class="rrn-option-btns">
-          <button class="phone-btn active" data-mode="full">전체 가리기</button>
-          <button class="phone-btn" data-mode="back8">뒷 번호 8자리 가리기</button>
-          <button class="phone-btn" data-mode="back4">뒷 번호 4자리 가리기</button>
-        </div>
-      </div>
-
-      <div class="action-wrap" id="actionWrap" style="display:none;">
-        <button class="btn-download" id="downloadBtn">
-          ⬇ 마스킹 이미지 다운로드
-        </button>
-        <button class="btn-reset" id="resetBtn">
-          ↺ 처음부터
-        </button>
-      </div>
-
-      <!-- 쿠팡 파트너스 광고 -->
-      <div class="coupang-wrap">
-        <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
-        <div class="coupang-items">
-          <div class="coupang-item">
-            <a href="https://link.coupang.com/a/euojfi8OPY" target="_blank" referrerpolicy="unsafe-url">
-              <img src="https://image14.coupangcdn.com/image/affiliate/banner/1c211b8e4c363d5815f47e269fdcce32@2x.jpg" alt="알리사 100단 아이스 터보 MAX 휴대용 선풍기" width="120" height="240" />
-            </a>
-          </div>
-          <div class="coupang-item">
-            <a href="https://link.coupang.com/a/euo2xIEWI0" target="_blank" referrerpolicy="unsafe-url">
-              <img src="https://image3.coupangcdn.com/image/affiliate/banner/01e011f943244ce5d7e901ee092a7185@2x.jpg" alt="삼성전자 USB메모리 3.1 FIT PLUS 128GB" width="120" height="240" />
-            </a>
-          </div>
-        </div>
       </div>
 
     </div>
@@ -131,17 +267,15 @@
 
   <footer class="footer">
     <div class="container">
-      <p class="footer-copy">© 2026 MaskPrivacy. 모든 처리는 브라우저 내에서 이루어집니다.</p>
+      <p class="footer-copy">© 2026 BrowserKit. 모든 처리는 브라우저 내에서 이루어집니다.</p>
       <nav class="footer-nav">
-        <a href="privacy.html">개인정보 처리방침</a>
-        <a href="terms.html">이용약관</a>
-        <a href="about.html">서비스 소개</a>
-        <a href="blog/index.html">블로그</a>
+        <a href="maskprivacy/privacy.html">개인정보 처리방침</a>
+        <a href="maskprivacy/terms.html">이용약관</a>
+        <a href="maskprivacy/about.html">서비스 소개</a>
+        <a href="maskprivacy/blog/index.html">블로그</a>
       </nav>
     </div>
   </footer>
 
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-  <script src="js/maskprivacy.js"></script>
 </body>
 </html>
