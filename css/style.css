@@ -389,7 +389,7 @@ a:hover { color: var(--text); }
   text-align: center;
   /* 광고 이미지 2개(120px) + 간격 + 여백에 맞게 너비 제한 */
   max-width: 300px;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
 .coupang-notice {
