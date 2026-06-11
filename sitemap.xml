@@ -4,109 +4,133 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
 
+  <!-- 메인 -->
+  <url>
+    <loc>https://maskprivacy.pages.dev/</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.00</priority>
+  </url>
 
-<url>
-  <loc>https://maskprivacy.pages.dev/</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>1.00</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/privacy</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/terms</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/about</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.80</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/01-privacy-law-intro</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/02-rrn-leak-danger</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/03-id-photo-masking</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/04-resume-privacy</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/05-privacy-leak-cases</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/06-image-masking-guide</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/07-maskprivacy-howto</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/08-worker-privacy-law</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/09-hospital-privacy</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/10-contract-masking</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/11-kakao-id-photo</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/12-privacy-policy-guide</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/13-masking-tool-compare</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/14-local-processing</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
-<url>
-  <loc>https://maskprivacy.pages.dev/blog/15-privacy-report-guide</loc>
-  <lastmod>2026-06-11T04:28:57+00:00</lastmod>
-  <priority>0.64</priority>
-</url>
+  <!-- 서브 페이지 -->
+  <url>
+    <loc>https://maskprivacy.pages.dev/about.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.80</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/privacy.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/terms.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.60</priority>
+  </url>
 
+  <!-- 블로그 목록 -->
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/index.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- 블로그 글 -->
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/01-privacy-law-intro.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/02-rrn-leak-danger.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/03-id-photo-masking.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/04-resume-privacy.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/05-privacy-leak-cases.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/06-image-masking-guide.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/07-maskprivacy-howto.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/08-worker-privacy-law.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/09-hospital-privacy.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/10-contract-masking.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/11-kakao-id-photo.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/12-privacy-policy-guide.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/13-masking-tool-compare.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/14-local-processing.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
+  <url>
+    <loc>https://maskprivacy.pages.dev/blog/15-privacy-report-guide.html</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.70</priority>
+  </url>
 
 </urlset>
