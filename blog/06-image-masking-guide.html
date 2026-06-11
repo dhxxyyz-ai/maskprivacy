@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="복잡한 툴 없이 브라우저에서 바로 이미지 속 개인정보를 무료로 마스킹하는 방법을 안내합니다." />
+  <meta property="og:title" content="이미지 속 개인정보 무료로 가리는 방법 — MaskPrivacy" />
+  <meta property="og:description" content="복잡한 툴 없이 브라우저에서 바로 이미지 속 개인정보를 무료로 마스킹하는 방법을 안내합니다." />
+  <meta property="og:type" content="article" />
+  <title>이미지 속 개인정보 무료로 가리는 방법 — MaskPrivacy</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    .post-wrap { max-width:720px; margin:0 auto; padding:48px 24px 80px; }
+    .post-tag { display:inline-block; font-size:12px; color:var(--point-hover); background:rgba(108,99,255,0.15); padding:3px 12px; border-radius:999px; margin-bottom:16px; }
+    .post-title { font-size:28px; font-weight:700; line-height:1.4; margin-bottom:12px; }
+    .post-date { color:var(--subtext); font-size:13px; margin-bottom:40px; padding-bottom:24px; border-bottom:1px solid var(--border); }
+    .post-body h2 { font-size:20px; font-weight:700; margin:40px 0 16px; color:var(--text); }
+    .post-body h3 { font-size:16px; font-weight:600; margin:28px 0 12px; color:var(--point-hover); }
+    .post-body p { font-size:15px; color:var(--subtext); line-height:1.9; margin-bottom:16px; }
+    .post-body ul, .post-body ol { padding-left:20px; margin-bottom:16px; }
+    .post-body li { font-size:15px; color:var(--subtext); line-height:1.9; margin-bottom:6px; }
+    .post-highlight { background:var(--card); border-left:3px solid var(--point); border-radius:8px; padding:16px 20px; margin:24px 0; font-size:15px; color:var(--text); line-height:1.8; }
+    .post-warn { background:rgba(239,68,68,0.08); border-left:3px solid #EF4444; border-radius:8px; padding:16px 20px; margin:24px 0; font-size:15px; color:var(--text); line-height:1.8; }
+    .step-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 24px; margin:16px 0; display:flex; gap:16px; align-items:flex-start; }
+    .step-num { min-width:36px; height:36px; background:linear-gradient(135deg,var(--point),var(--point-hover)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:white; flex-shrink:0; font-family:'Inter',sans-serif; }
+    .step-content h3 { font-size:15px; font-weight:600; margin-bottom:6px; color:var(--text); }
+    .step-content p { font-size:14px; color:var(--subtext); line-height:1.7; margin:0; }
+    .post-table { width:100%; border-collapse:collapse; margin:20px 0; font-size:14px; }
+    .post-table th { background:var(--card); padding:12px 16px; text-align:left; font-weight:600; border:1px solid var(--border); color:var(--text); }
+    .post-table td { padding:11px 16px; border:1px solid var(--border); color:var(--subtext); line-height:1.7; }
+    .post-table tr:hover td { background:rgba(108,99,255,0.04); }
+    .post-nav { display:flex; justify-content:space-between; margin-top:60px; padding-top:24px; border-top:1px solid var(--border); gap:12px; }
+    .post-nav a { font-size:14px; color:var(--subtext); }
+    .post-nav a:hover { color:var(--text); }
+    .cta-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; text-align:center; margin:48px 0 0; }
+    .cta-box p { font-size:15px; color:var(--subtext); margin-bottom:16px; }
+    .cta-btn { display:inline-block; background:linear-gradient(135deg,var(--point),var(--point-hover)); color:white; border-radius:10px; padding:12px 28px; font-size:14px; font-weight:600; text-decoration:none; }
+    .cta-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px var(--glow); color:white; }
+    .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--subtext); font-size:14px; margin-bottom:32px; text-decoration:none; }
+    .back-link:hover { color:var(--text); }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+          <span class="logo-icon">🔒</span>
+          <span class="logo-text">MaskPrivacy</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="post-wrap">
+    <a href="index.html" class="back-link">← 블로그 목록</a>
+    <span class="post-tag">가이드</span>
+    <h1 class="post-title">이미지 속 개인정보 무료로 가리는 방법</h1>
+    <div class="post-date">2026년 6월 10일</div>
+
+    <div class="post-body">
+
+      <p>신분증, 계약서, 명함 등의 사진을 공유해야 할 때 개인정보를 가리고 싶지만 어떻게 해야 할지 모르는 분들이 많습니다. 포토샵 같은 전문 툴 없이도 브라우저에서 무료로 간편하게 마스킹할 수 있는 방법을 소개합니다.</p>
+
+      <h2>이미지 마스킹이 필요한 상황</h2>
+      <ul>
+        <li>신분증 사진을 카카오톡이나 이메일로 전송할 때</li>
+        <li>계약서를 스캔해서 공유할 때</li>
+        <li>명함 사진을 SNS에 올릴 때</li>
+        <li>의료 서류를 제출할 때</li>
+        <li>이력서에 첨부된 사진을 가릴 때</li>
+      </ul>
+
+      <h2>기존 방법의 문제점</h2>
+
+      <div class="post-warn">
+        ⚠️ 스티커나 이모지로 가리는 방법은 원본 레이어가 남아 있어 쉽게 제거될 수 있습니다. 반드시 픽셀 단위로 완전히 덮어쓰는 방식을 사용해야 합니다.
+      </div>
+
+      <table class="post-table">
+        <thead>
+          <tr><th>방법</th><th>안전성</th><th>편의성</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>스티커/이모지 덮기</td><td>❌ 위험 (레이어 제거 가능)</td><td>✓ 쉬움</td></tr>
+          <tr><td>포토샵 편집</td><td>✓ 안전</td><td>❌ 복잡</td></tr>
+          <tr><td>스마트폰 기본 편집</td><td>△ 앱에 따라 다름</td><td>✓ 쉬움</td></tr>
+          <tr><td>MaskPrivacy</td><td>✓ 안전 (로컬 처리)</td><td>✓ 쉬움</td></tr>
+        </tbody>
+      </table>
+
+      <h2>MaskPrivacy로 마스킹하는 방법</h2>
+
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <h3>이미지 업로드</h3>
+          <p>MaskPrivacy 메인 페이지에서 이미지를 드래그하거나 클릭해서 업로드합니다. PNG, JPG, WEBP 형식을 지원합니다.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <h3>자동 탐지 확인</h3>
+          <p>OCR 엔진이 이미지를 분석해 주민번호, 전화번호, 이메일, 계좌번호를 자동으로 탐지합니다. 탐지된 항목은 목록으로 표시됩니다.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <h3>마스킹 방식 선택</h3>
+          <p>주민번호는 전체 가리기, 뒷자리 전체, 뒷자리 6자리 중 선택할 수 있습니다. 전화번호도 동일하게 선택 가능합니다.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <h3>수동 마스킹 보완</h3>
+          <p>자동으로 탐지되지 않은 영역은 마스킹 결과 이미지에서 직접 드래그해 가릴 수 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <h3>다운로드</h3>
+          <p>마스킹이 완료된 이미지를 PNG 파일로 다운로드합니다. 원본 이미지는 어디에도 저장되지 않습니다.</p>
+        </div>
+      </div>
+
+      <div class="post-highlight">
+        💡 MaskPrivacy는 모든 처리가 브라우저 내에서만 이루어집니다. 이미지가 외부 서버로 전송되지 않아 마스킹 과정 자체도 완전히 안전합니다.
+      </div>
+
+    </div>
+
+    <div class="cta-box">
+      <p>지금 바로 이미지 속 개인정보를 무료로 마스킹해보세요.<br />설치 없이 브라우저에서 바로 사용할 수 있습니다.</p>
+      <a href="../index.html" class="cta-btn">🔒 무료로 마스킹 시작하기</a>
+    </div>
+
+    <div class="post-nav">
+      <a href="05-privacy-leak-cases.html">← 이전 글: 개인정보 유출 실제 사례 모음</a>
+      <a href="07-maskprivacy-howto.html">다음 글: MaskPrivacy 사용법 완전 가이드 →</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">© 2026 MaskPrivacy. 모든 처리는 브라우저 내에서 이루어집니다.</p>
+      <nav class="footer-nav">
+        <a href="../privacy.html">개인정보 처리방침</a>
+        <a href="../terms.html">이용약관</a>
+        <a href="../about.html">서비스 소개</a>
+        <a href="index.html">블로그</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>

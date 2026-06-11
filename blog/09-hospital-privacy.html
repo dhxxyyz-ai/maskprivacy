@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="진료 기록, 처방전 등 의료 서류의 개인정보를 안전하게 처리하고 공유하는 방법을 안내합니다." />
+  <meta property="og:title" content="병원 서류 개인정보 처리 방법 — MaskPrivacy" />
+  <meta property="og:description" content="진료 기록, 처방전 등 의료 서류의 개인정보를 안전하게 처리하고 공유하는 방법을 안내합니다." />
+  <meta property="og:type" content="article" />
+  <title>병원 서류 개인정보 처리 방법 — MaskPrivacy</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    .post-wrap { max-width:720px; margin:0 auto; padding:48px 24px 80px; }
+    .post-tag { display:inline-block; font-size:12px; color:var(--point-hover); background:rgba(108,99,255,0.15); padding:3px 12px; border-radius:999px; margin-bottom:16px; }
+    .post-title { font-size:28px; font-weight:700; line-height:1.4; margin-bottom:12px; }
+    .post-date { color:var(--subtext); font-size:13px; margin-bottom:40px; padding-bottom:24px; border-bottom:1px solid var(--border); }
+    .post-body h2 { font-size:20px; font-weight:700; margin:40px 0 16px; color:var(--text); }
+    .post-body h3 { font-size:16px; font-weight:600; margin:28px 0 12px; color:var(--point-hover); }
+    .post-body p { font-size:15px; color:var(--subtext); line-height:1.9; margin-bottom:16px; }
+    .post-body ul, .post-body ol { padding-left:20px; margin-bottom:16px; }
+    .post-body li { font-size:15px; color:var(--subtext); line-height:1.9; margin-bottom:6px; }
+    .post-highlight { background:var(--card); border-left:3px solid var(--point); border-radius:8px; padding:16px 20px; margin:24px 0; font-size:15px; color:var(--text); line-height:1.8; }
+    .post-warn { background:rgba(239,68,68,0.08); border-left:3px solid #EF4444; border-radius:8px; padding:16px 20px; margin:24px 0; font-size:15px; color:var(--text); line-height:1.8; }
+    .post-table { width:100%; border-collapse:collapse; margin:20px 0; font-size:14px; }
+    .post-table th { background:var(--card); padding:12px 16px; text-align:left; font-weight:600; border:1px solid var(--border); color:var(--text); }
+    .post-table td { padding:11px 16px; border:1px solid var(--border); color:var(--subtext); line-height:1.7; }
+    .post-table tr:hover td { background:rgba(108,99,255,0.04); }
+    .post-nav { display:flex; justify-content:space-between; margin-top:60px; padding-top:24px; border-top:1px solid var(--border); gap:12px; }
+    .post-nav a { font-size:14px; color:var(--subtext); }
+    .post-nav a:hover { color:var(--text); }
+    .cta-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; text-align:center; margin:48px 0 0; }
+    .cta-box p { font-size:15px; color:var(--subtext); margin-bottom:16px; }
+    .cta-btn { display:inline-block; background:linear-gradient(135deg,var(--point),var(--point-hover)); color:white; border-radius:10px; padding:12px 28px; font-size:14px; font-weight:600; text-decoration:none; }
+    .cta-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px var(--glow); color:white; }
+    .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--subtext); font-size:14px; margin-bottom:32px; text-decoration:none; }
+    .back-link:hover { color:var(--text); }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+          <span class="logo-icon">🔒</span>
+          <span class="logo-text">MaskPrivacy</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="post-wrap">
+    <a href="index.html" class="back-link">← 블로그 목록</a>
+    <span class="post-tag">실용</span>
+    <h1 class="post-title">병원 서류 개인정보 처리 방법</h1>
+    <div class="post-date">2026년 6월 10일</div>
+
+    <div class="post-body">
+
+      <p>보험 청구, 회사 제출, 가족 공유 등 병원 서류를 외부에 제출하거나 공유해야 하는 상황이 자주 발생합니다. 진료 기록, 처방전, 입퇴원 확인서 등에는 매우 민감한 개인정보가 담겨 있어 각별한 주의가 필요합니다.</p>
+
+      <h2>병원 서류에 담긴 개인정보</h2>
+      <ul>
+        <li><strong>기본 정보:</strong> 이름, 주민등록번호, 주소, 전화번호</li>
+        <li><strong>진료 정보:</strong> 진단명, 병력, 치료 내용, 검사 결과</li>
+        <li><strong>처방 정보:</strong> 처방약 종류, 용량, 복용 기간</li>
+        <li><strong>보험 정보:</strong> 건강보험 번호, 보험사 정보</li>
+      </ul>
+
+      <div class="post-warn">
+        ⚠️ 진단명, 병력 등 의료 정보는 개인정보보호법상 '민감정보'로 분류됩니다. 일반 개인정보보다 더 엄격한 보호가 필요하며, 무단 유출 시 더 무거운 처벌을 받을 수 있습니다.
+      </div>
+
+      <h2>상황별 마스킹 가이드</h2>
+      <table class="post-table">
+        <thead>
+          <tr><th>제출 상황</th><th>마스킹 권장 항목</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>보험사 제출</td><td>주민번호 뒷자리, 주소 상세번지</td></tr>
+          <tr><td>회사 복지 신청</td><td>진단명 (필요 시만 공개), 주민번호 뒷자리</td></tr>
+          <tr><td>카카오톡으로 가족 공유</td><td>주민번호 전체, 상세 주소</td></tr>
+          <tr><td>이메일 제출</td><td>주민번호 뒷자리, 상세 주소</td></tr>
+          <tr><td>SNS 공유 (인증샷 등)</td><td>모든 개인정보 전부</td></tr>
+        </tbody>
+      </table>
+
+      <h2>병원 서류 안전하게 공유하는 방법</h2>
+
+      <h3>1. 꼭 필요한 정보만 제공</h3>
+      <p>보험 청구에는 진단서와 영수증이면 충분한 경우가 많습니다. 요구하지 않은 서류까지 첨부하지 않도록 합니다.</p>
+
+      <h3>2. 전송 전 마스킹 필수</h3>
+      <p>병원 서류 사진을 찍어 전송하기 전 MaskPrivacy에 업로드해 주민번호와 불필요한 정보를 마스킹합니다.</p>
+
+      <h3>3. 이메일 암호화</h3>
+      <p>중요한 의료 서류를 이메일로 전송할 때는 PDF에 암호를 설정하거나 암호화된 파일 공유 서비스를 이용합니다.</p>
+
+      <h3>4. 원본 파기</h3>
+      <p>더 이상 필요 없는 병원 서류는 파쇄기로 파기합니다. 스마트폰에 저장된 사진도 완전히 삭제합니다.</p>
+
+      <div class="post-highlight">
+        💡 병원 서류 속 주민번호는 MaskPrivacy의 자동 탐지 기능으로 간편하게 마스킹할 수 있습니다. 탐지되지 않는 영역은 수동 드래그로 직접 가릴 수 있습니다.
+      </div>
+
+    </div>
+
+    <div class="cta-box">
+      <p>병원 서류 제출 전, 개인정보를 먼저 마스킹하세요.<br />서버 전송 없이 브라우저에서 안전하게 처리됩니다.</p>
+      <a href="../index.html" class="cta-btn">🔒 무료로 마스킹 시작하기</a>
+    </div>
+
+    <div class="post-nav">
+      <a href="08-worker-privacy-law.html">← 이전 글: 직장인이 꼭 알아야 할 개인정보보호법 5가지</a>
+      <a href="10-contract-masking.html">다음 글: 계약서 개인정보 마스킹하는 법 →</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">© 2026 MaskPrivacy. 모든 처리는 브라우저 내에서 이루어집니다.</p>
+      <nav class="footer-nav">
+        <a href="../privacy.html">개인정보 처리방침</a>
+        <a href="../terms.html">이용약관</a>
+        <a href="../about.html">서비스 소개</a>
+        <a href="index.html">블로그</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>

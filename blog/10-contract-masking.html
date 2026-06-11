@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="계약서를 공유하기 전 반드시 처리해야 할 개인정보 항목과 마스킹 방법을 안내합니다." />
+  <meta property="og:title" content="계약서 개인정보 마스킹하는 법 — MaskPrivacy" />
+  <meta property="og:description" content="계약서를 공유하기 전 반드시 처리해야 할 개인정보 항목과 마스킹 방법을 안내합니다." />
+  <meta property="og:type" content="article" />
+  <title>계약서 개인정보 마스킹하는 법 — MaskPrivacy</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    .post-wrap { max-width:720px; margin:0 auto; padding:48px 24px 80px; }
+    .post-tag { display:inline-block; font-size:12px; color:var(--point-hover); background:rgba(108,99,255,0.15); padding:3px 12px; border-radius:999px; margin-bottom:16px; }
+    .post-title { font-size:28px; font-weight:700; line-height:1.4; margin-bottom:12px; }
+    .post-date { color:var(--subtext); font-size:13px; margin-bottom:40px; padding-bottom:24px; border-bottom:1px solid var(--border); }
+    .post-body h2 { font-size:20px; font-weight:700; margin:40px 0 16px; color:var(--text); }
+    .post-body h3 { font-size:16px; font-weight:600; margin:28px 0 12px; color:var(--point-hover); }
+    .post-body p { font-size:15px; color:var(--subtext); line-height:1.9; margin-bottom:16px; }
+    .post-body ul, .post-body ol { padding-left:20px; margin-bottom:16px; }
+    .post-body li { font-size:15px; color:var(--subtext); line-height:1.9; margin-bottom:6px; }
+    .post-highlight { background:var(--card); border-left:3px solid var(--point); border-radius:8px; padding:16px 20px; margin:24px 0; font-size:15px; color:var(--text); line-height:1.8; }
+    .post-warn { background:rgba(239,68,68,0.08); border-left:3px solid #EF4444; border-radius:8px; padding:16px 20px; margin:24px 0; font-size:15px; color:var(--text); line-height:1.8; }
+    .post-table { width:100%; border-collapse:collapse; margin:20px 0; font-size:14px; }
+    .post-table th { background:var(--card); padding:12px 16px; text-align:left; font-weight:600; border:1px solid var(--border); color:var(--text); }
+    .post-table td { padding:11px 16px; border:1px solid var(--border); color:var(--subtext); line-height:1.7; }
+    .post-table tr:hover td { background:rgba(108,99,255,0.04); }
+    .post-nav { display:flex; justify-content:space-between; margin-top:60px; padding-top:24px; border-top:1px solid var(--border); gap:12px; }
+    .post-nav a { font-size:14px; color:var(--subtext); }
+    .post-nav a:hover { color:var(--text); }
+    .cta-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; text-align:center; margin:48px 0 0; }
+    .cta-box p { font-size:15px; color:var(--subtext); margin-bottom:16px; }
+    .cta-btn { display:inline-block; background:linear-gradient(135deg,var(--point),var(--point-hover)); color:white; border-radius:10px; padding:12px 28px; font-size:14px; font-weight:600; text-decoration:none; }
+    .cta-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px var(--glow); color:white; }
+    .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--subtext); font-size:14px; margin-bottom:32px; text-decoration:none; }
+    .back-link:hover { color:var(--text); }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="container">
+      <div class="logo">
+        <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+          <span class="logo-icon">🔒</span>
+          <span class="logo-text">MaskPrivacy</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="post-wrap">
+    <a href="index.html" class="back-link">← 블로그 목록</a>
+    <span class="post-tag">실용</span>
+    <h1 class="post-title">계약서 개인정보 마스킹하는 법</h1>
+    <div class="post-date">2026년 6월 10일</div>
+
+    <div class="post-body">
+
+      <p>부동산 계약서, 근로계약서, 서비스 계약서 등 각종 계약서에는 양측 당사자의 개인정보가 빠짐없이 담겨 있습니다. 이 서류를 제3자와 공유하거나 참고용으로 전달할 때는 반드시 개인정보를 마스킹해야 합니다.</p>
+
+      <h2>계약서에 담긴 개인정보</h2>
+      <ul>
+        <li>계약 당사자 이름</li>
+        <li>주민등록번호 또는 사업자등록번호</li>
+        <li>주소 (자택 또는 사업장)</li>
+        <li>전화번호, 이메일</li>
+        <li>계좌번호 (대금 지급 정보)</li>
+        <li>서명 또는 인감</li>
+      </ul>
+
+      <h2>계약서 공유 상황별 마스킹 기준</h2>
+      <table class="post-table">
+        <thead>
+          <tr><th>공유 상황</th><th>마스킹 필요 항목</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>분쟁 상담 (법무사·변호사)</td><td>상대방 주민번호, 계좌번호</td></tr>
+          <tr><td>세무 처리 참고용</td><td>주민번호 뒷자리, 상대방 연락처</td></tr>
+          <tr><td>사내 공유·보고</td><td>주민번호 전체, 계좌번호, 상세 주소</td></tr>
+          <tr><td>온라인 커뮤니티 문의</td><td>모든 개인정보 전부</td></tr>
+        </tbody>
+      </table>
+
+      <div class="post-warn">
+        ⚠️ 계약서를 온라인 커뮤니티나 SNS에 올려 법률 조언을 구할 때 개인정보를 가리지 않으면 제3자에게 무단으로 노출됩니다. 반드시 모든 개인정보를 마스킹한 후 공유하세요.
+      </div>
+
+      <h2>계약서 마스킹 절차</h2>
+      <ol>
+        <li>계약서를 스캔하거나 사진으로 촬영합니다.</li>
+        <li>MaskPrivacy에 이미지를 업로드합니다.</li>
+        <li>자동 탐지된 주민번호, 전화번호, 이메일, 계좌번호를 확인합니다.</li>
+        <li>자동으로 탐지되지 않은 항목은 수동 드래그로 직접 마스킹합니다.</li>
+        <li>마스킹된 이미지를 다운로드해 공유합니다.</li>
+      </ol>
+
+      <h2>계약서 보관 시 주의사항</h2>
+      <ul>
+        <li>계약서 원본은 잠금장치가 있는 곳에 보관</li>
+        <li>디지털 사본은 암호화 후 저장</li>
+        <li>계약 종료 후 법정 보존 기간 이후에는 파기</li>
+        <li>클라우드 저장 시 접근 권한 최소화</li>
+      </ul>
+
+      <div class="post-highlight">
+        💡 계약서 사진에서 계좌번호는 자동 탐지가 가능하지만, 서명이나 인감 이미지는 수동으로 드래그해 마스킹해야 합니다. MaskPrivacy의 수동 마스킹 기능을 활용해보세요.
+      </div>
+
+    </div>
+
+    <div class="cta-box">
+      <p>계약서 공유 전, 개인정보를 먼저 마스킹하세요.<br />수동 드래그로 원하는 영역만 정확하게 가릴 수 있습니다.</p>
+      <a href="../index.html" class="cta-btn">🔒 무료로 마스킹 시작하기</a>
+    </div>
+
+    <div class="post-nav">
+      <a href="09-hospital-privacy.html">← 이전 글: 병원 서류 개인정보 처리 방법</a>
+      <a href="11-kakao-id-photo.html">다음 글: 카카오톡으로 신분증 보내도 될까? →</a>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">© 2026 MaskPrivacy. 모든 처리는 브라우저 내에서 이루어집니다.</p>
+      <nav class="footer-nav">
+        <a href="../privacy.html">개인정보 처리방침</a>
+        <a href="../terms.html">이용약관</a>
+        <a href="../about.html">서비스 소개</a>
+        <a href="index.html">블로그</a>
+      </nav>
+    </div>
+  </footer>
+
+</body>
+</html>
