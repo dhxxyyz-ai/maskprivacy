@@ -378,6 +378,48 @@ a:hover { color: var(--text); }
 }
 
 /* ============================
+   쿠팡 파트너스 광고
+============================ */
+.coupang-wrap {
+  margin: 0 0 48px;
+  padding: 20px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  text-align: center;
+}
+
+.coupang-notice {
+  font-size: 11px;
+  color: var(--subtext);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.coupang-items {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.coupang-item a {
+  display: block;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.coupang-item a:hover {
+  transform: translateY(-2px);
+}
+
+.coupang-item img {
+  display: block;
+  border-radius: 8px;
+}
+
+/* ============================
    푸터
 ============================ */
 .footer {
@@ -429,7 +471,6 @@ a:hover { color: var(--text); }
   flex-wrap: wrap;
 }
 
-/* 주민번호 버튼 */
 .rrn-btn {
   background: var(--bg);
   color: var(--subtext);
@@ -452,7 +493,6 @@ a:hover { color: var(--text); }
   border-color: transparent;
 }
 
-/* 전화번호 버튼 — 주민번호와 동일한 스타일 */
 .phone-btn {
   background: var(--bg);
   color: var(--subtext);
@@ -475,7 +515,6 @@ a:hover { color: var(--text); }
   border-color: transparent;
 }
 
-/* 주소 버튼 — 주민번호와 동일한 스타일 */
 .addr-btn {
   background: var(--bg);
   color: var(--subtext);
@@ -512,4 +551,8 @@ a:hover { color: var(--text); }
 
   .logo-text { font-size: 24px; }
   .logo-icon { font-size: 24px; }
+
+  .coupang-items {
+    gap: 10px;
+  }
 }
