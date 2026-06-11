@@ -407,7 +407,7 @@ a:hover { color: var(--text); }
 .footer-nav a:hover { color: var(--text); }
 
 /* ============================
-   마스킹 옵션 공통 (주민번호 / 주소)
+   마스킹 옵션 공통 (주민번호 / 전화번호 / 주소)
 ============================ */
 .rrn-option-wrap {
   background: var(--card);
@@ -447,6 +447,29 @@ a:hover { color: var(--text); }
 }
 
 .rrn-btn.active {
+  background: linear-gradient(135deg, var(--point), var(--point-hover));
+  color: white;
+  border-color: transparent;
+}
+
+/* 전화번호 버튼 — 주민번호와 동일한 스타일 */
+.phone-btn {
+  background: var(--bg);
+  color: var(--subtext);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 16px;
+  font-size: 13px;
+  font-family: 'Pretendard', sans-serif;
+  cursor: pointer;
+}
+
+.phone-btn:hover {
+  border-color: var(--point);
+  color: var(--text);
+}
+
+.phone-btn.active {
   background: linear-gradient(135deg, var(--point), var(--point-hover));
   color: white;
   border-color: transparent;

@@ -6,21 +6,22 @@
 // ============================
 // 1. 요소 참조
 // ============================
-const uploadZone     = document.getElementById('uploadZone');
-const fileInput      = document.getElementById('fileInput');
-const uploadContent  = document.getElementById('uploadContent');
-const progressWrap   = document.getElementById('progressWrap');
-const progressFill   = document.getElementById('progressFill');
-const progressLabel  = document.getElementById('progressLabel');
-const previewWrap    = document.getElementById('previewWrap');
-const originalCanvas = document.getElementById('originalCanvas');
-const maskedCanvas   = document.getElementById('maskedCanvas');
-const detectedWrap   = document.getElementById('detectedWrap');
-const detectedList   = document.getElementById('detectedList');
-const actionWrap     = document.getElementById('actionWrap');
-const downloadBtn    = document.getElementById('downloadBtn');
-const resetBtn       = document.getElementById('resetBtn');
-const rrnOptionWrap  = document.getElementById('rrnOptionWrap');
+const uploadZone        = document.getElementById('uploadZone');
+const fileInput         = document.getElementById('fileInput');
+const uploadContent     = document.getElementById('uploadContent');
+const progressWrap      = document.getElementById('progressWrap');
+const progressFill      = document.getElementById('progressFill');
+const progressLabel     = document.getElementById('progressLabel');
+const previewWrap       = document.getElementById('previewWrap');
+const originalCanvas    = document.getElementById('originalCanvas');
+const maskedCanvas      = document.getElementById('maskedCanvas');
+const detectedWrap      = document.getElementById('detectedWrap');
+const detectedList      = document.getElementById('detectedList');
+const actionWrap        = document.getElementById('actionWrap');
+const downloadBtn       = document.getElementById('downloadBtn');
+const resetBtn          = document.getElementById('resetBtn');
+const rrnOptionWrap     = document.getElementById('rrnOptionWrap');
+const phoneOptionWrap   = document.getElementById('phoneOptionWrap');
 
 // ============================
 // 2. 상태 관리
@@ -29,20 +30,35 @@ let originalImage = null;
 let maskRegions   = [];
 let isDrawing     = false;
 let dragStart     = { x: 0, y: 0 };
-let rrnMode       = 'full';  // full | back | back6
+let rrnMode       = 'full';   // full | back | back6
+let phoneMode     = 'full';   // full | back8 | back4
 
 // ============================
 // 3. 정규식 패턴
 // ============================
 const PATTERNS = [
   { type: '주민등록번호', regex: /\d{6}-[1-4]\d{6}/g },
+  // 전화번호: 010-1234-5678 형식
   { type: '전화번호',     regex: /01[0-9]-\d{3,4}-\d{4}/g },
+  // 전화번호: +82-10-1234-5678 형식
+  { type: '전화번호',     regex: /\+82-1[0-9]-\d{3,4}-\d{4}/g },
   { type: '이메일',       regex: /[\w.-]+@[\w.-]+\.\w{2,}/g },
   { type: '계좌번호',     regex: /\d{3,6}-\d{2,6}-\d{4,6}(-\d{2})?/g },
 ];
 
 // ============================
-// 3-1. 주소 탐지용 상수
+// 3-1. 전화번호 모드별 비율 상수
+// ============================
+// 010-1234-5678 (13자) 기준
+//   뒷 8자리: -1234-5678 = 10/13
+//   뒷 4자리: -5678      =  5/13
+// +82-10-1234-5678 (16자) 기준
+//   뒷 8자리: -1234-5678 = 10/16
+//   뒷 4자리: -5678      =  5/16
+// → 매칭된 텍스트 길이로 동적 계산
+
+// ============================
+// 3-2. 주소 탐지용 상수
 // ============================
 const SIDO_KEYWORDS = [
   '서울특별시', '서울시', '서울',
@@ -66,7 +82,6 @@ const SIDO_KEYWORDS = [
 
 const ADDR_MAX_LINES = 3;
 
-// 오탐 방지 키워드
 const ADDR_EXCLUDE_KEYWORDS = [
   '구청장', '시청장', '경찰청장', '구청', '시청', '경찰청',
   '경찰서', '주민센터', '동사무소', '소방서', '법원', '검찰청',
@@ -105,6 +120,17 @@ document.querySelectorAll('.rrn-btn').forEach((btn) => {
     btn.classList.add('active');
     rrnMode = btn.dataset.mode;
     applyRrnMode();
+    redrawMasked();
+  });
+});
+
+// 전화번호 옵션 버튼
+document.querySelectorAll('.phone-btn').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.phone-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    phoneMode = btn.dataset.mode;
+    applyPhoneMode();
     redrawMasked();
   });
 });
@@ -247,11 +273,19 @@ function detectPrivateInfo(words) {
         const x1 = Math.max(...matchedWords.map(w => w.bbox.x1));
         const y1 = Math.max(...matchedWords.map(w => w.bbox.y1));
         const padding = 4;
+
+        // 전화번호는 phoneMode, 주민번호는 rrnMode, 나머지는 full
+        let maskMode = 'full';
+        if (pattern.type === '주민등록번호') maskMode = rrnMode;
+        if (pattern.type === '전화번호')     maskMode = phoneMode;
+
         maskRegions.push({
           x: x0 - padding, y: y0 - padding,
           w: (x1 - x0) + padding * 2, h: (y1 - y0) + padding * 2,
-          type: pattern.type, value: matchedText, active: true,
-          maskMode: pattern.type === '주민등록번호' ? rrnMode : 'full',
+          type:     pattern.type,
+          value:    matchedText,
+          active:   true,
+          maskMode: maskMode,
           origX0: x0, origY0: y0, origX1: x1, origY1: y1,
         });
       }
@@ -273,11 +307,9 @@ function detectAddress(lineList) {
 
     const lineText = lineWords.map(w => w.text).join(' ');
 
-    // 오탐 방지
     const hasExclude = ADDR_EXCLUDE_KEYWORDS.some(k => lineText.includes(k));
     if (hasExclude) return;
 
-    // 시/도 키워드 단어 단위 탐지
     let sidoWordIdx = -1;
     for (let i = 0; i < lineWords.length; i++) {
       const wordText = lineWords[i].text.trim();
@@ -293,7 +325,6 @@ function detectAddress(lineList) {
     if (sidoWordIdx === -1) return;
     if (lineWords.length < 2) return;
 
-    // 최대 3줄 연속 병합
     const mergedLines      = [lineWords];
     usedLineIdx.add(lineIdx);
 
@@ -312,7 +343,6 @@ function detectAddress(lineList) {
       const nextHasExclude = ADDR_EXCLUDE_KEYWORDS.some(k => nextText.includes(k));
       if (nextHasExclude) break;
 
-      // 새로운 시/도 키워드 발견 시 중단
       const nextHasSido = nextWords.some(w =>
         SIDO_KEYWORDS.some(k => w.text.includes(k) || k.includes(w.text)) && w.text.length >= 2
       );
@@ -336,9 +366,9 @@ function detectAddress(lineList) {
     maskRegions.push({
       x: x0 - padding, y: y0 - padding,
       w: (x1 - x0) + padding * 2, h: (y1 - y0) + padding * 2,
-      type:    '주소',
-      value:   allWords.map(w => w.text).join(' ').trim(),
-      active:  true,
+      type:   '주소',
+      value:  allWords.map(w => w.text).join(' ').trim(),
+      active: true,
       origX0: x0, origY0: y0, origX1: x1, origY1: y1,
     });
   });
@@ -357,11 +387,50 @@ function applyRrnMode() {
       region.x = region.origX0 - p;
       region.w = fullW + p * 2;
     } else if (rrnMode === 'back') {
+      // 뒷자리 전체: 하이픈 포함 8자 = 8/14 비율
       const bw = Math.floor(fullW * (8 / 14));
       region.x = region.origX1 - bw - p;
       region.w = bw + p * 2;
     } else if (rrnMode === 'back6') {
+      // 뒷자리 6자리 = 6/14 비율
       const bw = Math.floor(fullW * (6 / 14));
+      region.x = region.origX1 - bw - p;
+      region.w = bw + p * 2;
+    }
+  });
+}
+
+// ============================
+// 9-3. 전화번호 모드 재적용
+// ============================
+function applyPhoneMode() {
+  maskRegions.forEach((region) => {
+    if (region.type !== '전화번호') return;
+    region.maskMode = phoneMode;
+    const fullW  = region.origX1 - region.origX0;
+    const total  = region.value.replace(/\s/g, '').length; // 실제 문자 수
+    const p      = 4;
+
+    if (phoneMode === 'full') {
+      // 전체 가리기
+      region.x = region.origX0 - p;
+      region.w = fullW + p * 2;
+
+    } else if (phoneMode === 'back8') {
+      // 뒷 번호 8자리 가리기: -1234-5678 (하이픈 포함 10자)
+      // 010-1234-5678 (13자) → 10/13
+      // +82-10-1234-5678 (16자) → 10/16
+      const maskLen = 10;
+      const bw = Math.floor(fullW * (maskLen / total));
+      region.x = region.origX1 - bw - p;
+      region.w = bw + p * 2;
+
+    } else if (phoneMode === 'back4') {
+      // 뒷 번호 4자리 가리기: -5678 (하이픈 포함 5자)
+      // 010-1234-5678 (13자) → 5/13
+      // +82-10-1234-5678 (16자) → 5/16
+      const maskLen = 5;
+      const bw = Math.floor(fullW * (maskLen / total));
       region.x = region.origX1 - bw - p;
       region.w = bw + p * 2;
     }
@@ -374,8 +443,11 @@ function applyRrnMode() {
 function renderDetectedList() {
   detectedList.innerHTML = '';
 
-  const hasRRN = maskRegions.some(r => r.type === '주민등록번호');
-  rrnOptionWrap.style.display = hasRRN ? 'block' : 'none';
+  const hasRRN   = maskRegions.some(r => r.type === '주민등록번호');
+  const hasPhone = maskRegions.some(r => r.type === '전화번호');
+
+  rrnOptionWrap.style.display   = hasRRN   ? 'block' : 'none';
+  phoneOptionWrap.style.display = hasPhone ? 'block' : 'none';
 
   if (maskRegions.length === 0) {
     detectedList.innerHTML = '<li style="color:var(--subtext);font-size:14px;">탐지된 개인정보가 없습니다.</li>';
@@ -494,22 +566,27 @@ resetBtn.addEventListener('click', () => {
   maskRegions   = [];
   isDrawing     = false;
   rrnMode       = 'full';
+  phoneMode     = 'full';
 
   [originalCanvas, maskedCanvas].forEach((c) => {
     c.getContext('2d').clearRect(0, 0, c.width, c.height);
   });
 
-  fileInput.value             = '';
-  detectedList.innerHTML      = '';
-  uploadZone.style.display    = 'block';
-  progressWrap.style.display  = 'none';
-  previewWrap.style.display   = 'none';
-  detectedWrap.style.display  = 'none';
-  rrnOptionWrap.style.display = 'none';
-  actionWrap.style.display    = 'none';
+  fileInput.value               = '';
+  detectedList.innerHTML        = '';
+  uploadZone.style.display      = 'block';
+  progressWrap.style.display    = 'none';
+  previewWrap.style.display     = 'none';
+  detectedWrap.style.display    = 'none';
+  rrnOptionWrap.style.display   = 'none';
+  phoneOptionWrap.style.display = 'none';
+  actionWrap.style.display      = 'none';
 
   document.querySelectorAll('.rrn-btn').forEach(b => b.classList.remove('active'));
   document.querySelector('.rrn-btn[data-mode="full"]').classList.add('active');
+
+  document.querySelectorAll('.phone-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.phone-btn[data-mode="full"]').classList.add('active');
 });
 
 // ============================
