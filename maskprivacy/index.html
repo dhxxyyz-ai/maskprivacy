@@ -15,29 +15,84 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* 헤더 오버라이드 — pdf-tools와 통일 */
+    .header { padding: 24px 0 16px; border-bottom: 1px solid var(--border); }
+    .header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-brand {
+      display: flex; align-items: center; gap: 10px;
+      text-decoration: none;
+    }
+    .header-brand-icon { font-size: 24px; }
+    .header-brand-text {
+      font-size: 20px; font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, var(--point), var(--point-hover));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .header-back {
+      font-size: 13px; color: var(--subtext);
+      display: flex; align-items: center; gap: 6px;
+      text-decoration: none;
+    }
+    .header-back:hover { color: var(--text); }
+
+    /* 히어로 */
+    .hero {
+      text-align: center;
+      padding: 40px 0 32px;
+    }
+    .hero-icon { font-size: 48px; margin-bottom: 16px; }
+    .hero-title {
+      font-size: 32px; font-weight: 700; margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--point), var(--point-hover));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-desc { color: var(--subtext); font-size: 15px; margin-bottom: 20px; }
+    .hero-badges { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+    .hero-badge {
+      background: var(--card); border: 1px solid var(--border);
+      border-radius: 999px; padding: 5px 16px;
+      font-size: 13px; color: var(--subtext);
+    }
+  </style>
 </head>
 <body>
 
+  <!-- 헤더: 좌측 BrowserKit 브랜드 + 우측 홈으로 링크 -->
   <header class="header">
     <div class="container">
-      <div class="logo">
-        <span class="logo-icon">🔒</span>
-        <span class="logo-text">MaskPrivacy</span>
-      </div>
-      <p class="header-desc">이미지 속 개인정보를 브라우저에서 자동으로 감지·마스킹</p>
+      <a href="../index.html" class="header-brand">
+        <span class="header-brand-icon">🧰</span>
+        <span class="header-brand-text">BrowserKit</span>
+      </a>
+      <a href="../index.html" class="header-back">← BrowserKit 홈으로</a>
     </div>
   </header>
 
-  <section class="badges">
-    <div class="container badges-wrap">
-      <span class="badge">🔒 완전 로컬 처리</span>
-      <span class="badge">⚡ 무료 사용</span>
-      <span class="badge">🛡️ 서버 전송 없음</span>
-    </div>
-  </section>
-
   <main class="main">
     <div class="container">
+
+      <!-- 히어로: 아이콘 + 서비스명 + 설명 + 뱃지 -->
+      <div class="hero">
+        <div class="hero-icon">🔒</div>
+        <div class="hero-title">MaskPrivacy</div>
+        <p class="hero-desc">이미지 속 개인정보를 브라우저에서 자동으로 감지·마스킹해주는 무료 도구</p>
+        <div class="hero-badges">
+          <span class="hero-badge">🔒 완전 로컬 처리</span>
+          <span class="hero-badge">⚡ 무료 사용</span>
+          <span class="hero-badge">🛡️ 서버 전송 없음</span>
+          <span class="hero-badge">📦 설치 불필요</span>
+        </div>
+      </div>
 
       <div class="upload-zone" id="uploadZone">
         <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp" hidden />
@@ -129,7 +184,7 @@
 
   <footer class="footer">
     <div class="container">
-      <p class="footer-copy">© 2026 MaskPrivacy. 모든 처리는 브라우저 내에서 이루어집니다.</p>
+      <p class="footer-copy">© 2026 BrowserKit. 모든 처리는 브라우저 내에서 이루어집니다.</p>
       <nav class="footer-nav">
         <a href="privacy.html">개인정보 처리방침</a>
         <a href="terms.html">이용약관</a>
