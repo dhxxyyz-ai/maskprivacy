@@ -13,29 +13,22 @@
     .doc-wrap { max-width:720px; margin:0 auto; padding:60px 24px 80px; }
     .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--subtext); font-size:14px; margin-bottom:32px; }
     .back-link:hover { color:var(--text); }
-
-    /* 히어로 */
     .about-hero { text-align:center; padding:48px 0 56px; }
     .about-hero-icon { font-size:56px; margin-bottom:20px; }
     .about-hero h1 { font-size:36px; font-weight:700; margin-bottom:16px; background:linear-gradient(135deg,var(--point),var(--point-hover)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
     .about-hero p { color:var(--subtext); font-size:16px; line-height:1.8; max-width:520px; margin:0 auto; }
-
-    /* 핵심 특징 */
     .features { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:48px 0; }
     .feature-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px 20px; text-align:center; }
     .feature-card:hover { border-color:var(--point); box-shadow:0 0 16px var(--glow); }
     .feature-icon { font-size:32px; margin-bottom:12px; }
     .feature-title { font-size:15px; font-weight:600; margin-bottom:8px; color:var(--text); }
     .feature-desc { font-size:13px; color:var(--subtext); line-height:1.7; }
-
-    /* 서비스 목록 */
     .services-section { margin:56px 0; }
     .services-section h2 { font-size:22px; font-weight:700; margin-bottom:24px; text-align:center; }
     .service-cards { display:flex; flex-direction:column; gap:16px; }
     .service-card { display:flex; align-items:flex-start; gap:20px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; }
     .service-card:hover { border-color:var(--point); }
     .service-card-icon { font-size:36px; flex-shrink:0; }
-    .service-card-body {}
     .service-card-name { font-size:17px; font-weight:700; color:var(--text); margin-bottom:6px; display:flex; align-items:center; gap:10px; }
     .service-badge { font-size:11px; font-weight:600; padding:2px 10px; border-radius:999px; }
     .service-badge.live { background:rgba(52,211,153,0.15); color:var(--success); border:1px solid rgba(52,211,153,0.3); }
@@ -43,8 +36,6 @@
     .service-card-desc { font-size:14px; color:var(--subtext); line-height:1.8; margin-bottom:10px; }
     .service-card-tags { display:flex; gap:8px; flex-wrap:wrap; }
     .service-tag { font-size:12px; color:var(--subtext); background:var(--bg); border:1px solid var(--border); border-radius:999px; padding:2px 10px; }
-
-    /* 작동 방식 */
     .how-section { margin:56px 0; }
     .how-section h2 { font-size:22px; font-weight:700; margin-bottom:32px; text-align:center; }
     .how-steps { display:flex; flex-direction:column; gap:16px; }
@@ -53,8 +44,6 @@
     .step-num { min-width:36px; height:36px; background:linear-gradient(135deg,var(--point),var(--point-hover)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; font-family:'Inter',sans-serif; color:white; flex-shrink:0; }
     .step-content h3 { font-size:15px; font-weight:600; margin-bottom:4px; color:var(--text); }
     .step-content p { font-size:14px; color:var(--subtext); line-height:1.7; }
-
-    /* 비교표 */
     .compare-section { margin:56px 0; }
     .compare-section h2 { font-size:22px; font-weight:700; margin-bottom:24px; text-align:center; }
     .compare-table { width:100%; border-collapse:collapse; font-size:14px; }
@@ -66,14 +55,11 @@
     .check { color:var(--success); font-size:16px; }
     .cross { color:#EF4444; font-size:16px; }
     .th-us { color:var(--point-hover) !important; }
-
-    /* CTA */
     .cta-section { text-align:center; margin:56px 0 0; padding:48px 32px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); }
     .cta-section h2 { font-size:22px; font-weight:700; margin-bottom:12px; }
     .cta-section p { color:var(--subtext); font-size:15px; margin-bottom:28px; }
     .btn-cta { display:inline-block; background:linear-gradient(135deg,var(--point),var(--point-hover)); color:white; border-radius:12px; padding:14px 36px; font-size:15px; font-weight:600; font-family:'Pretendard',sans-serif; text-decoration:none; border:none; cursor:pointer; }
     .btn-cta:hover { transform:translateY(-2px); box-shadow:0 8px 24px var(--glow); color:white; }
-
     @media (max-width:640px) {
       .features { grid-template-columns:1fr; }
       .about-hero h1 { font-size:26px; }
@@ -87,8 +73,8 @@
     <div class="container">
       <div class="logo">
         <a href="../../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-          <span class="logo-icon">🔒</span>
-          <span class="logo-text">MaskPrivacy</span>
+          <span class="logo-icon">🧰</span>
+          <span class="logo-text">BrowserKit</span>
         </a>
       </div>
     </div>
@@ -98,14 +84,12 @@
 
     <a href="../../index.html" class="back-link">← BrowserKit 홈으로</a>
 
-    <!-- 히어로 -->
     <section class="about-hero">
       <div class="about-hero-icon">🧰</div>
       <h1>브라우저에서 바로 쓰는 무료 도구 모음</h1>
       <p>BrowserKit은 설치도, 회원가입도, 서버 전송도 없는 브라우저 기반 도구 모음입니다. 개인정보 마스킹부터 이미지 편집, PDF 처리까지 하나의 플랫폼에서 제공합니다.</p>
     </section>
 
-    <!-- 핵심 특징 -->
     <section class="features">
       <div class="feature-card">
         <div class="feature-icon">🖥️</div>
@@ -139,11 +123,9 @@
       </div>
     </section>
 
-    <!-- 제공 서비스 -->
     <section class="services-section">
       <h2>제공 서비스</h2>
       <div class="service-cards">
-
         <div class="service-card">
           <div class="service-card-icon">🔒</div>
           <div class="service-card-body">
@@ -161,7 +143,6 @@
             </div>
           </div>
         </div>
-
         <div class="service-card">
           <div class="service-card-icon">🖼️</div>
           <div class="service-card-body">
@@ -177,7 +158,6 @@
             </div>
           </div>
         </div>
-
         <div class="service-card">
           <div class="service-card-icon">📄</div>
           <div class="service-card-body">
@@ -192,11 +172,9 @@
             </div>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!-- 작동 방식 -->
     <section class="how-section">
       <h2>어떻게 작동하나요?</h2>
       <div class="how-steps">
@@ -231,7 +209,6 @@
       </div>
     </section>
 
-    <!-- 비교표 -->
     <section class="compare-section">
       <h2>다른 서비스와 비교</h2>
       <table class="compare-table">
@@ -244,47 +221,16 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>완전 무료</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td>서버 전송 없음</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td>설치 불필요</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td>회원가입 불필요</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td>모바일 지원</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td>개인정보 자동 탐지</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
+          <tr><td>완전 무료</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td>서버 전송 없음</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+          <tr><td>설치 불필요</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td>회원가입 불필요</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td>모바일 지원</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td>개인정보 자동 탐지</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
         </tbody>
       </table>
     </section>
 
-    <!-- CTA -->
     <section class="cta-section">
       <h2>지금 바로 시작하세요</h2>
       <p>설치도, 회원가입도, 비용도 없습니다.<br />브라우저만 있으면 바로 사용할 수 있습니다.</p>
