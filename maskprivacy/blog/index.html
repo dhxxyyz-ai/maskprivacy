@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="개인정보 보호, 마스킹, 개인정보보호법에 관한 유용한 정보를 제공합니다." />
-  <meta property="og:title" content="블로그 — MaskPrivacy" />
-  <meta property="og:description" content="개인정보 보호, 마스킹, 개인정보보호법에 관한 유용한 정보를 제공합니다." />
+  <meta name="description" content="BrowserKit 블로그 — 개인정보 보호, 이미지 편집, 브라우저 도구 활용법까지 유용한 정보를 제공합니다." />
+  <meta property="og:title" content="블로그 — BrowserKit" />
+  <meta property="og:description" content="개인정보 보호, 이미지 편집, 브라우저 도구 활용법까지 유용한 정보를 제공합니다." />
   <meta property="og:type" content="website" />
-  <title>블로그 — MaskPrivacy</title>
+  <title>블로그 — BrowserKit</title>
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -28,6 +28,14 @@
     .blog-hero p {
       color: var(--subtext);
       font-size: 15px;
+    }
+    .blog-section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--subtext);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin: 40px 0 16px;
     }
     .blog-grid {
       display: grid;
@@ -74,6 +82,16 @@
       color: var(--subtext);
       margin-top: auto;
     }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--subtext);
+      font-size: 14px;
+      margin-bottom: 8px;
+      text-decoration: none;
+    }
+    .back-link:hover { color: var(--text); }
     @media (max-width: 768px) {
       .blog-grid { grid-template-columns: 1fr; }
       .blog-hero h1 { font-size: 24px; }
@@ -88,7 +106,7 @@
   <header class="header">
     <div class="container">
       <div class="logo">
-        <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+        <a href="../../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
           <span class="logo-icon">🔒</span>
           <span class="logo-text">MaskPrivacy</span>
         </a>
@@ -98,11 +116,15 @@
 
   <main>
     <div class="container">
+
+      <a href="../../index.html" class="back-link">← BrowserKit 홈으로</a>
+
       <div class="blog-hero">
-        <h1>개인정보 보호 블로그</h1>
-        <p>개인정보 보호, 마스킹 방법, 관련 법률까지 쉽게 알아보세요.</p>
+        <h1>BrowserKit 블로그</h1>
+        <p>개인정보 보호, 마스킹 방법, 브라우저 도구 활용법까지 유용한 정보를 제공합니다.</p>
       </div>
 
+      <div class="blog-section-title">🔒 개인정보 보호</div>
       <div class="blog-grid">
 
         <a href="01-privacy-law-intro.html" class="blog-card">
@@ -137,20 +159,6 @@
           <span class="blog-card-tag">사례</span>
           <div class="blog-card-title">개인정보 유출 실제 사례 모음</div>
           <div class="blog-card-desc">국내외 개인정보 유출 사례를 통해 보안의 중요성을 다시 한번 확인해보세요.</div>
-          <div class="blog-card-date">2026.06.10</div>
-        </a>
-
-        <a href="06-image-masking-guide.html" class="blog-card">
-          <span class="blog-card-tag">가이드</span>
-          <div class="blog-card-title">이미지 속 개인정보 무료로 가리는 방법</div>
-          <div class="blog-card-desc">복잡한 툴 없이 브라우저에서 바로 개인정보를 마스킹하는 방법을 안내합니다.</div>
-          <div class="blog-card-date">2026.06.10</div>
-        </a>
-
-        <a href="07-maskprivacy-howto.html" class="blog-card">
-          <span class="blog-card-tag">가이드</span>
-          <div class="blog-card-title">MaskPrivacy 사용법 완전 가이드</div>
-          <div class="blog-card-desc">MaskPrivacy의 모든 기능을 단계별로 설명하는 공식 사용 가이드입니다.</div>
           <div class="blog-card-date">2026.06.10</div>
         </a>
 
@@ -189,6 +197,32 @@
           <div class="blog-card-date">2026.06.10</div>
         </a>
 
+        <a href="15-privacy-report-guide.html" class="blog-card">
+          <span class="blog-card-tag">법률</span>
+          <div class="blog-card-title">개인정보보호위원회 신고 방법 안내</div>
+          <div class="blog-card-desc">개인정보 침해를 당했을 때 신고하는 방법과 절차를 단계별로 안내합니다.</div>
+          <div class="blog-card-date">2026.06.10</div>
+        </a>
+
+      </div>
+
+      <div class="blog-section-title">🛠️ 도구 활용 가이드</div>
+      <div class="blog-grid">
+
+        <a href="06-image-masking-guide.html" class="blog-card">
+          <span class="blog-card-tag">가이드</span>
+          <div class="blog-card-title">이미지 속 개인정보 무료로 가리는 방법</div>
+          <div class="blog-card-desc">복잡한 툴 없이 브라우저에서 바로 개인정보를 마스킹하는 방법을 안내합니다.</div>
+          <div class="blog-card-date">2026.06.10</div>
+        </a>
+
+        <a href="07-maskprivacy-howto.html" class="blog-card">
+          <span class="blog-card-tag">가이드</span>
+          <div class="blog-card-title">MaskPrivacy 사용법 완전 가이드</div>
+          <div class="blog-card-desc">MaskPrivacy의 모든 기능을 단계별로 설명하는 공식 사용 가이드입니다.</div>
+          <div class="blog-card-date">2026.06.10</div>
+        </a>
+
         <a href="13-masking-tool-compare.html" class="blog-card">
           <span class="blog-card-tag">비교</span>
           <div class="blog-card-title">무료 개인정보 마스킹 툴 비교</div>
@@ -203,20 +237,14 @@
           <div class="blog-card-date">2026.06.10</div>
         </a>
 
-        <a href="15-privacy-report-guide.html" class="blog-card">
-          <span class="blog-card-tag">법률</span>
-          <div class="blog-card-title">개인정보보호위원회 신고 방법 안내</div>
-          <div class="blog-card-desc">개인정보 침해를 당했을 때 신고하는 방법과 절차를 단계별로 안내합니다.</div>
-          <div class="blog-card-date">2026.06.10</div>
-        </a>
-
       </div>
+
     </div>
   </main>
 
   <footer class="footer">
     <div class="container">
-      <p class="footer-copy">© 2026 MaskPrivacy. 모든 처리는 브라우저 내에서 이루어집니다.</p>
+      <p class="footer-copy">© 2026 BrowserKit. 모든 처리는 브라우저 내에서 이루어집니다.</p>
       <nav class="footer-nav">
         <a href="../privacy.html">개인정보 처리방침</a>
         <a href="../terms.html">이용약관</a>

@@ -3,244 +3,106 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="MaskPrivacy 서비스 소개 — 완전 로컬 처리 방식의 무료 개인정보 마스킹 도구입니다." />
-  <title>서비스 소개 — MaskPrivacy</title>
+  <meta name="description" content="BrowserKit 서비스 소개 — 브라우저에서 바로 쓰는 무료 도구 모음. 서버 전송 없이 개인정보 마스킹, 이미지 편집, PDF 처리까지." />
+  <title>서비스 소개 — BrowserKit</title>
   <link rel="stylesheet" href="css/style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* 공통 doc 스타일 */
-    .doc-wrap {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 60px 24px 80px;
-    }
-    .back-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--subtext);
-      font-size: 14px;
-      margin-bottom: 32px;
-    }
-    .back-link:hover { color: var(--text); }
+    .doc-wrap { max-width:720px; margin:0 auto; padding:60px 24px 80px; }
+    .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--subtext); font-size:14px; margin-bottom:32px; }
+    .back-link:hover { color:var(--text); }
 
     /* 히어로 */
-    .about-hero {
-      text-align: center;
-      padding: 48px 0 56px;
-    }
-    .about-hero-icon {
-      font-size: 56px;
-      margin-bottom: 20px;
-    }
-    .about-hero h1 {
-      font-size: 36px;
-      font-weight: 700;
-      margin-bottom: 16px;
-      background: linear-gradient(135deg, var(--point), var(--point-hover));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .about-hero p {
-      color: var(--subtext);
-      font-size: 16px;
-      line-height: 1.8;
-      max-width: 520px;
-      margin: 0 auto;
-    }
+    .about-hero { text-align:center; padding:48px 0 56px; }
+    .about-hero-icon { font-size:56px; margin-bottom:20px; }
+    .about-hero h1 { font-size:36px; font-weight:700; margin-bottom:16px; background:linear-gradient(135deg,var(--point),var(--point-hover)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .about-hero p { color:var(--subtext); font-size:16px; line-height:1.8; max-width:520px; margin:0 auto; }
 
-    /* 핵심 특징 카드 */
-    .features {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      margin: 48px 0;
-    }
-    .feature-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px 20px;
-      text-align: center;
-    }
-    .feature-card:hover {
-      border-color: var(--point);
-      box-shadow: 0 0 16px var(--glow);
-    }
-    .feature-icon {
-      font-size: 32px;
-      margin-bottom: 12px;
-    }
-    .feature-title {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: var(--text);
-    }
-    .feature-desc {
-      font-size: 13px;
-      color: var(--subtext);
-      line-height: 1.7;
-    }
+    /* 핵심 특징 */
+    .features { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin:48px 0; }
+    .feature-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px 20px; text-align:center; }
+    .feature-card:hover { border-color:var(--point); box-shadow:0 0 16px var(--glow); }
+    .feature-icon { font-size:32px; margin-bottom:12px; }
+    .feature-title { font-size:15px; font-weight:600; margin-bottom:8px; color:var(--text); }
+    .feature-desc { font-size:13px; color:var(--subtext); line-height:1.7; }
+
+    /* 서비스 목록 */
+    .services-section { margin:56px 0; }
+    .services-section h2 { font-size:22px; font-weight:700; margin-bottom:24px; text-align:center; }
+    .service-cards { display:flex; flex-direction:column; gap:16px; }
+    .service-card { display:flex; align-items:flex-start; gap:20px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; }
+    .service-card:hover { border-color:var(--point); }
+    .service-card-icon { font-size:36px; flex-shrink:0; }
+    .service-card-body {}
+    .service-card-name { font-size:17px; font-weight:700; color:var(--text); margin-bottom:6px; display:flex; align-items:center; gap:10px; }
+    .service-badge { font-size:11px; font-weight:600; padding:2px 10px; border-radius:999px; }
+    .service-badge.live { background:rgba(52,211,153,0.15); color:var(--success); border:1px solid rgba(52,211,153,0.3); }
+    .service-badge.soon { background:rgba(108,99,255,0.15); color:var(--point-hover); border:1px solid var(--border); }
+    .service-card-desc { font-size:14px; color:var(--subtext); line-height:1.8; margin-bottom:10px; }
+    .service-card-tags { display:flex; gap:8px; flex-wrap:wrap; }
+    .service-tag { font-size:12px; color:var(--subtext); background:var(--bg); border:1px solid var(--border); border-radius:999px; padding:2px 10px; }
 
     /* 작동 방식 */
-    .how-section {
-      margin: 56px 0;
-    }
-    .how-section h2 {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 32px;
-      text-align: center;
-    }
-    .how-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .how-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 20px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px 24px;
-    }
-    .how-step:hover { border-color: var(--point); }
-    .step-num {
-      min-width: 36px;
-      height: 36px;
-      background: linear-gradient(135deg, var(--point), var(--point-hover));
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: 700;
-      font-family: 'Inter', sans-serif;
-      color: white;
-      flex-shrink: 0;
-    }
-    .step-content h3 {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 4px;
-      color: var(--text);
-    }
-    .step-content p {
-      font-size: 14px;
-      color: var(--subtext);
-      line-height: 1.7;
-    }
+    .how-section { margin:56px 0; }
+    .how-section h2 { font-size:22px; font-weight:700; margin-bottom:32px; text-align:center; }
+    .how-steps { display:flex; flex-direction:column; gap:16px; }
+    .how-step { display:flex; align-items:flex-start; gap:20px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 24px; }
+    .how-step:hover { border-color:var(--point); }
+    .step-num { min-width:36px; height:36px; background:linear-gradient(135deg,var(--point),var(--point-hover)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; font-family:'Inter',sans-serif; color:white; flex-shrink:0; }
+    .step-content h3 { font-size:15px; font-weight:600; margin-bottom:4px; color:var(--text); }
+    .step-content p { font-size:14px; color:var(--subtext); line-height:1.7; }
 
     /* 비교표 */
-    .compare-section {
-      margin: 56px 0;
-    }
-    .compare-section h2 {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 24px;
-      text-align: center;
-    }
-    .compare-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-    .compare-table th {
-      background: var(--card);
-      padding: 14px 16px;
-      text-align: center;
-      font-weight: 600;
-      border: 1px solid var(--border);
-      color: var(--text);
-    }
-    .compare-table th:first-child { text-align: left; }
-    .compare-table td {
-      padding: 12px 16px;
-      border: 1px solid var(--border);
-      color: var(--subtext);
-      text-align: center;
-    }
-    .compare-table td:first-child {
-      text-align: left;
-      color: var(--text);
-    }
-    .compare-table tr:hover td { background: rgba(108, 99, 255, 0.04); }
-    .check { color: var(--success); font-size: 16px; }
-    .cross { color: #EF4444; font-size: 16px; }
-    .th-us { color: var(--point-hover) !important; }
+    .compare-section { margin:56px 0; }
+    .compare-section h2 { font-size:22px; font-weight:700; margin-bottom:24px; text-align:center; }
+    .compare-table { width:100%; border-collapse:collapse; font-size:14px; }
+    .compare-table th { background:var(--card); padding:14px 16px; text-align:center; font-weight:600; border:1px solid var(--border); color:var(--text); }
+    .compare-table th:first-child { text-align:left; }
+    .compare-table td { padding:12px 16px; border:1px solid var(--border); color:var(--subtext); text-align:center; }
+    .compare-table td:first-child { text-align:left; color:var(--text); }
+    .compare-table tr:hover td { background:rgba(108,99,255,0.04); }
+    .check { color:var(--success); font-size:16px; }
+    .cross { color:#EF4444; font-size:16px; }
+    .th-us { color:var(--point-hover) !important; }
 
     /* CTA */
-    .cta-section {
-      text-align: center;
-      margin: 56px 0 0;
-      padding: 48px 32px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-    }
-    .cta-section h2 {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 12px;
-    }
-    .cta-section p {
-      color: var(--subtext);
-      font-size: 15px;
-      margin-bottom: 28px;
-    }
-    .btn-cta {
-      display: inline-block;
-      background: linear-gradient(135deg, var(--point), var(--point-hover));
-      color: white;
-      border-radius: 12px;
-      padding: 14px 36px;
-      font-size: 15px;
-      font-weight: 600;
-      font-family: 'Pretendard', sans-serif;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-    }
-    .btn-cta:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px var(--glow);
-      color: white;
-    }
+    .cta-section { text-align:center; margin:56px 0 0; padding:48px 32px; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); }
+    .cta-section h2 { font-size:22px; font-weight:700; margin-bottom:12px; }
+    .cta-section p { color:var(--subtext); font-size:15px; margin-bottom:28px; }
+    .btn-cta { display:inline-block; background:linear-gradient(135deg,var(--point),var(--point-hover)); color:white; border-radius:12px; padding:14px 36px; font-size:15px; font-weight:600; font-family:'Pretendard',sans-serif; text-decoration:none; border:none; cursor:pointer; }
+    .btn-cta:hover { transform:translateY(-2px); box-shadow:0 8px 24px var(--glow); color:white; }
 
-    /* 반응형 */
-    @media (max-width: 640px) {
-      .features { grid-template-columns: 1fr; }
-      .about-hero h1 { font-size: 26px; }
+    @media (max-width:640px) {
+      .features { grid-template-columns:1fr; }
+      .about-hero h1 { font-size:26px; }
+      .service-card { flex-direction:column; gap:12px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- 헤더 -->
   <header class="header">
     <div class="container">
       <div class="logo">
-        <span class="logo-icon">🔒</span>
-        <span class="logo-text">MaskPrivacy</span>
+        <a href="../../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
+          <span class="logo-icon">🔒</span>
+          <span class="logo-text">MaskPrivacy</span>
+        </a>
       </div>
     </div>
   </header>
 
   <div class="doc-wrap">
 
-    <a href="index.html" class="back-link">← 메인으로 돌아가기</a>
+    <a href="../../index.html" class="back-link">← BrowserKit 홈으로</a>
 
     <!-- 히어로 -->
     <section class="about-hero">
-      <div class="about-hero-icon">🔒</div>
-      <h1>개인정보, 안전하게 가리세요</h1>
-      <p>MaskPrivacy는 이미지 속 개인정보를 브라우저에서 자동으로 감지·마스킹하는 완전 무료 도구입니다. 파일이 서버로 전송되지 않아 유출 걱정이 없습니다.</p>
+      <div class="about-hero-icon">🧰</div>
+      <h1>브라우저에서 바로 쓰는 무료 도구 모음</h1>
+      <p>BrowserKit은 설치도, 회원가입도, 서버 전송도 없는 브라우저 기반 도구 모음입니다. 개인정보 마스킹부터 이미지 편집, PDF 처리까지 하나의 플랫폼에서 제공합니다.</p>
     </section>
 
     <!-- 핵심 특징 -->
@@ -248,32 +110,89 @@
       <div class="feature-card">
         <div class="feature-icon">🖥️</div>
         <div class="feature-title">완전 로컬 처리</div>
-        <div class="feature-desc">모든 이미지 처리가 브라우저 안에서만 이루어집니다. 서버로 전송되는 데이터가 없습니다.</div>
+        <div class="feature-desc">모든 파일 처리가 브라우저 안에서만 이루어집니다. 서버로 전송되는 데이터가 없습니다.</div>
       </div>
       <div class="feature-card">
         <div class="feature-icon">⚡</div>
         <div class="feature-title">무료 사용</div>
-        <div class="feature-desc">회원가입 없이 즉시 사용 가능합니다. 영구 무료로 제공됩니다.</div>
+        <div class="feature-desc">회원가입 없이 즉시 사용 가능합니다. 모든 도구가 영구 무료로 제공됩니다.</div>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🎯</div>
-        <div class="feature-title">자동 탐지</div>
-        <div class="feature-desc">주민번호, 전화번호, 이메일, 계좌번호를 자동으로 감지하고 마스킹합니다.</div>
+        <div class="feature-icon">📦</div>
+        <div class="feature-title">설치 불필요</div>
+        <div class="feature-desc">브라우저만 있으면 됩니다. PC, 모바일 어디서든 바로 사용할 수 있습니다.</div>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">✏️</div>
-        <div class="feature-title">수동 마스킹</div>
-        <div class="feature-desc">자동 탐지 외에도 원하는 영역을 드래그하여 직접 마스킹할 수 있습니다.</div>
+        <div class="feature-icon">🔒</div>
+        <div class="feature-title">개인정보 안전</div>
+        <div class="feature-desc">파일이 외부로 나가지 않아 민감한 문서도 안심하고 처리할 수 있습니다.</div>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">🔄</div>
-        <div class="feature-title">개별 ON/OFF</div>
-        <div class="feature-desc">탐지된 항목을 개별적으로 켜고 끌 수 있어 세밀한 조정이 가능합니다.</div>
+        <div class="feature-icon">🛠️</div>
+        <div class="feature-title">다양한 도구</div>
+        <div class="feature-desc">개인정보 마스킹, 이미지 편집, PDF 처리 등 다양한 도구를 한곳에서 제공합니다.</div>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">📥</div>
-        <div class="feature-title">즉시 다운로드</div>
-        <div class="feature-desc">마스킹 완료된 이미지를 PNG 형식으로 즉시 저장할 수 있습니다.</div>
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">모바일 지원</div>
+        <div class="feature-desc">스마트폰, 태블릿에서도 동일하게 사용할 수 있습니다.</div>
+      </div>
+    </section>
+
+    <!-- 제공 서비스 -->
+    <section class="services-section">
+      <h2>제공 서비스</h2>
+      <div class="service-cards">
+
+        <div class="service-card">
+          <div class="service-card-icon">🔒</div>
+          <div class="service-card-body">
+            <div class="service-card-name">
+              개인정보 마스킹 (MaskPrivacy)
+              <span class="service-badge live">✓ 서비스 중</span>
+            </div>
+            <div class="service-card-desc">이미지 속 주민번호, 전화번호, 이메일, 계좌번호를 OCR로 자동 탐지해 마스킹합니다. 수동 드래그 마스킹과 부분 마스킹 옵션도 지원합니다.</div>
+            <div class="service-card-tags">
+              <span class="service-tag">주민번호</span>
+              <span class="service-tag">전화번호</span>
+              <span class="service-tag">이메일</span>
+              <span class="service-tag">계좌번호</span>
+              <span class="service-tag">주소</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-icon">🖼️</div>
+          <div class="service-card-body">
+            <div class="service-card-name">
+              이미지 편집 도구
+              <span class="service-badge soon">준비 중</span>
+            </div>
+            <div class="service-card-desc">이미지 크기 조정, 형식 변환(PNG↔JPG), 용량 압축을 브라우저에서 바로 처리합니다. 모두 서버 전송 없이 로컬에서 처리됩니다.</div>
+            <div class="service-card-tags">
+              <span class="service-tag">크기 조정</span>
+              <span class="service-tag">형식 변환</span>
+              <span class="service-tag">용량 압축</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="service-card">
+          <div class="service-card-icon">📄</div>
+          <div class="service-card-body">
+            <div class="service-card-name">
+              PDF 도구
+              <span class="service-badge soon">준비 중</span>
+            </div>
+            <div class="service-card-desc">PDF 문서 속 개인정보를 브라우저에서 바로 마스킹합니다. 병원 서류, 계약서 등 민감한 PDF를 안전하게 처리할 수 있습니다.</div>
+            <div class="service-card-tags">
+              <span class="service-tag">PDF 마스킹</span>
+              <span class="service-tag">개인정보 제거</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -284,29 +203,29 @@
         <div class="how-step">
           <div class="step-num">1</div>
           <div class="step-content">
-            <h3>이미지 업로드</h3>
-            <p>마스킹이 필요한 이미지를 드래그하거나 클릭하여 업로드합니다. PNG, JPG, WEBP 형식을 지원합니다.</p>
+            <h3>도구 선택</h3>
+            <p>BrowserKit 허브에서 원하는 도구를 선택합니다. 별도 설치나 회원가입 없이 바로 접속할 수 있습니다.</p>
           </div>
         </div>
         <div class="how-step">
           <div class="step-num">2</div>
           <div class="step-content">
-            <h3>자동 개인정보 탐지</h3>
-            <p>Tesseract.js OCR 엔진이 브라우저 내에서 이미지를 분석하고, 정규식 패턴으로 주민번호·전화번호·이메일·계좌번호를 탐지합니다.</p>
+            <h3>파일 업로드</h3>
+            <p>처리할 파일을 드래그하거나 클릭해서 업로드합니다. 파일은 브라우저 메모리에만 올라가며 서버로 전송되지 않습니다.</p>
           </div>
         </div>
         <div class="how-step">
           <div class="step-num">3</div>
           <div class="step-content">
-            <h3>마스킹 확인 및 조정</h3>
-            <p>탐지된 항목을 목록에서 확인하고 개별 ON/OFF로 조정합니다. 누락된 영역은 드래그로 직접 추가할 수 있습니다.</p>
+            <h3>브라우저 내 처리</h3>
+            <p>모든 처리가 사용자의 브라우저 내에서만 이루어집니다. OCR, 이미지 변환, 압축 등 모든 연산이 로컬에서 실행됩니다.</p>
           </div>
         </div>
         <div class="how-step">
           <div class="step-num">4</div>
           <div class="step-content">
-            <h3>다운로드</h3>
-            <p>마스킹 완료된 이미지를 PNG로 즉시 다운로드합니다. 원본 이미지는 어디에도 저장되지 않습니다.</p>
+            <h3>결과 다운로드</h3>
+            <p>처리 완료된 파일을 즉시 다운로드합니다. 원본 파일은 세션 종료 시 자동으로 메모리에서 삭제됩니다.</p>
           </div>
         </div>
       </div>
@@ -319,9 +238,9 @@
         <thead>
           <tr>
             <th>항목</th>
-            <th class="th-us">MaskPrivacy</th>
-            <th>일반 편집 도구</th>
-            <th>유료 마스킹 서비스</th>
+            <th class="th-us">BrowserKit</th>
+            <th>일반 온라인 도구</th>
+            <th>유료 소프트웨어</th>
           </tr>
         </thead>
         <tbody>
@@ -335,31 +254,31 @@
             <td>서버 전송 없음</td>
             <td><span class="check">✓</span></td>
             <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td>자동 개인정보 탐지</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="cross">✗</span></td>
             <td><span class="check">✓</span></td>
           </tr>
           <tr>
             <td>설치 불필요</td>
             <td><span class="check">✓</span></td>
+            <td><span class="check">✓</span></td>
             <td><span class="cross">✗</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td>수동 마스킹</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
           </tr>
           <tr>
             <td>회원가입 불필요</td>
             <td><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>모바일 지원</td>
+            <td><span class="check">✓</span></td>
             <td><span class="check">✓</span></td>
             <td><span class="cross">✗</span></td>
+          </tr>
+          <tr>
+            <td>개인정보 자동 탐지</td>
+            <td><span class="check">✓</span></td>
+            <td><span class="cross">✗</span></td>
+            <td><span class="check">✓</span></td>
           </tr>
         </tbody>
       </table>
@@ -368,16 +287,15 @@
     <!-- CTA -->
     <section class="cta-section">
       <h2>지금 바로 시작하세요</h2>
-      <p>설치도, 회원가입도, 비용도 없습니다.<br />이미지만 올리면 바로 사용할 수 있습니다.</p>
-      <a href="index.html" class="btn-cta">무료로 마스킹 시작하기</a>
+      <p>설치도, 회원가입도, 비용도 없습니다.<br />브라우저만 있으면 바로 사용할 수 있습니다.</p>
+      <a href="../../index.html" class="btn-cta">🧰 BrowserKit 시작하기</a>
     </section>
 
   </div>
 
-  <!-- 푸터 -->
   <footer class="footer">
     <div class="container">
-      <p class="footer-copy">© 2026 MaskPrivacy. 모든 처리는 브라우저 내에서 이루어집니다.</p>
+      <p class="footer-copy">© 2026 BrowserKit. 모든 처리는 브라우저 내에서 이루어집니다.</p>
       <nav class="footer-nav">
         <a href="privacy.html">개인정보 처리방침</a>
         <a href="terms.html">이용약관</a>
