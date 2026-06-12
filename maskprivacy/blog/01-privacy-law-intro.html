@@ -4,15 +4,22 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="개인정보보호법의 주요 내용과 위반 시 처벌 수위를 알기 쉽게 정리했습니다. 개인정보의 정의부터 수집·이용 원칙까지 핵심만 설명합니다." />
-  <meta property="og:title" content="개인정보보호법이란? 핵심만 쉽게 정리 — MaskPrivacy" />
+  <meta property="og:title" content="개인정보보호법이란? 핵심만 쉽게 정리 — BrowserKit" />
   <meta property="og:description" content="개인정보보호법의 주요 내용과 위반 시 처벌 수위를 알기 쉽게 정리했습니다." />
   <meta property="og:type" content="article" />
-  <title>개인정보보호법이란? 핵심만 쉽게 정리 — MaskPrivacy</title>
+  <title>개인정보보호법이란? 핵심만 쉽게 정리 — BrowserKit</title>
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
+    .header { padding:24px 0 16px; border-bottom:1px solid var(--border); }
+    .header .container { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+    .header-brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .header-brand-icon { font-size:24px; }
+    .header-brand-text { font-size:20px; font-weight:700; font-family:'Inter',sans-serif; background:linear-gradient(135deg,var(--point),var(--point-hover)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .header-back { font-size:13px; color:var(--subtext); display:flex; align-items:center; gap:6px; text-decoration:none; }
+    .header-back:hover { color:var(--text); }
     .post-wrap { max-width:720px; margin:0 auto; padding:48px 24px 80px; }
     .post-tag { display:inline-block; font-size:12px; color:var(--point-hover); background:rgba(108,99,255,0.15); padding:3px 12px; border-radius:999px; margin-bottom:16px; }
     .post-title { font-size:28px; font-weight:700; line-height:1.4; margin-bottom:12px; }
@@ -41,12 +48,11 @@
 <body>
   <header class="header">
     <div class="container">
-      <div class="logo">
-        <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-          <span class="logo-icon">🔒</span>
-          <span class="logo-text">MaskPrivacy</span>
-        </a>
-      </div>
+      <a href="../../index.html" class="header-brand">
+        <span class="header-brand-icon">🧰</span>
+        <span class="header-brand-text">BrowserKit</span>
+      </a>
+      <a href="../../index.html" class="header-back">← BrowserKit 홈으로</a>
     </div>
   </header>
   <div class="post-wrap">
@@ -113,20 +119,11 @@
       <p>문서·신분증 속 개인정보, 지금 바로 무료로 마스킹해보세요.<br />서버 전송 없이 브라우저에서 안전하게 처리됩니다.</p>
       <a href="../index.html" class="cta-btn">🔒 무료로 마스킹 시작하기</a>
     </div>
-    <!-- 쿠팡 파트너스 광고 : 보안 USB + 프라이버시 필름 -->
     <div class="coupang-wrap">
       <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
       <div class="coupang-items">
-        <div class="coupang-item">
-          <a href="https://link.coupang.com/a/euo2xIEWI0" target="_blank" referrerpolicy="unsafe-url">
-            <img src="https://image3.coupangcdn.com/image/affiliate/banner/01e011f943244ce5d7e901ee092a7185@2x.jpg" alt="삼성전자 USB메모리 3.1 FIT PLUS 128GB" width="120" height="240" />
-          </a>
-        </div>
-        <div class="coupang-item">
-          <a href="https://link.coupang.com/a/euphPUBh80" target="_blank" referrerpolicy="unsafe-url">
-            <img src="https://img1c.coupangcdn.com/image/affiliate/banner/6469cec2b9ddfa0476d8fdd702e7af36@2x.jpg" alt="신지모루 프라이버시 강화유리 액정보호필름" width="120" height="240" />
-          </a>
-        </div>
+        <div class="coupang-item"><a href="https://link.coupang.com/a/euo2xIEWI0" target="_blank" referrerpolicy="unsafe-url"><img src="https://image3.coupangcdn.com/image/affiliate/banner/01e011f943244ce5d7e901ee092a7185@2x.jpg" alt="삼성전자 USB메모리 3.1 FIT PLUS 128GB" width="120" height="240" /></a></div>
+        <div class="coupang-item"><a href="https://link.coupang.com/a/euphPUBh80" target="_blank" referrerpolicy="unsafe-url"><img src="https://img1c.coupangcdn.com/image/affiliate/banner/6469cec2b9ddfa0476d8fdd702e7af36@2x.jpg" alt="신지모루 프라이버시 강화유리 액정보호필름" width="120" height="240" /></a></div>
       </div>
     </div>
     <div class="post-nav">
@@ -136,7 +133,7 @@
   </div>
   <footer class="footer">
     <div class="container">
-      <p class="footer-copy">© 2026 MaskPrivacy. 모든 처리는 브라우저 내에서 이루어집니다.</p>
+      <p class="footer-copy">© 2026 BrowserKit. 모든 처리는 브라우저 내에서 이루어집니다.</p>
       <nav class="footer-nav">
         <a href="../privacy.html">개인정보 처리방침</a>
         <a href="../terms.html">이용약관</a>

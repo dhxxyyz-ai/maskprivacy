@@ -4,15 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="MaskPrivacy의 모든 기능을 단계별로 설명하는 공식 사용 가이드입니다. 자동 마스킹부터 수동 마스킹까지 쉽게 따라할 수 있습니다." />
-  <meta property="og:title" content="MaskPrivacy 사용법 완전 가이드 — MaskPrivacy" />
+  <meta property="og:title" content="MaskPrivacy 사용법 완전 가이드 — BrowserKit" />
   <meta property="og:description" content="MaskPrivacy의 모든 기능을 단계별로 설명하는 공식 사용 가이드입니다." />
   <meta property="og:type" content="article" />
-  <title>MaskPrivacy 사용법 완전 가이드 — MaskPrivacy</title>
+  <title>MaskPrivacy 사용법 완전 가이드 — BrowserKit</title>
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
+    .header{padding:24px 0 16px;border-bottom:1px solid var(--border)}.header .container{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}.header-brand{display:flex;align-items:center;gap:10px;text-decoration:none}.header-brand-icon{font-size:24px}.header-brand-text{font-size:20px;font-weight:700;font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--point),var(--point-hover));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.header-back{font-size:13px;color:var(--subtext);display:flex;align-items:center;gap:6px;text-decoration:none}.header-back:hover{color:var(--text)}
     .post-wrap { max-width:720px; margin:0 auto; padding:48px 24px 80px; }
     .post-tag { display:inline-block; font-size:12px; color:var(--point-hover); background:rgba(108,99,255,0.15); padding:3px 12px; border-radius:999px; margin-bottom:16px; }
     .post-title { font-size:28px; font-weight:700; line-height:1.4; margin-bottom:12px; }
@@ -38,8 +39,7 @@
     .post-table td { padding:11px 16px; border:1px solid var(--border); color:var(--subtext); line-height:1.7; }
     .post-table tr:hover td { background:rgba(108,99,255,0.04); }
     .post-nav { display:flex; justify-content:space-between; margin-top:60px; padding-top:24px; border-top:1px solid var(--border); gap:12px; }
-    .post-nav a { font-size:14px; color:var(--subtext); }
-    .post-nav a:hover { color:var(--text); }
+    .post-nav a { font-size:14px; color:var(--subtext); } .post-nav a:hover { color:var(--text); }
     .cta-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; text-align:center; margin:48px 0 0; }
     .cta-box p { font-size:15px; color:var(--subtext); margin-bottom:16px; }
     .cta-btn { display:inline-block; background:linear-gradient(135deg,var(--point),var(--point-hover)); color:white; border-radius:10px; padding:12px 28px; font-size:14px; font-weight:600; text-decoration:none; }
@@ -50,107 +50,36 @@
   </style>
 </head>
 <body>
-
   <header class="header">
     <div class="container">
-      <div class="logo">
-        <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-          <span class="logo-icon">🔒</span>
-          <span class="logo-text">MaskPrivacy</span>
-        </a>
-      </div>
+      <a href="../../index.html" class="header-brand"><span class="header-brand-icon">🧰</span><span class="header-brand-text">BrowserKit</span></a>
+      <a href="../../index.html" class="header-back">← BrowserKit 홈으로</a>
     </div>
   </header>
-
   <div class="post-wrap">
     <a href="index.html" class="back-link">← 블로그 목록</a>
     <span class="post-tag">가이드</span>
     <h1 class="post-title">MaskPrivacy 사용법 완전 가이드</h1>
     <div class="post-date">2026년 6월 10일</div>
-
     <div class="post-body">
-
       <p>MaskPrivacy는 이미지 속 개인정보를 브라우저에서 자동으로 감지·마스킹해주는 무료 온라인 도구입니다. 설치 없이 바로 사용할 수 있으며, 모든 처리가 브라우저 내에서만 이루어져 개인정보 유출 걱정이 없습니다.</p>
-
       <h2>주요 기능</h2>
       <div class="feature-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🔍</div>
-          <div class="feature-title">자동 개인정보 탐지</div>
-          <div class="feature-desc">주민번호, 전화번호, 이메일, 계좌번호를 OCR로 자동 탐지합니다.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">✏️</div>
-          <div class="feature-title">수동 마스킹</div>
-          <div class="feature-desc">드래그로 원하는 영역을 직접 지정해 마스킹할 수 있습니다.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">⚙️</div>
-          <div class="feature-title">마스킹 방식 선택</div>
-          <div class="feature-desc">주민번호·전화번호는 전체 또는 부분 마스킹을 선택할 수 있습니다.</div>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">📥</div>
-          <div class="feature-title">PNG 다운로드</div>
-          <div class="feature-desc">마스킹 완료된 이미지를 즉시 PNG로 다운로드할 수 있습니다.</div>
-        </div>
+        <div class="feature-card"><div class="feature-icon">🔍</div><div class="feature-title">자동 개인정보 탐지</div><div class="feature-desc">주민번호, 전화번호, 이메일, 계좌번호를 OCR로 자동 탐지합니다.</div></div>
+        <div class="feature-card"><div class="feature-icon">✏️</div><div class="feature-title">수동 마스킹</div><div class="feature-desc">드래그로 원하는 영역을 직접 지정해 마스킹할 수 있습니다.</div></div>
+        <div class="feature-card"><div class="feature-icon">⚙️</div><div class="feature-title">마스킹 방식 선택</div><div class="feature-desc">주민번호·전화번호는 전체 또는 부분 마스킹을 선택할 수 있습니다.</div></div>
+        <div class="feature-card"><div class="feature-icon">📥</div><div class="feature-title">PNG 다운로드</div><div class="feature-desc">마스킹 완료된 이미지를 즉시 PNG로 다운로드할 수 있습니다.</div></div>
       </div>
-
       <h2>기본 사용법</h2>
-
-      <div class="step-card">
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <h3>이미지 업로드</h3>
-          <p>업로드 영역에 이미지를 드래그하거나 클릭해서 파일을 선택합니다. PNG, JPG, WEBP 형식을 지원하며 모바일에서도 갤러리 사진을 바로 업로드할 수 있습니다.</p>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <h3>자동 탐지 대기</h3>
-          <p>업로드 후 OCR 엔진이 이미지를 분석합니다. 진행 바가 표시되며 보통 10~30초 정도 소요됩니다. 이미지 크기와 복잡도에 따라 시간이 달라질 수 있습니다.</p>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <h3>탐지 결과 확인</h3>
-          <p>탐지된 개인정보 항목이 목록으로 표시됩니다. 각 항목 옆의 토글로 마스킹 여부를 개별적으로 조정할 수 있습니다.</p>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-num">4</div>
-        <div class="step-content">
-          <h3>마스킹 방식 선택</h3>
-          <p>주민번호는 전체 가리기 / 뒷자리 전체 / 뒷자리 6자리 중 선택할 수 있습니다. 전화번호는 전체 / 뒷 8자리 / 뒷 4자리 중 선택 가능합니다.</p>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-num">5</div>
-        <div class="step-content">
-          <h3>수동 마스킹 보완</h3>
-          <p>자동으로 탐지되지 않은 영역은 마스킹 결과 이미지에서 마우스로 드래그해 직접 가릴 수 있습니다.</p>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-num">6</div>
-        <div class="step-content">
-          <h3>다운로드</h3>
-          <p>마스킹 완료 후 다운로드 버튼을 클릭하면 PNG 파일로 저장됩니다. 처음부터 버튼으로 초기화 후 다른 이미지를 처리할 수 있습니다.</p>
-        </div>
-      </div>
-
+      <div class="step-card"><div class="step-num">1</div><div class="step-content"><h3>이미지 업로드</h3><p>업로드 영역에 이미지를 드래그하거나 클릭해서 파일을 선택합니다. PNG, JPG, WEBP 형식을 지원하며 모바일에서도 갤러리 사진을 바로 업로드할 수 있습니다.</p></div></div>
+      <div class="step-card"><div class="step-num">2</div><div class="step-content"><h3>자동 탐지 대기</h3><p>업로드 후 OCR 엔진이 이미지를 분석합니다. 진행 바가 표시되며 보통 10~30초 정도 소요됩니다. 이미지 크기와 복잡도에 따라 시간이 달라질 수 있습니다.</p></div></div>
+      <div class="step-card"><div class="step-num">3</div><div class="step-content"><h3>탐지 결과 확인</h3><p>탐지된 개인정보 항목이 목록으로 표시됩니다. 각 항목 옆의 토글로 마스킹 여부를 개별적으로 조정할 수 있습니다.</p></div></div>
+      <div class="step-card"><div class="step-num">4</div><div class="step-content"><h3>마스킹 방식 선택</h3><p>주민번호는 전체 가리기 / 뒷자리 전체 / 뒷자리 6자리 중 선택할 수 있습니다. 전화번호는 전체 / 뒷 8자리 / 뒷 4자리 중 선택 가능합니다.</p></div></div>
+      <div class="step-card"><div class="step-num">5</div><div class="step-content"><h3>수동 마스킹 보완</h3><p>자동으로 탐지되지 않은 영역은 마스킹 결과 이미지에서 마우스로 드래그해 직접 가릴 수 있습니다.</p></div></div>
+      <div class="step-card"><div class="step-num">6</div><div class="step-content"><h3>다운로드</h3><p>마스킹 완료 후 다운로드 버튼을 클릭하면 PNG 파일로 저장됩니다. 처음부터 버튼으로 초기화 후 다른 이미지를 처리할 수 있습니다.</p></div></div>
       <h2>마스킹 방식 비교</h2>
       <table class="post-table">
-        <thead>
-          <tr><th>항목</th><th>옵션</th><th>결과 예시</th></tr>
-        </thead>
+        <thead><tr><th>항목</th><th>옵션</th><th>결과 예시</th></tr></thead>
         <tbody>
           <tr><td>주민번호 전체</td><td>전체 가리기</td><td>██████-███████</td></tr>
           <tr><td>주민번호 뒷자리</td><td>뒷자리 전체</td><td>950101-███████</td></tr>
@@ -160,18 +89,12 @@
           <tr><td>전화번호 뒷 4자리</td><td>뒷 번호 4자리</td><td>010-1234-████</td></tr>
         </tbody>
       </table>
-
-      <div class="post-highlight">
-        💡 OCR 특성상 이미지 품질이 낮거나 손글씨, 특수 폰트의 경우 자동 탐지 정확도가 낮을 수 있습니다. 탐지 결과를 반드시 육안으로 확인하고 수동 마스킹으로 보완하세요.
-      </div>
-
+      <div class="post-highlight">💡 OCR 특성상 이미지 품질이 낮거나 손글씨, 특수 폰트의 경우 자동 탐지 정확도가 낮을 수 있습니다. 탐지 결과를 반드시 육안으로 확인하고 수동 마스킹으로 보완하세요.</div>
     </div>
-
     <div class="cta-box">
       <p>지금 바로 MaskPrivacy를 사용해보세요.<br />설치도, 회원가입도, 비용도 없습니다.</p>
       <a href="../index.html" class="cta-btn">🔒 무료로 마스킹 시작하기</a>
     </div>
-
     <div class="coupang-wrap">
       <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
       <div class="coupang-items">
@@ -179,24 +102,11 @@
         <div class="coupang-item"><a href="https://link.coupang.com/a/eun2krC7rg" target="_blank" referrerpolicy="unsafe-url"><img src="https://image10.coupangcdn.com/image/affiliate/banner/7ae115a6edc6962f7c7677f095c3e611@2x.jpg" alt="홈플래닛 스탠드형 선풍기" width="120" height="240" /></a></div>
       </div>
     </div>
-
     <div class="post-nav">
       <a href="06-image-masking-guide.html">← 이전 글: 이미지 속 개인정보 무료로 가리는 방법</a>
       <a href="08-worker-privacy-law.html">다음 글: 직장인이 꼭 알아야 할 개인정보보호법 5가지 →</a>
     </div>
   </div>
-
-  <footer class="footer">
-    <div class="container">
-      <p class="footer-copy">© 2026 MaskPrivacy. 모든 처리는 브라우저 내에서 이루어집니다.</p>
-      <nav class="footer-nav">
-        <a href="../privacy.html">개인정보 처리방침</a>
-        <a href="../terms.html">이용약관</a>
-        <a href="../about.html">서비스 소개</a>
-        <a href="index.html">블로그</a>
-      </nav>
-    </div>
-  </footer>
-
+  <footer class="footer"><div class="container"><p class="footer-copy">© 2026 BrowserKit. 모든 처리는 브라우저 내에서 이루어집니다.</p><nav class="footer-nav"><a href="../privacy.html">개인정보 처리방침</a><a href="../terms.html">이용약관</a><a href="../about.html">서비스 소개</a><a href="index.html">블로그</a></nav></div></footer>
 </body>
 </html>

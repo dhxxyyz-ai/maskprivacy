@@ -4,15 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="카카오톡으로 신분증을 전송할 때의 위험성과 안전한 대안을 알아봅니다." />
-  <meta property="og:title" content="카카오톡으로 신분증 보내도 될까? — MaskPrivacy" />
+  <meta property="og:title" content="카카오톡으로 신분증 보내도 될까? — BrowserKit" />
   <meta property="og:description" content="카카오톡으로 신분증을 전송할 때의 위험성과 안전한 대안을 알아봅니다." />
   <meta property="og:type" content="article" />
-  <title>카카오톡으로 신분증 보내도 될까? — MaskPrivacy</title>
+  <title>카카오톡으로 신분증 보내도 될까? — BrowserKit</title>
   <link rel="stylesheet" href="../css/style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
+    .header{padding:24px 0 16px;border-bottom:1px solid var(--border)}.header .container{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}.header-brand{display:flex;align-items:center;gap:10px;text-decoration:none}.header-brand-icon{font-size:24px}.header-brand-text{font-size:20px;font-weight:700;font-family:'Inter',sans-serif;background:linear-gradient(135deg,var(--point),var(--point-hover));-webkit-background-clip:text;-webkit-text-fill-color:transparent}.header-back{font-size:13px;color:var(--subtext);display:flex;align-items:center;gap:6px;text-decoration:none}.header-back:hover{color:var(--text)}
     .post-wrap { max-width:720px; margin:0 auto; padding:48px 24px 80px; }
     .post-tag { display:inline-block; font-size:12px; color:var(--point-hover); background:rgba(108,99,255,0.15); padding:3px 12px; border-radius:999px; margin-bottom:16px; }
     .post-title { font-size:28px; font-weight:700; line-height:1.4; margin-bottom:12px; }
@@ -29,8 +30,7 @@
     .post-table td { padding:11px 16px; border:1px solid var(--border); color:var(--subtext); line-height:1.7; }
     .post-table tr:hover td { background:rgba(108,99,255,0.04); }
     .post-nav { display:flex; justify-content:space-between; margin-top:60px; padding-top:24px; border-top:1px solid var(--border); gap:12px; }
-    .post-nav a { font-size:14px; color:var(--subtext); }
-    .post-nav a:hover { color:var(--text); }
+    .post-nav a { font-size:14px; color:var(--subtext); } .post-nav a:hover { color:var(--text); }
     .cta-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; text-align:center; margin:48px 0 0; }
     .cta-box p { font-size:15px; color:var(--subtext); margin-bottom:16px; }
     .cta-btn { display:inline-block; background:linear-gradient(135deg,var(--point),var(--point-hover)); color:white; border-radius:10px; padding:12px 28px; font-size:14px; font-weight:600; text-decoration:none; }
@@ -40,51 +40,32 @@
   </style>
 </head>
 <body>
-
   <header class="header">
     <div class="container">
-      <div class="logo">
-        <a href="../index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
-          <span class="logo-icon">🔒</span>
-          <span class="logo-text">MaskPrivacy</span>
-        </a>
-      </div>
+      <a href="../../index.html" class="header-brand"><span class="header-brand-icon">🧰</span><span class="header-brand-text">BrowserKit</span></a>
+      <a href="../../index.html" class="header-back">← BrowserKit 홈으로</a>
     </div>
   </header>
-
   <div class="post-wrap">
     <a href="index.html" class="back-link">← 블로그 목록</a>
     <span class="post-tag">보안</span>
     <h1 class="post-title">카카오톡으로 신분증 보내도 될까?</h1>
     <div class="post-date">2026년 6월 10일</div>
-
     <div class="post-body">
-
       <p>카카오톡은 대한민국에서 가장 많이 쓰는 메신저입니다. 그래서 신분증 사진도 카카오톡으로 전송하는 경우가 매우 흔합니다. 하지만 카카오톡으로 신분증을 보내는 것이 과연 안전할까요?</p>
-
       <h2>카카오톡 신분증 전송의 위험성</h2>
-
       <h3>1. 서버에 저장됩니다</h3>
       <p>카카오톡으로 전송한 사진은 카카오 서버에 저장됩니다. 기본적으로 일정 기간 보관되며, 계정이 해킹되거나 서버 보안에 문제가 생기면 노출될 수 있습니다.</p>
-
       <h3>2. 상대방 기기에도 저장됩니다</h3>
       <p>전송받은 사람의 스마트폰 갤러리에 자동 저장되는 경우가 많습니다. 상대방이 기기를 분실하거나 제3자에게 빌려줄 경우 신분증 사진이 노출될 수 있습니다.</p>
-
       <h3>3. 백업에도 남습니다</h3>
       <p>카카오톡 대화 백업을 사용하면 신분증 사진도 함께 백업됩니다. 클라우드 백업 계정이 해킹되면 과거에 전송한 신분증 사진까지 노출될 수 있습니다.</p>
-
       <h3>4. 삭제해도 완전히 지워지지 않습니다</h3>
       <p>카카오톡 대화에서 사진을 삭제해도 상대방 기기에 이미 저장된 사진은 삭제되지 않습니다. 또한 서버 사본이 즉시 삭제되지 않을 수 있습니다.</p>
-
-      <div class="post-warn">
-        ⚠️ 신분증 원본 사진을 카카오톡으로 전송하는 것은 매우 위험합니다. 반드시 주민번호 등 민감한 정보를 마스킹한 후 전송해야 합니다.
-      </div>
-
+      <div class="post-warn">⚠️ 신분증 원본 사진을 카카오톡으로 전송하는 것은 매우 위험합니다. 반드시 주민번호 등 민감한 정보를 마스킹한 후 전송해야 합니다.</div>
       <h2>메신저별 보안 비교</h2>
       <table class="post-table">
-        <thead>
-          <tr><th>메신저</th><th>종단간 암호화</th><th>서버 저장</th><th>권장 여부</th></tr>
-        </thead>
+        <thead><tr><th>메신저</th><th>종단간 암호화</th><th>서버 저장</th><th>권장 여부</th></tr></thead>
         <tbody>
           <tr><td>카카오톡</td><td>일반 채팅 미적용</td><td>저장됨</td><td>마스킹 후 전송</td></tr>
           <tr><td>카카오톡 비밀 채팅</td><td>적용</td><td>미저장</td><td>마스킹 후 전송</td></tr>
@@ -92,7 +73,6 @@
           <tr><td>이메일</td><td>미적용</td><td>저장됨</td><td>마스킹 필수</td></tr>
         </tbody>
       </table>
-
       <h2>안전하게 신분증을 전송하는 방법</h2>
       <ol>
         <li>신분증을 촬영합니다.</li>
@@ -102,18 +82,12 @@
         <li>마스킹된 이미지를 전송합니다.</li>
         <li>전송 후 원본 사진은 기기에서 즉시 삭제합니다.</li>
       </ol>
-
-      <div class="post-highlight">
-        💡 어떤 메신저를 사용하든 신분증을 전송하기 전에는 반드시 마스킹이 필요합니다. 메신저 보안 수준과 관계없이 마스킹이 가장 확실한 보호 방법입니다.
-      </div>
-
+      <div class="post-highlight">💡 어떤 메신저를 사용하든 신분증을 전송하기 전에는 반드시 마스킹이 필요합니다. 메신저 보안 수준과 관계없이 마스킹이 가장 확실한 보호 방법입니다.</div>
     </div>
-
     <div class="cta-box">
       <p>카카오톡 전송 전, 신분증 마스킹하셨나요?<br />MaskPrivacy로 30초 안에 안전하게 처리할 수 있습니다.</p>
       <a href="../index.html" class="cta-btn">🔒 무료로 마스킹 시작하기</a>
     </div>
-
     <div class="coupang-wrap">
       <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
       <div class="coupang-items">
@@ -121,24 +95,11 @@
         <div class="coupang-item"><a href="https://link.coupang.com/a/euo2xIEWI0" target="_blank" referrerpolicy="unsafe-url"><img src="https://image3.coupangcdn.com/image/affiliate/banner/01e011f943244ce5d7e901ee092a7185@2x.jpg" alt="삼성전자 USB메모리 128GB" width="120" height="240" /></a></div>
       </div>
     </div>
-
     <div class="post-nav">
       <a href="10-contract-masking.html">← 이전 글: 계약서 개인정보 마스킹하는 법</a>
       <a href="12-privacy-policy-guide.html">다음 글: 개인정보 처리방침 어떻게 만드나요? →</a>
     </div>
   </div>
-
-  <footer class="footer">
-    <div class="container">
-      <p class="footer-copy">© 2026 MaskPrivacy. 모든 처리는 브라우저 내에서 이루어집니다.</p>
-      <nav class="footer-nav">
-        <a href="../privacy.html">개인정보 처리방침</a>
-        <a href="../terms.html">이용약관</a>
-        <a href="../about.html">서비스 소개</a>
-        <a href="index.html">블로그</a>
-      </nav>
-    </div>
-  </footer>
-
+  <footer class="footer"><div class="container"><p class="footer-copy">© 2026 BrowserKit. 모든 처리는 브라우저 내에서 이루어집니다.</p><nav class="footer-nav"><a href="../privacy.html">개인정보 처리방침</a><a href="../terms.html">이용약관</a><a href="../about.html">서비스 소개</a><a href="index.html">블로그</a></nav></div></footer>
 </body>
 </html>
