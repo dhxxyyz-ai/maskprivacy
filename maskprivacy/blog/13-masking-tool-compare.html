@@ -24,19 +24,15 @@
     .post-body ul, .post-body ol { padding-left:20px; margin-bottom:16px; }
     .post-body li { font-size:15px; color:var(--subtext); line-height:1.9; margin-bottom:6px; }
     .post-highlight { background:var(--card); border-left:3px solid var(--point); border-radius:8px; padding:16px 20px; margin:24px 0; font-size:15px; color:var(--text); line-height:1.8; }
-    .post-warn { background:rgba(239,68,68,0.08); border-left:3px solid #EF4444; border-radius:8px; padding:16px 20px; margin:24px 0; font-size:15px; color:var(--text); line-height:1.8; }
     .post-table { width:100%; border-collapse:collapse; margin:20px 0; font-size:14px; }
     .post-table th { background:var(--card); padding:12px 16px; text-align:left; font-weight:600; border:1px solid var(--border); color:var(--text); }
     .post-table td { padding:11px 16px; border:1px solid var(--border); color:var(--subtext); line-height:1.7; text-align:center; }
     .post-table td:first-child { text-align:left; }
     .post-table tr:hover td { background:rgba(108,99,255,0.04); }
-    .check { color:var(--success); }
-    .cross { color:#EF4444; }
-    .half { color:#F59E0B; }
+    .check { color:var(--success); } .cross { color:#EF4444; } .half { color:#F59E0B; }
     .th-us { color:var(--point-hover) !important; }
     .post-nav { display:flex; justify-content:space-between; margin-top:60px; padding-top:24px; border-top:1px solid var(--border); gap:12px; }
-    .post-nav a { font-size:14px; color:var(--subtext); }
-    .post-nav a:hover { color:var(--text); }
+    .post-nav a { font-size:14px; color:var(--subtext); } .post-nav a:hover { color:var(--text); }
     .cta-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; text-align:center; margin:48px 0 0; }
     .cta-box p { font-size:15px; color:var(--subtext); margin-bottom:16px; }
     .cta-btn { display:inline-block; background:linear-gradient(135deg,var(--point),var(--point-hover)); color:white; border-radius:10px; padding:12px 28px; font-size:14px; font-weight:600; text-decoration:none; }
@@ -52,120 +48,51 @@
       <a href="../../index.html" class="header-back">← BrowserKit 홈으로</a>
     </div>
   </header>
-
   <div class="post-wrap">
     <a href="index.html" class="back-link">← 블로그 목록</a>
     <span class="post-tag">비교</span>
     <h1 class="post-title">무료 개인정보 마스킹 툴 비교</h1>
     <div class="post-date">2026년 6월 10일</div>
-
     <div class="post-body">
-
       <p>이미지 속 개인정보를 마스킹하는 방법은 다양합니다. 스마트폰 기본 편집 기능부터 전문 툴까지, 각각 장단점이 있습니다. 어떤 방법이 가장 안전하고 편리한지 비교해드립니다.</p>
-
       <h2>마스킹 방법 비교표</h2>
       <table class="post-table">
-        <thead>
-          <tr>
-            <th>항목</th>
-            <th class="th-us">MaskPrivacy</th>
-            <th>스마트폰 편집</th>
-            <th>포토샵</th>
-            <th>그림판</th>
-          </tr>
-        </thead>
+        <thead><tr><th>항목</th><th class="th-us">MaskPrivacy</th><th>스마트폰 편집</th><th>포토샵</th><th>그림판</th></tr></thead>
         <tbody>
-          <tr>
-            <td>완전 무료</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td>서버 전송 없음</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td>자동 개인정보 탐지</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td>설치 불필요</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td>PC·모바일 모두 지원</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="half">△</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
-          <tr>
-            <td>픽셀 단위 완전 마스킹</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="half">△</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="check">✓</span></td>
-          </tr>
-          <tr>
-            <td>부분 마스킹 선택</td>
-            <td><span class="check">✓</span></td>
-            <td><span class="cross">✗</span></td>
-            <td><span class="check">✓</span></td>
-            <td><span class="cross">✗</span></td>
-          </tr>
+          <tr><td>완전 무료</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td></tr>
+          <tr><td>서버 전송 없음</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr><td>자동 개인정보 탐지</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td>설치 불필요</td><td><span class="check">✓</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td>PC·모바일 모두 지원</td><td><span class="check">✓</span></td><td><span class="half">△</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td>픽셀 단위 완전 마스킹</td><td><span class="check">✓</span></td><td><span class="half">△</span></td><td><span class="check">✓</span></td><td><span class="check">✓</span></td></tr>
+          <tr><td>부분 마스킹 선택</td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td><td><span class="check">✓</span></td><td><span class="cross">✗</span></td></tr>
         </tbody>
       </table>
-
       <h2>각 방법의 특징</h2>
-
       <h3>스마트폰 기본 편집</h3>
       <p>가장 접근하기 쉬운 방법이지만 스티커나 그리기 기능으로 가리는 경우 원본 레이어가 남아 있어 보안에 취약합니다. 반드시 모자이크나 블러 기능을 사용해야 합니다.</p>
-
       <h3>포토샵 / 전문 편집 툴</h3>
       <p>가장 정밀한 마스킹이 가능하지만 유료이고 사용법을 익혀야 합니다. 대량의 이미지를 처리해야 하는 전문가에게 적합합니다.</p>
-
       <h3>그림판 (Windows 기본)</h3>
-      <p>무료이고 설치 없이 사용 가능하지만 자동 탐지 기능이 없어 수동으로 직접 가려야 합니다. 간단한 작업에는 적합하지만 세밀한 작업은 어렵습니다.</p>
-
+      <p>무료이고 설치 없이 사용 가능하지만 자동 탐지 기능이 없어 수동으로 직접 가려야 합니다.</p>
       <h3>MaskPrivacy</h3>
       <p>자동 개인정보 탐지, 부분 마스킹 선택, 완전 로컬 처리의 장점을 모두 갖추고 있습니다. 특히 주민번호, 전화번호 등을 자동으로 찾아주므로 누락 위험이 줄어듭니다.</p>
-
-      <div class="post-highlight">
-        💡 어떤 툴을 사용하든 마스킹 후 반드시 결과물을 육안으로 확인하세요. 자동 탐지 기능이 있더라도 OCR 특성상 일부 항목이 누락될 수 있습니다.
-      </div>
-
+      <div class="post-highlight">💡 어떤 툴을 사용하든 마스킹 후 반드시 결과물을 육안으로 확인하세요. 자동 탐지 기능이 있더라도 OCR 특성상 일부 항목이 누락될 수 있습니다.</div>
     </div>
-
     <div class="cta-box">
       <p>자동 탐지 + 수동 마스킹으로 가장 편리하게.<br />MaskPrivacy로 지금 바로 시작해보세요.</p>
       <a href="../index.html" class="cta-btn">🔒 무료로 마스킹 시작하기</a>
     </div>
-
-    <div class="coupang-wrap">
+    <div class="coupang-dynamic">
       <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
-      <div class="coupang-items">
-        <div class="coupang-item"><a href="https://link.coupang.com/a/euojfi8OPY" target="_blank" referrerpolicy="unsafe-url"><img src="https://image14.coupangcdn.com/image/affiliate/banner/1c211b8e4c363d5815f47e269fdcce32@2x.jpg" alt="알리사 휴대용 선풍기" width="120" height="240" /></a></div>
-        <div class="coupang-item"><a href="https://link.coupang.com/a/eun2krC7rg" target="_blank" referrerpolicy="unsafe-url"><img src="https://image10.coupangcdn.com/image/affiliate/banner/7ae115a6edc6962f7c7677f095c3e611@2x.jpg" alt="홈플래닛 스탠드형 선풍기" width="120" height="240" /></a></div>
-      </div>
+      <script src="https://ads-partners.coupang.com/g.js"></script>
+      <script>new PartnersCoupang.G({"id":996719,"template":"carousel","trackingCode":"AF9398669","width":"668","height":"100","tsource":""});</script>
     </div>
-
     <div class="post-nav">
       <a href="12-privacy-policy-guide.html">← 이전 글: 개인정보 처리방침 어떻게 만드나요?</a>
       <a href="14-local-processing.html">다음 글: 서버 없이 개인정보 처리하는 방법 →</a>
     </div>
   </div>
-
   <footer class="footer">
     <div class="container">
       <p class="footer-copy">© 2026 BrowserKit. 모든 처리는 브라우저 내에서 이루어집니다.</p>

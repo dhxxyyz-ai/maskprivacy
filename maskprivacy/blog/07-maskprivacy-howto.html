@@ -21,8 +21,6 @@
     .post-body h2 { font-size:20px; font-weight:700; margin:40px 0 16px; color:var(--text); }
     .post-body h3 { font-size:16px; font-weight:600; margin:28px 0 12px; color:var(--point-hover); }
     .post-body p { font-size:15px; color:var(--subtext); line-height:1.9; margin-bottom:16px; }
-    .post-body ul, .post-body ol { padding-left:20px; margin-bottom:16px; }
-    .post-body li { font-size:15px; color:var(--subtext); line-height:1.9; margin-bottom:6px; }
     .post-highlight { background:var(--card); border-left:3px solid var(--point); border-radius:8px; padding:16px 20px; margin:24px 0; font-size:15px; color:var(--text); line-height:1.8; }
     .feature-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0; }
     .feature-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
@@ -71,12 +69,12 @@
         <div class="feature-card"><div class="feature-icon">📥</div><div class="feature-title">PNG 다운로드</div><div class="feature-desc">마스킹 완료된 이미지를 즉시 PNG로 다운로드할 수 있습니다.</div></div>
       </div>
       <h2>기본 사용법</h2>
-      <div class="step-card"><div class="step-num">1</div><div class="step-content"><h3>이미지 업로드</h3><p>업로드 영역에 이미지를 드래그하거나 클릭해서 파일을 선택합니다. PNG, JPG, WEBP 형식을 지원하며 모바일에서도 갤러리 사진을 바로 업로드할 수 있습니다.</p></div></div>
-      <div class="step-card"><div class="step-num">2</div><div class="step-content"><h3>자동 탐지 대기</h3><p>업로드 후 OCR 엔진이 이미지를 분석합니다. 진행 바가 표시되며 보통 10~30초 정도 소요됩니다. 이미지 크기와 복잡도에 따라 시간이 달라질 수 있습니다.</p></div></div>
+      <div class="step-card"><div class="step-num">1</div><div class="step-content"><h3>이미지 업로드</h3><p>업로드 영역에 이미지를 드래그하거나 클릭해서 파일을 선택합니다. PNG, JPG, WEBP 형식을 지원합니다.</p></div></div>
+      <div class="step-card"><div class="step-num">2</div><div class="step-content"><h3>자동 탐지 대기</h3><p>업로드 후 OCR 엔진이 이미지를 분석합니다. 보통 10~30초 정도 소요됩니다.</p></div></div>
       <div class="step-card"><div class="step-num">3</div><div class="step-content"><h3>탐지 결과 확인</h3><p>탐지된 개인정보 항목이 목록으로 표시됩니다. 각 항목 옆의 토글로 마스킹 여부를 개별적으로 조정할 수 있습니다.</p></div></div>
       <div class="step-card"><div class="step-num">4</div><div class="step-content"><h3>마스킹 방식 선택</h3><p>주민번호는 전체 가리기 / 뒷자리 전체 / 뒷자리 6자리 중 선택할 수 있습니다. 전화번호는 전체 / 뒷 8자리 / 뒷 4자리 중 선택 가능합니다.</p></div></div>
       <div class="step-card"><div class="step-num">5</div><div class="step-content"><h3>수동 마스킹 보완</h3><p>자동으로 탐지되지 않은 영역은 마스킹 결과 이미지에서 마우스로 드래그해 직접 가릴 수 있습니다.</p></div></div>
-      <div class="step-card"><div class="step-num">6</div><div class="step-content"><h3>다운로드</h3><p>마스킹 완료 후 다운로드 버튼을 클릭하면 PNG 파일로 저장됩니다. 처음부터 버튼으로 초기화 후 다른 이미지를 처리할 수 있습니다.</p></div></div>
+      <div class="step-card"><div class="step-num">6</div><div class="step-content"><h3>다운로드</h3><p>마스킹 완료 후 다운로드 버튼을 클릭하면 PNG 파일로 저장됩니다.</p></div></div>
       <h2>마스킹 방식 비교</h2>
       <table class="post-table">
         <thead><tr><th>항목</th><th>옵션</th><th>결과 예시</th></tr></thead>
@@ -95,12 +93,10 @@
       <p>지금 바로 MaskPrivacy를 사용해보세요.<br />설치도, 회원가입도, 비용도 없습니다.</p>
       <a href="../index.html" class="cta-btn">🔒 무료로 마스킹 시작하기</a>
     </div>
-    <div class="coupang-wrap">
+    <div class="coupang-dynamic">
       <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
-      <div class="coupang-items">
-        <div class="coupang-item"><a href="https://link.coupang.com/a/euojfi8OPY" target="_blank" referrerpolicy="unsafe-url"><img src="https://image14.coupangcdn.com/image/affiliate/banner/1c211b8e4c363d5815f47e269fdcce32@2x.jpg" alt="알리사 휴대용 선풍기" width="120" height="240" /></a></div>
-        <div class="coupang-item"><a href="https://link.coupang.com/a/eun2krC7rg" target="_blank" referrerpolicy="unsafe-url"><img src="https://image10.coupangcdn.com/image/affiliate/banner/7ae115a6edc6962f7c7677f095c3e611@2x.jpg" alt="홈플래닛 스탠드형 선풍기" width="120" height="240" /></a></div>
-      </div>
+      <script src="https://ads-partners.coupang.com/g.js"></script>
+      <script>new PartnersCoupang.G({"id":996719,"template":"carousel","trackingCode":"AF9398669","width":"668","height":"100","tsource":""});</script>
     </div>
     <div class="post-nav">
       <a href="06-image-masking-guide.html">← 이전 글: 이미지 속 개인정보 무료로 가리는 방법</a>

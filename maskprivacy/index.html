@@ -16,58 +16,26 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
   <style>
-    /* 헤더 오버라이드 — pdf-tools와 통일 */
     .header { padding: 24px 0 16px; border-bottom: 1px solid var(--border); }
-    .header .container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .header-brand {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none;
-    }
+    .header .container { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .header-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; }
     .header-brand-icon { font-size: 24px; }
-    .header-brand-text {
-      font-size: 20px; font-weight: 700;
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, var(--point), var(--point-hover));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .header-back {
-      font-size: 13px; color: var(--subtext);
-      display: flex; align-items: center; gap: 6px;
-      text-decoration: none;
-    }
+    .header-brand-text { font-size: 20px; font-weight: 700; font-family: 'Inter', sans-serif; background: linear-gradient(135deg, var(--point), var(--point-hover)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .header-back { font-size: 13px; color: var(--subtext); display: flex; align-items: center; gap: 6px; text-decoration: none; }
     .header-back:hover { color: var(--text); }
-
-    /* 히어로 */
-    .hero {
-      text-align: center;
-      padding: 40px 0 32px;
-    }
+    .hero { text-align: center; padding: 40px 0 32px; }
     .hero-icon { font-size: 48px; margin-bottom: 16px; }
-    .hero-title {
-      font-size: 32px; font-weight: 700; margin-bottom: 12px;
-      background: linear-gradient(135deg, var(--point), var(--point-hover));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+    .hero-title { font-size: 32px; font-weight: 700; margin-bottom: 12px; background: linear-gradient(135deg, var(--point), var(--point-hover)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .hero-desc { color: var(--subtext); font-size: 15px; margin-bottom: 20px; }
     .hero-badges { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-    .hero-badge {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 999px; padding: 5px 16px;
-      font-size: 13px; color: var(--subtext);
-    }
+    .hero-badge { background: var(--card); border: 1px solid var(--border); border-radius: 999px; padding: 5px 16px; font-size: 13px; color: var(--subtext); }
+    /* 다이나믹 배너 */
+    .coupang-dynamic { margin: 20px auto 48px; max-width: 728px; text-align: center; }
+    .coupang-dynamic .coupang-notice { font-size: 11px; color: var(--subtext); margin-bottom: 10px; line-height: 1.6; }
   </style>
 </head>
 <body>
 
-  <!-- 헤더: 좌측 BrowserKit 브랜드 + 우측 홈으로 링크 -->
   <header class="header">
     <div class="container">
       <a href="../index.html" class="header-brand">
@@ -81,7 +49,6 @@
   <main class="main">
     <div class="container">
 
-      <!-- 히어로: 아이콘 + 서비스명 + 설명 + 뱃지 -->
       <div class="hero">
         <div class="hero-icon">🔒</div>
         <div class="hero-title">MaskPrivacy</div>
@@ -127,13 +94,11 @@
         </div>
       </div>
 
-      <!-- 탐지 항목 목록 -->
       <div class="detected-wrap" id="detectedWrap" style="display:none;">
         <h2 class="detected-title">탐지된 개인정보</h2>
         <ul class="detected-list" id="detectedList"></ul>
       </div>
 
-      <!-- 주민등록번호 마스킹 옵션 -->
       <div class="rrn-option-wrap" id="rrnOptionWrap" style="display:none;">
         <div class="rrn-option-label">주민등록번호 마스킹 방식</div>
         <div class="rrn-option-btns">
@@ -143,7 +108,6 @@
         </div>
       </div>
 
-      <!-- 전화번호 마스킹 옵션 -->
       <div class="rrn-option-wrap" id="phoneOptionWrap" style="display:none;">
         <div class="rrn-option-label">전화번호 마스킹 방식</div>
         <div class="rrn-option-btns">
@@ -154,29 +118,17 @@
       </div>
 
       <div class="action-wrap" id="actionWrap" style="display:none;">
-        <button class="btn-download" id="downloadBtn">
-          ⬇ 마스킹 이미지 다운로드
-        </button>
-        <button class="btn-reset" id="resetBtn">
-          ↺ 처음부터
-        </button>
+        <button class="btn-download" id="downloadBtn">⬇ 마스킹 이미지 다운로드</button>
+        <button class="btn-reset" id="resetBtn">↺ 처음부터</button>
       </div>
 
-      <!-- 쿠팡 파트너스 광고 -->
-      <div class="coupang-wrap">
+      <!-- 쿠팡 파트너스 다이나믹 배너 (728×120) -->
+      <div class="coupang-dynamic">
         <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
-        <div class="coupang-items">
-          <div class="coupang-item">
-            <a href="https://link.coupang.com/a/euojfi8OPY" target="_blank" referrerpolicy="unsafe-url">
-              <img src="https://image14.coupangcdn.com/image/affiliate/banner/1c211b8e4c363d5815f47e269fdcce32@2x.jpg" alt="알리사 100단 아이스 터보 MAX 휴대용 선풍기" width="120" height="240" />
-            </a>
-          </div>
-          <div class="coupang-item">
-            <a href="https://link.coupang.com/a/euo2xIEWI0" target="_blank" referrerpolicy="unsafe-url">
-              <img src="https://image3.coupangcdn.com/image/affiliate/banner/01e011f943244ce5d7e901ee092a7185@2x.jpg" alt="삼성전자 USB메모리 3.1 FIT PLUS 128GB" width="120" height="240" />
-            </a>
-          </div>
-        </div>
+        <script src="https://ads-partners.coupang.com/g.js"></script>
+        <script>
+          new PartnersCoupang.G({"id":996719,"template":"carousel","trackingCode":"AF9398669","width":"728","height":"120","tsource":""});
+        </script>
       </div>
 
     </div>

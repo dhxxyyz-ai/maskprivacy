@@ -21,10 +21,9 @@
     .post-body h2 { font-size:20px; font-weight:700; margin:40px 0 16px; color:var(--text); }
     .post-body h3 { font-size:16px; font-weight:600; margin:28px 0 12px; color:var(--point-hover); }
     .post-body p { font-size:15px; color:var(--subtext); line-height:1.9; margin-bottom:16px; }
-    .post-body ul, .post-body ol { padding-left:20px; margin-bottom:16px; }
+    .post-body ul { padding-left:20px; margin-bottom:16px; }
     .post-body li { font-size:15px; color:var(--subtext); line-height:1.9; margin-bottom:6px; }
     .post-highlight { background:var(--card); border-left:3px solid var(--point); border-radius:8px; padding:16px 20px; margin:24px 0; font-size:15px; color:var(--text); line-height:1.8; }
-    .post-warn { background:rgba(239,68,68,0.08); border-left:3px solid #EF4444; border-radius:8px; padding:16px 20px; margin:24px 0; font-size:15px; color:var(--text); line-height:1.8; }
     .step-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 24px; margin:16px 0; display:flex; gap:16px; align-items:flex-start; }
     .step-num { min-width:36px; height:36px; background:linear-gradient(135deg,var(--point),var(--point-hover)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:white; flex-shrink:0; font-family:'Inter',sans-serif; }
     .step-content h3 { font-size:15px; font-weight:600; margin-bottom:6px; color:var(--text); }
@@ -34,8 +33,7 @@
     .contact-name { font-size:15px; font-weight:600; color:var(--text); margin-bottom:8px; }
     .contact-info { font-size:14px; color:var(--subtext); line-height:1.8; }
     .post-nav { display:flex; justify-content:space-between; margin-top:60px; padding-top:24px; border-top:1px solid var(--border); gap:12px; }
-    .post-nav a { font-size:14px; color:var(--subtext); }
-    .post-nav a:hover { color:var(--text); }
+    .post-nav a { font-size:14px; color:var(--subtext); } .post-nav a:hover { color:var(--text); }
     .cta-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; text-align:center; margin:48px 0 0; }
     .cta-box p { font-size:15px; color:var(--subtext); margin-bottom:16px; }
     .cta-btn { display:inline-block; background:linear-gradient(135deg,var(--point),var(--point-hover)); color:white; border-radius:10px; padding:12px 28px; font-size:14px; font-weight:600; text-decoration:none; }
@@ -51,17 +49,13 @@
       <a href="../../index.html" class="header-back">← BrowserKit 홈으로</a>
     </div>
   </header>
-
   <div class="post-wrap">
     <a href="index.html" class="back-link">← 블로그 목록</a>
     <span class="post-tag">법률</span>
     <h1 class="post-title">개인정보보호위원회 신고 방법 안내</h1>
     <div class="post-date">2026년 6월 10일</div>
-
     <div class="post-body">
-
       <p>개인정보가 유출되거나 무단으로 수집·이용되는 피해를 입었다면 어떻게 해야 할까요? 개인정보보호위원회와 관련 기관에 신고하는 방법을 단계별로 안내합니다.</p>
-
       <h2>신고할 수 있는 상황</h2>
       <ul>
         <li>개인정보가 동의 없이 수집·이용된 경우</li>
@@ -70,112 +64,33 @@
         <li>개인정보 열람·삭제·정정 요청을 거부당한 경우</li>
         <li>스팸, 보이스피싱 등 개인정보 악용 피해를 입은 경우</li>
       </ul>
-
       <h2>신고 절차</h2>
-
-      <div class="step-card">
-        <div class="step-num">1</div>
-        <div class="step-content">
-          <h3>증거 수집</h3>
-          <p>유출 또는 침해 사실을 입증할 수 있는 증거를 수집합니다. 화면 캡처, 이메일, 문자 메시지 등을 보관해두세요.</p>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-num">2</div>
-        <div class="step-content">
-          <h3>해당 기업/기관에 먼저 항의</h3>
-          <p>피해를 입힌 기업이나 기관에 먼저 개인정보 처리 중단 및 삭제를 요청합니다. 이 과정의 기록도 증거로 보관하세요.</p>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-num">3</div>
-        <div class="step-content">
-          <h3>개인정보보호위원회 신고</h3>
-          <p>개인정보보호 포털(privacy.go.kr)에 접속해 온라인으로 신고합니다. 또는 개인정보 침해 신고센터(국번 없이 182)로 전화 신고도 가능합니다.</p>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-num">4</div>
-        <div class="step-content">
-          <h3>조사 및 처리</h3>
-          <p>신고 접수 후 개인정보보호위원회가 조사를 진행합니다. 필요시 추가 자료 제출을 요청받을 수 있습니다.</p>
-        </div>
-      </div>
-
-      <div class="step-card">
-        <div class="step-num">5</div>
-        <div class="step-content">
-          <h3>결과 통보</h3>
-          <p>조사 결과에 따라 시정명령, 과태료 부과 등의 조치가 이루어집니다. 신고자에게 처리 결과가 통보됩니다.</p>
-        </div>
-      </div>
-
+      <div class="step-card"><div class="step-num">1</div><div class="step-content"><h3>증거 수집</h3><p>유출 또는 침해 사실을 입증할 수 있는 증거를 수집합니다. 화면 캡처, 이메일, 문자 메시지 등을 보관해두세요.</p></div></div>
+      <div class="step-card"><div class="step-num">2</div><div class="step-content"><h3>해당 기업/기관에 먼저 항의</h3><p>피해를 입힌 기업이나 기관에 먼저 개인정보 처리 중단 및 삭제를 요청합니다. 이 과정의 기록도 증거로 보관하세요.</p></div></div>
+      <div class="step-card"><div class="step-num">3</div><div class="step-content"><h3>개인정보보호위원회 신고</h3><p>개인정보보호 포털(privacy.go.kr)에 접속해 온라인으로 신고합니다. 또는 개인정보 침해 신고센터(국번 없이 182)로 전화 신고도 가능합니다.</p></div></div>
+      <div class="step-card"><div class="step-num">4</div><div class="step-content"><h3>조사 및 처리</h3><p>신고 접수 후 개인정보보호위원회가 조사를 진행합니다. 필요시 추가 자료 제출을 요청받을 수 있습니다.</p></div></div>
+      <div class="step-card"><div class="step-num">5</div><div class="step-content"><h3>결과 통보</h3><p>조사 결과에 따라 시정명령, 과태료 부과 등의 조치가 이루어집니다. 신고자에게 처리 결과가 통보됩니다.</p></div></div>
       <h2>주요 신고 기관 연락처</h2>
-
-      <div class="contact-card">
-        <div class="contact-name">🏛️ 개인정보보호위원회</div>
-        <div class="contact-info">
-          웹사이트: privacy.go.kr<br />
-          전화: 국번 없이 182<br />
-          업무: 개인정보 침해 신고, 분쟁 조정
-        </div>
-      </div>
-
-      <div class="contact-card">
-        <div class="contact-name">🌐 한국인터넷진흥원(KISA)</div>
-        <div class="contact-info">
-          웹사이트: kisa.or.kr<br />
-          전화: 118<br />
-          업무: 개인정보 침해, 사이버 범죄 신고
-        </div>
-      </div>
-
-      <div class="contact-card">
-        <div class="contact-name">💰 금융감독원</div>
-        <div class="contact-info">
-          웹사이트: fss.or.kr<br />
-          전화: 1332<br />
-          업무: 금융 관련 개인정보 침해, 보이스피싱 피해
-        </div>
-      </div>
-
-      <div class="contact-card">
-        <div class="contact-name">👮 경찰청 사이버수사대</div>
-        <div class="contact-info">
-          웹사이트: cyberbureau.police.go.kr<br />
-          전화: 182<br />
-          업무: 개인정보 악용 범죄, 명의도용 등 형사 사건
-        </div>
-      </div>
-
-      <div class="post-highlight">
-        💡 피해를 예방하는 것이 가장 좋습니다. 신분증 등 개인정보가 담긴 이미지를 전송하기 전에 MaskPrivacy로 미리 마스킹하는 습관을 들이세요.
-      </div>
-
+      <div class="contact-card"><div class="contact-name">🏛️ 개인정보보호위원회</div><div class="contact-info">웹사이트: privacy.go.kr<br />전화: 국번 없이 182<br />업무: 개인정보 침해 신고, 분쟁 조정</div></div>
+      <div class="contact-card"><div class="contact-name">🌐 한국인터넷진흥원(KISA)</div><div class="contact-info">웹사이트: kisa.or.kr<br />전화: 118<br />업무: 개인정보 침해, 사이버 범죄 신고</div></div>
+      <div class="contact-card"><div class="contact-name">💰 금융감독원</div><div class="contact-info">웹사이트: fss.or.kr<br />전화: 1332<br />업무: 금융 관련 개인정보 침해, 보이스피싱 피해</div></div>
+      <div class="contact-card"><div class="contact-name">👮 경찰청 사이버수사대</div><div class="contact-info">웹사이트: cyberbureau.police.go.kr<br />전화: 182<br />업무: 개인정보 악용 범죄, 명의도용 등 형사 사건</div></div>
+      <div class="post-highlight">💡 피해를 예방하는 것이 가장 좋습니다. 신분증 등 개인정보가 담긴 이미지를 전송하기 전에 MaskPrivacy로 미리 마스킹하는 습관을 들이세요.</div>
     </div>
-
     <div class="cta-box">
       <p>피해를 예방하는 가장 확실한 방법, 마스킹.<br />MaskPrivacy로 지금 바로 시작해보세요.</p>
       <a href="../index.html" class="cta-btn">🔒 무료로 마스킹 시작하기</a>
     </div>
-
-    <div class="coupang-wrap">
+    <div class="coupang-dynamic">
       <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
-      <div class="coupang-items">
-        <div class="coupang-item"><a href="https://link.coupang.com/a/euojfi8OPY" target="_blank" referrerpolicy="unsafe-url"><img src="https://image14.coupangcdn.com/image/affiliate/banner/1c211b8e4c363d5815f47e269fdcce32@2x.jpg" alt="알리사 휴대용 선풍기" width="120" height="240" /></a></div>
-        <div class="coupang-item"><a href="https://link.coupang.com/a/euphPUBh80" target="_blank" referrerpolicy="unsafe-url"><img src="https://img1c.coupangcdn.com/image/affiliate/banner/6469cec2b9ddfa0476d8fdd702e7af36@2x.jpg" alt="프라이버시 강화유리 액정보호필름" width="120" height="240" /></a></div>
-      </div>
+      <script src="https://ads-partners.coupang.com/g.js"></script>
+      <script>new PartnersCoupang.G({"id":996719,"template":"carousel","trackingCode":"AF9398669","width":"668","height":"100","tsource":""});</script>
     </div>
-
     <div class="post-nav">
       <a href="14-local-processing.html">← 이전 글: 서버 없이 개인정보 처리하는 방법</a>
       <a href="index.html">← 블로그 목록으로 돌아가기</a>
     </div>
   </div>
-
   <footer class="footer">
     <div class="container">
       <p class="footer-copy">© 2026 BrowserKit. 모든 처리는 브라우저 내에서 이루어집니다.</p>

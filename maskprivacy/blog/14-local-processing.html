@@ -21,7 +21,7 @@
     .post-body h2 { font-size:20px; font-weight:700; margin:40px 0 16px; color:var(--text); }
     .post-body h3 { font-size:16px; font-weight:600; margin:28px 0 12px; color:var(--point-hover); }
     .post-body p { font-size:15px; color:var(--subtext); line-height:1.9; margin-bottom:16px; }
-    .post-body ul, .post-body ol { padding-left:20px; margin-bottom:16px; }
+    .post-body ul { padding-left:20px; margin-bottom:16px; }
     .post-body li { font-size:15px; color:var(--subtext); line-height:1.9; margin-bottom:6px; }
     .post-highlight { background:var(--card); border-left:3px solid var(--point); border-radius:8px; padding:16px 20px; margin:24px 0; font-size:15px; color:var(--text); line-height:1.8; }
     .post-table { width:100%; border-collapse:collapse; margin:20px 0; font-size:14px; }
@@ -34,8 +34,7 @@
     .flow-icon { font-size:20px; flex-shrink:0; }
     .flow-arrow { text-align:center; color:var(--border); font-size:18px; }
     .post-nav { display:flex; justify-content:space-between; margin-top:60px; padding-top:24px; border-top:1px solid var(--border); gap:12px; }
-    .post-nav a { font-size:14px; color:var(--subtext); }
-    .post-nav a:hover { color:var(--text); }
+    .post-nav a { font-size:14px; color:var(--subtext); } .post-nav a:hover { color:var(--text); }
     .cta-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; text-align:center; margin:48px 0 0; }
     .cta-box p { font-size:15px; color:var(--subtext); margin-bottom:16px; }
     .cta-btn { display:inline-block; background:linear-gradient(135deg,var(--point),var(--point-hover)); color:white; border-radius:10px; padding:12px 28px; font-size:14px; font-weight:600; text-decoration:none; }
@@ -51,22 +50,16 @@
       <a href="../../index.html" class="header-back">← BrowserKit 홈으로</a>
     </div>
   </header>
-
   <div class="post-wrap">
     <a href="index.html" class="back-link">← 블로그 목록</a>
     <span class="post-tag">기술</span>
     <h1 class="post-title">서버 없이 개인정보 처리하는 방법</h1>
     <div class="post-date">2026년 6월 10일</div>
-
     <div class="post-body">
-
       <p>대부분의 온라인 서비스는 이미지를 서버로 전송해 처리합니다. 하지만 개인정보가 담긴 이미지를 외부 서버로 보내는 것은 유출 위험이 있습니다. 서버 없이 브라우저에서만 처리하는 방식이 왜 더 안전한지 알아봅니다.</p>
-
       <h2>서버 처리 방식의 문제점</h2>
       <table class="post-table">
-        <thead>
-          <tr><th>위험 요소</th><th>설명</th></tr>
-        </thead>
+        <thead><tr><th>위험 요소</th><th>설명</th></tr></thead>
         <tbody>
           <tr><td>전송 중 탈취</td><td>이미지가 서버로 전송되는 과정에서 가로채질 수 있음</td></tr>
           <tr><td>서버 저장</td><td>처리 후에도 서버에 이미지가 남아 있을 수 있음</td></tr>
@@ -75,10 +68,8 @@
           <tr><td>정책 변경</td><td>서비스 정책 변경으로 데이터 활용 방식이 바뀔 수 있음</td></tr>
         </tbody>
       </table>
-
       <h2>로컬(클라이언트 사이드) 처리 방식</h2>
       <p>로컬 처리 방식은 모든 연산이 사용자의 브라우저 안에서만 이루어집니다. 이미지 데이터가 외부 서버로 나가지 않습니다.</p>
-
       <div class="flow-wrap">
         <div class="flow-step"><span class="flow-icon">📁</span>이미지 업로드 → 브라우저 메모리에만 저장</div>
         <div class="flow-arrow">↓</div>
@@ -88,40 +79,27 @@
         <div class="flow-arrow">↓</div>
         <div class="flow-step"><span class="flow-icon">📥</span>다운로드 → 처리된 이미지만 저장, 원본 메모리에서 삭제</div>
       </div>
-
       <h2>MaskPrivacy가 사용하는 기술</h2>
-
       <h3>Tesseract.js</h3>
       <p>세계적으로 널리 사용되는 오픈소스 OCR 엔진인 Tesseract를 JavaScript로 포팅한 라이브러리입니다. WebAssembly 기술을 통해 브라우저 내에서 직접 실행되어 서버 없이도 고성능 OCR이 가능합니다.</p>
-
       <h3>Canvas API</h3>
       <p>브라우저에 기본으로 내장된 그래픽 처리 API입니다. 이미지의 픽셀을 직접 조작해 마스킹 처리를 수행합니다. 외부 라이브러리 없이 브라우저만으로 동작합니다.</p>
-
-      <div class="post-highlight">
-        💡 MaskPrivacy는 Cloudflare Pages에 정적 파일로 배포됩니다. 서버 컴퓨팅이 전혀 없으며, 사용자의 이미지 데이터는 오직 브라우저 메모리 안에서만 처리됩니다.
-      </div>
-
+      <div class="post-highlight">💡 MaskPrivacy는 Cloudflare Pages에 정적 파일로 배포됩니다. 서버 컴퓨팅이 전혀 없으며, 사용자의 이미지 데이터는 오직 브라우저 메모리 안에서만 처리됩니다.</div>
     </div>
-
     <div class="cta-box">
       <p>서버 전송 없이 브라우저에서만 처리되는 안전한 마스킹.<br />MaskPrivacy로 지금 바로 시작해보세요.</p>
       <a href="../index.html" class="cta-btn">🔒 무료로 마스킹 시작하기</a>
     </div>
-
-    <div class="coupang-wrap">
+    <div class="coupang-dynamic">
       <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
-      <div class="coupang-items">
-        <div class="coupang-item"><a href="https://link.coupang.com/a/euo2xIEWI0" target="_blank" referrerpolicy="unsafe-url"><img src="https://image3.coupangcdn.com/image/affiliate/banner/01e011f943244ce5d7e901ee092a7185@2x.jpg" alt="삼성전자 USB메모리 128GB" width="120" height="240" /></a></div>
-        <div class="coupang-item"><a href="https://link.coupang.com/a/euphPUBh80" target="_blank" referrerpolicy="unsafe-url"><img src="https://img1c.coupangcdn.com/image/affiliate/banner/6469cec2b9ddfa0476d8fdd702e7af36@2x.jpg" alt="프라이버시 강화유리 액정보호필름" width="120" height="240" /></a></div>
-      </div>
+      <script src="https://ads-partners.coupang.com/g.js"></script>
+      <script>new PartnersCoupang.G({"id":996719,"template":"carousel","trackingCode":"AF9398669","width":"668","height":"100","tsource":""});</script>
     </div>
-
     <div class="post-nav">
       <a href="13-masking-tool-compare.html">← 이전 글: 무료 개인정보 마스킹 툴 비교</a>
       <a href="15-privacy-report-guide.html">다음 글: 개인정보보호위원회 신고 방법 안내 →</a>
     </div>
   </div>
-
   <footer class="footer">
     <div class="container">
       <p class="footer-copy">© 2026 BrowserKit. 모든 처리는 브라우저 내에서 이루어집니다.</p>

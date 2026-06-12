@@ -380,22 +380,28 @@ a:hover { color: var(--text); }
 /* ============================
    쿠팡 파트너스 광고
 ============================ */
+/* 기존 이미지 배너 (레거시) */
 .coupang-wrap {
-  margin: 0 auto 48px;
+  margin: 20px auto 48px;
   padding: 16px 20px;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   text-align: center;
-  /* 광고 이미지 2개(120px) + 간격 + 여백에 맞게 너비 제한 */
   max-width: 300px;
-  margin-top: 20px;
+}
+
+/* 다이나믹 배너 (블로그 글: 668×100) */
+.coupang-dynamic {
+  margin: 20px auto 48px;
+  max-width: 668px;
+  text-align: center;
 }
 
 .coupang-notice {
   font-size: 11px;
   color: var(--subtext);
-  margin-bottom: 14px;
+  margin-bottom: 10px;
   line-height: 1.6;
 }
 
@@ -555,7 +561,8 @@ a:hover { color: var(--text); }
   .logo-text { font-size: 24px; }
   .logo-icon { font-size: 24px; }
 
-  .coupang-wrap {
+  .coupang-wrap,
+  .coupang-dynamic {
     max-width: 100%;
   }
 }
