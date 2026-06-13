@@ -391,11 +391,11 @@ a:hover { color: var(--text); }
   max-width: 300px;
 }
 
-/* 다이나믹 배너 공통 */
-.coupang-dynamic {
+/* 다이나믹 배너 — PC/모바일 CSS 분기 */
+.coupang-banner {
   margin: 20px auto 48px;
   text-align: center;
-  overflow: hidden;  /* 배너가 삐져나오지 않도록 */
+  overflow: hidden;
 }
 
 .coupang-notice {
@@ -403,6 +403,15 @@ a:hover { color: var(--text); }
   color: var(--subtext);
   margin-bottom: 10px;
   line-height: 1.6;
+}
+
+/* 모바일 배너는 기본 숨김 */
+.coupang-banner-mo { display: none; }
+
+@media (max-width: 640px) {
+  /* PC 배너 숨기고 모바일 배너 표시 */
+  .coupang-banner-pc { display: none; }
+  .coupang-banner-mo { display: block; }
 }
 
 .coupang-items {

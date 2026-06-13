@@ -120,9 +120,17 @@
         <button class="btn-reset" id="resetBtn">↺ 처음부터</button>
       </div>
 
-      <!-- 쿠팡 파트너스 다이나믹 배너 (PC: 728×120 / 모바일: 320×50) -->
-      <div class="coupang-dynamic" data-width="728" data-height="120">
+      <!-- 쿠팡 파트너스 배너: PC 728×120 -->
+      <div class="coupang-banner coupang-banner-pc">
         <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+        <script src="https://ads-partners.coupang.com/g.js"></script>
+        <script>new PartnersCoupang.G({"id":996719,"template":"carousel","trackingCode":"AF9398669","width":"728","height":"120","tsource":""});</script>
+      </div>
+      <!-- 쿠팡 파트너스 배너: 모바일 320×50 -->
+      <div class="coupang-banner coupang-banner-mo">
+        <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+        <script src="https://ads-partners.coupang.com/g.js"></script>
+        <script>new PartnersCoupang.G({"id":996719,"template":"carousel","trackingCode":"AF9398669","width":"320","height":"50","tsource":""});</script>
       </div>
 
     </div>
@@ -142,6 +150,5 @@
 
   <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
   <script src="js/maskprivacy.js"></script>
-  <script src="js/banner.js"></script>
 </body>
 </html>
