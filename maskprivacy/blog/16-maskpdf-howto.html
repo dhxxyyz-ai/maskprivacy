@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="MaskPDF의 모든 기능을 단계별로 설명하는 공식 사용 가이드입니다. 자동 마스킹부터 수동 마스킹, PDF 다운로드까지 쉽게 따라할 수 있습니다." />
+  <meta property="og:title" content="MaskPDF 사용법 완전 가이드 — BrowserKit" />
+  <meta property="og:description" content="MaskPDF의 모든 기능을 단계별로 설명하는 공식 사용 가이드입니다." />
+  <meta property="og:type" content="article" />
+  <title>MaskPDF 사용법 완전 가이드 — BrowserKit</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    .header { padding:24px 0 16px; border-bottom:1px solid var(--border); }
+    .header .container { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+    .header-brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .header-brand-icon { font-size:24px; }
+    .header-brand-text { font-size:20px; font-weight:700; font-family:'Inter',sans-serif; background:linear-gradient(135deg,var(--point),var(--point-hover)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .header-back { font-size:13px; color:var(--subtext); display:flex; align-items:center; gap:6px; text-decoration:none; }
+    .header-back:hover { color:var(--text); }
+    .post-wrap { max-width:720px; margin:0 auto; padding:48px 24px 80px; }
+    .post-tag { display:inline-block; font-size:12px; color:var(--point-hover); background:rgba(108,99,255,0.15); padding:3px 12px; border-radius:999px; margin-bottom:16px; }
+    .post-title { font-size:28px; font-weight:700; line-height:1.4; margin-bottom:12px; }
+    .post-date { color:var(--subtext); font-size:13px; margin-bottom:40px; padding-bottom:24px; border-bottom:1px solid var(--border); }
+    .post-body h2 { font-size:20px; font-weight:700; margin:40px 0 16px; color:var(--text); }
+    .post-body h3 { font-size:16px; font-weight:600; margin:28px 0 12px; color:var(--point-hover); }
+    .post-body p { font-size:15px; color:var(--subtext); line-height:1.9; margin-bottom:16px; }
+    .post-highlight { background:var(--card); border-left:3px solid var(--point); border-radius:8px; padding:16px 20px; margin:24px 0; font-size:15px; color:var(--text); line-height:1.8; }
+    .feature-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0; }
+    .feature-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px; }
+    .feature-card:hover { border-color:var(--point); }
+    .feature-icon { font-size:24px; margin-bottom:10px; }
+    .feature-title { font-size:14px; font-weight:600; color:var(--text); margin-bottom:6px; }
+    .feature-desc { font-size:13px; color:var(--subtext); line-height:1.7; }
+    .step-card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:20px 24px; margin:16px 0; display:flex; gap:16px; align-items:flex-start; }
+    .step-num { min-width:36px; height:36px; background:linear-gradient(135deg,var(--point),var(--point-hover)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:white; flex-shrink:0; font-family:'Inter',sans-serif; }
+    .step-content h3 { font-size:15px; font-weight:600; margin-bottom:6px; color:var(--text); }
+    .step-content p { font-size:14px; color:var(--subtext); line-height:1.7; margin:0; }
+    .post-table { width:100%; border-collapse:collapse; margin:20px 0; font-size:14px; }
+    .post-table th { background:var(--card); padding:12px 16px; text-align:left; font-weight:600; border:1px solid var(--border); color:var(--text); }
+    .post-table td { padding:11px 16px; border:1px solid var(--border); color:var(--subtext); line-height:1.7; }
+    .post-table tr:hover td { background:rgba(108,99,255,0.04); }
+    .post-nav { display:flex; justify-content:space-between; margin-top:60px; padding-top:24px; border-top:1px solid var(--border); gap:12px; }
+    .post-nav a { font-size:14px; color:var(--subtext); }
+    .post-nav a:hover { color:var(--text); }
+    .cta-box { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:28px; text-align:center; margin:48px 0 0; }
+    .cta-box p { font-size:15px; color:var(--subtext); margin-bottom:16px; }
+    .cta-btn { display:inline-block; background:linear-gradient(135deg,var(--point),var(--point-hover)); color:white; border-radius:10px; padding:12px 28px; font-size:14px; font-weight:600; text-decoration:none; }
+    .cta-btn:hover { transform:translateY(-2px); box-shadow:0 8px 24px var(--glow); color:white; }
+    .back-link { display:inline-flex; align-items:center; gap:6px; color:var(--subtext); font-size:14px; margin-bottom:32px; text-decoration:none; }
+    .back-link:hover { color:var(--text); }
+    @media (max-width:640px) { .feature-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <a href="../../index.html" class="header-brand"><span class="header-brand-icon">🧰</span><span class="header-brand-text">BrowserKit</span></a>
+      <a href="../../index.html" class="header-back">← BrowserKit 홈으로</a>
+    </div>
+  </header>
+  <div class="post-wrap">
+    <a href="index.html" class="back-link">← 블로그 목록</a>
+    <span class="post-tag">가이드</span>
+    <h1 class="post-title">MaskPDF 사용법 완전 가이드</h1>
+    <div class="post-date">2026년 6월 13일</div>
+    <div class="post-body">
+      <p>MaskPDF는 PDF 속 개인정보를 브라우저에서 자동으로 감지·마스킹해주는 무료 온라인 도구입니다. 설치 없이 바로 사용할 수 있으며, 모든 처리가 브라우저 내에서만 이루어져 PDF 파일이 외부 서버로 전송되지 않습니다.</p>
+      <h2>주요 기능</h2>
+      <div class="feature-grid">
+        <div class="feature-card"><div class="feature-icon">🔍</div><div class="feature-title">자동 개인정보 탐지</div><div class="feature-desc">주민번호, 전화번호, 이메일, 계좌번호, 주소를 OCR로 자동 탐지합니다.</div></div>
+        <div class="feature-card"><div class="feature-icon">📋</div><div class="feature-title">탐지 결과 요약</div><div class="feature-desc">페이지별 탐지 건수를 요약으로 표시하고, 클릭하면 해당 페이지로 이동합니다.</div></div>
+        <div class="feature-card"><div class="feature-icon">✏️</div><div class="feature-title">수동 마스킹</div><div class="feature-desc">드래그로 원하는 영역을 직접 지정해 마스킹할 수 있습니다.</div></div>
+        <div class="feature-card"><div class="feature-icon">⚙️</div><div class="feature-title">마스킹 방식 선택</div><div class="feature-desc">주민번호·전화번호는 전체 또는 부분 마스킹을 선택할 수 있습니다.</div></div>
+        <div class="feature-card"><div class="feature-icon">📄</div><div class="feature-title">다중 페이지 지원</div><div class="feature-desc">여러 페이지 PDF를 한 번에 처리하고 페이지별로 개별 확인합니다.</div></div>
+        <div class="feature-card"><div class="feature-icon">📥</div><div class="feature-title">PDF 다운로드</div><div class="feature-desc">마스킹 완료된 파일을 즉시 PDF로 다운로드할 수 있습니다.</div></div>
+      </div>
+      <h2>기본 사용법</h2>
+      <div class="step-card"><div class="step-num">1</div><div class="step-content"><h3>PDF 파일 업로드</h3><p>업로드 영역에 PDF 파일을 드래그하거나 클릭해서 파일을 선택합니다. 20페이지 이하를 권장합니다.</p></div></div>
+      <div class="step-card"><div class="step-num">2</div><div class="step-content"><h3>페이지 렌더링 및 OCR 분석 대기</h3><p>PDF.js로 전체 페이지를 이미지로 변환한 뒤, OCR 엔진이 페이지별로 순차 분석합니다. 진행 상황은 Progress Bar로 확인할 수 있습니다.</p></div></div>
+      <div class="step-card"><div class="step-num">3</div><div class="step-content"><h3>탐지 결과 요약 확인</h3><p>분석이 완료되면 개인정보가 탐지된 페이지 목록이 요약으로 표시됩니다. 항목을 클릭하면 해당 페이지로 바로 이동합니다.</p></div></div>
+      <div class="step-card"><div class="step-num">4</div><div class="step-content"><h3>마스킹 방식 선택</h3><p>주민번호는 전체 가리기 / 뒷자리 전체 / 뒷자리 6자리 중 선택할 수 있습니다. 전화번호는 전체 / 뒷 8자리 / 뒷 4자리 중 선택 가능합니다. 변경 시 전체 페이지에 일괄 적용됩니다.</p></div></div>
+      <div class="step-card"><div class="step-num">5</div><div class="step-content"><h3>수동 마스킹 보완</h3><p>자동으로 탐지되지 않은 영역은 마스킹 결과 이미지에서 마우스로 드래그해 직접 가릴 수 있습니다. 수동 마스킹 영역도 탐지 목록에 추가됩니다.</p></div></div>
+      <div class="step-card"><div class="step-num">6</div><div class="step-content"><h3>페이지 이동 및 전체 확인</h3><p>이전/다음 버튼으로 페이지를 이동하며 모든 페이지의 마스킹 결과를 검토합니다.</p></div></div>
+      <div class="step-card"><div class="step-num">7</div><div class="step-content"><h3>PDF 다운로드</h3><p>마스킹 완료 후 다운로드 버튼을 클릭하면 <code>maskpdf_result.pdf</code> 파일로 저장됩니다.</p></div></div>
+      <h2>마스킹 방식 비교</h2>
+      <table class="post-table">
+        <thead><tr><th>항목</th><th>옵션</th><th>결과 예시</th></tr></thead>
+        <tbody>
+          <tr><td>주민번호 전체</td><td>전체 가리기</td><td>██████-███████</td></tr>
+          <tr><td>주민번호 뒷자리</td><td>뒷자리 전체</td><td>950101-███████</td></tr>
+          <tr><td>주민번호 뒷 6자리</td><td>뒷자리 6자리</td><td>950101-1██████</td></tr>
+          <tr><td>전화번호 전체</td><td>전체 가리기</td><td>███-████-████</td></tr>
+          <tr><td>전화번호 뒷 8자리</td><td>뒷 번호 8자리</td><td>010-████-████</td></tr>
+          <tr><td>전화번호 뒷 4자리</td><td>뒷 번호 4자리</td><td>010-1234-████</td></tr>
+        </tbody>
+      </table>
+      <h2>MaskPrivacy와의 차이점</h2>
+      <table class="post-table">
+        <thead><tr><th>항목</th><th>MaskPrivacy</th><th>MaskPDF</th></tr></thead>
+        <tbody>
+          <tr><td>처리 대상</td><td>이미지 (PNG/JPG/WEBP)</td><td>PDF 문서</td></tr>
+          <tr><td>출력 형식</td><td>PNG 이미지</td><td>PDF 파일</td></tr>
+          <tr><td>페이지</td><td>단일 이미지</td><td>다중 페이지 지원</td></tr>
+          <tr><td>처리 시간</td><td>10~30초</td><td>페이지 수에 따라 수 분 소요</td></tr>
+          <tr><td>권장 파일</td><td>제한 없음</td><td>20페이지 이하 권장</td></tr>
+        </tbody>
+      </table>
+      <div class="post-highlight">💡 OCR 특성상 이미지 품질이 낮거나 손글씨, 특수 폰트의 경우 자동 탐지 정확도가 낮을 수 있습니다. 탐지 결과를 반드시 육안으로 확인하고 수동 마스킹으로 보완하세요. 스캔 PDF의 경우 해상도가 높을수록 탐지 정확도가 올라갑니다.</div>
+    </div>
+    <div class="cta-box">
+      <p>지금 바로 MaskPDF를 사용해보세요.<br />설치도, 회원가입도, 비용도 없습니다.</p>
+      <a href="../../pdf-tools/index.html" class="cta-btn">📄 무료로 PDF 마스킹 시작하기</a>
+    </div>
+    <div class="coupang-banner coupang-banner-pc">
+      <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+      <script src="https://ads-partners.coupang.com/g.js"></script>
+      <script>new PartnersCoupang.G({"id":996719,"template":"carousel","trackingCode":"AF9398669","width":"668","height":"100","tsource":""});</script>
+    </div>
+    <div class="coupang-banner coupang-banner-mo">
+      <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+      <script src="https://ads-partners.coupang.com/g.js"></script>
+      <script>new PartnersCoupang.G({"id":996719,"template":"carousel","trackingCode":"AF9398669","width":"320","height":"50","tsource":""});</script>
+    </div>
+    <div class="post-nav">
+      <a href="15-privacy-report-guide.html">← 이전 글: 개인정보보호위원회 신고 방법 안내</a>
+      <span></span>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">© 2026 BrowserKit. 모든 처리는 브라우저 내에서 이루어집니다.</p>
+      <nav class="footer-nav">
+        <a href="../privacy.html">개인정보 처리방침</a>
+        <a href="../terms.html">이용약관</a>
+        <a href="../about.html">서비스 소개</a>
+        <a href="index.html">블로그</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
