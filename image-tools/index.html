@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="이미지 크기 조정, 형식 변환, 용량 압축을 브라우저에서 무료로 처리하는 온라인 도구. 파일이 서버로 전송되지 않습니다." />
+  <meta property="og:title" content="FitImage — 이미지 편집 도구" />
+  <meta property="og:description" content="이미지 크기 조정, 형식 변환, 용량 압축을 브라우저에서 무료로 처리하는 온라인 도구." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://browserkit.pages.dev/image-tools/" />
+  <meta property="og:locale" content="ko_KR" />
+  <title>FitImage — 이미지 편집 도구</title>
+  <link rel="stylesheet" href="../maskprivacy/css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* 헤더 */
+    .header { padding:24px 0 16px; border-bottom:1px solid var(--border); }
+    .header .container { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+    .header-brand { display:flex; align-items:center; gap:10px; text-decoration:none; }
+    .header-brand-icon { font-size:24px; }
+    .header-brand-text { font-size:20px; font-weight:700; font-family:'Inter',sans-serif; background:linear-gradient(135deg,var(--point),var(--point-hover)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .header-back { font-size:13px; color:var(--subtext); display:flex; align-items:center; gap:6px; text-decoration:none; }
+    .header-back:hover { color:var(--text); }
+
+    /* 히어로 */
+    .hero { text-align:center; padding:40px 0 32px; }
+    .hero-icon { font-size:48px; margin-bottom:16px; }
+    .hero-title { font-size:32px; font-weight:700; margin-bottom:12px; background:linear-gradient(135deg,var(--point),var(--point-hover)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+    .hero-desc { color:var(--subtext); font-size:15px; margin-bottom:20px; }
+    .hero-badges { display:flex; justify-content:center; gap:10px; flex-wrap:wrap; }
+    .hero-badge { background:var(--card); border:1px solid var(--border); border-radius:999px; padding:5px 16px; font-size:13px; color:var(--subtext); }
+
+    /* 기능 탭 */
+    .tab-wrap { display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; }
+    .tab-btn { background:var(--card); color:var(--subtext); border:1px solid var(--border); border-radius:10px; padding:10px 24px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Pretendard',sans-serif; }
+    .tab-btn:hover { border-color:var(--point); color:var(--text); }
+    .tab-btn.active { background:linear-gradient(135deg,var(--point),var(--point-hover)); color:white; border-color:transparent; }
+
+    /* 업로드 존 */
+    .upload-zone { background:var(--card); border:2px dashed var(--border); border-radius:var(--radius); padding:56px 40px; text-align:center; cursor:pointer; margin-bottom:16px; }
+    .upload-zone:hover, .upload-zone.drag-over { border-color:var(--point); box-shadow:0 0 24px var(--glow); background:rgba(108,99,255,0.05); }
+    .upload-icon { font-size:48px; margin-bottom:20px; }
+    .upload-title { font-size:18px; font-weight:600; margin-bottom:8px; }
+    .upload-sub { color:var(--subtext); font-size:14px; margin-bottom:8px; }
+    .upload-formats { color:var(--subtext); font-size:13px; margin-bottom:8px; }
+    .upload-safe { color:var(--success); font-size:13px; }
+
+    /* 탭별 옵션 영역 */
+    .tab-panel { display:none; background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:24px; margin-bottom:20px; }
+    .tab-panel.active { display:block; }
+    .panel-title { font-size:14px; font-weight:600; color:var(--subtext); margin-bottom:16px; }
+
+    /* 크기 조정 옵션 */
+    .size-inputs { display:flex; align-items:center; gap:12px; margin-bottom:16px; flex-wrap:wrap; }
+    .size-input-group { display:flex; flex-direction:column; gap:6px; }
+    .size-input-group label { font-size:12px; color:var(--subtext); }
+    .size-input { background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:8px 12px; font-size:14px; color:var(--text); width:100px; font-family:'Inter',sans-serif; }
+    .size-input:focus { outline:none; border-color:var(--point); }
+    .size-sep { font-size:18px; color:var(--subtext); margin-top:20px; }
+    .ratio-lock { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--subtext); cursor:pointer; margin-bottom:16px; }
+    .ratio-lock input { accent-color:var(--point); width:16px; height:16px; cursor:pointer; }
+    .shortcut-btns { display:flex; gap:8px; flex-wrap:wrap; }
+    .shortcut-btn { background:var(--bg); color:var(--subtext); border:1px solid var(--border); border-radius:8px; padding:6px 14px; font-size:13px; cursor:pointer; font-family:'Pretendard',sans-serif; }
+    .shortcut-btn:hover { border-color:var(--point); color:var(--text); }
+
+    /* 형식 변환 옵션 */
+    .format-btns { display:flex; gap:10px; flex-wrap:wrap; margin-bottom:16px; }
+    .format-btn { background:var(--bg); color:var(--subtext); border:1px solid var(--border); border-radius:10px; padding:12px 24px; font-size:14px; font-weight:600; cursor:pointer; font-family:'Pretendard',sans-serif; text-align:center; }
+    .format-btn:hover { border-color:var(--point); color:var(--text); }
+    .format-btn.active { background:linear-gradient(135deg,var(--point),var(--point-hover)); color:white; border-color:transparent; }
+    .format-btn small { display:block; font-size:11px; font-weight:400; margin-top:3px; opacity:0.8; }
+    .format-notice { font-size:13px; color:var(--subtext); padding:10px 14px; background:var(--bg); border-radius:8px; border:1px solid var(--border); }
+
+    /* 용량 압축 옵션 */
+    .quality-wrap { margin-bottom:16px; }
+    .quality-label { display:flex; justify-content:space-between; align-items:center; font-size:14px; color:var(--text); margin-bottom:10px; }
+    .quality-value { font-size:20px; font-weight:700; color:var(--point-hover); font-family:'Inter',sans-serif; }
+    .quality-slider { width:100%; accent-color:var(--point); height:6px; cursor:pointer; }
+    .compress-info { font-size:13px; color:var(--subtext); margin-top:12px; }
+
+    /* 미리보기 */
+    .preview-wrap { display:none; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:24px; }
+    .preview-panel { background:var(--card); border-radius:var(--radius); padding:16px; border:1px solid var(--border); }
+    .preview-label { font-size:13px; color:var(--subtext); margin-bottom:8px; text-align:center; }
+    .preview-panel canvas { width:100%; height:auto; border-radius:8px; display:block; }
+    .file-info { font-size:12px; color:var(--subtext); text-align:center; margin-top:8px; line-height:1.6; }
+    .file-info .diff { color:var(--success); font-weight:600; }
+    .file-info .diff.up { color:#EF4444; }
+
+    /* 액션 버튼 */
+    .action-wrap { display:none; justify-content:center; gap:12px; margin-bottom:48px; flex-wrap:wrap; }
+    .btn-download { background:linear-gradient(135deg,var(--point),var(--point-hover)); color:white; border:none; border-radius:12px; padding:14px 32px; font-size:15px; font-weight:600; cursor:pointer; font-family:'Pretendard',sans-serif; }
+    .btn-download:hover { transform:translateY(-2px); box-shadow:0 8px 24px var(--glow); }
+    .btn-reset { background:var(--card); color:var(--subtext); border:1px solid var(--border); border-radius:12px; padding:14px 24px; font-size:15px; cursor:pointer; font-family:'Pretendard',sans-serif; }
+    .btn-reset:hover { transform:translateY(-2px); color:var(--text); border-color:var(--point); }
+
+    /* 배너 */
+    .coupang-banner { margin:0 auto 48px; text-align:center; overflow:hidden; }
+    .coupang-notice { font-size:11px; color:var(--subtext); margin-bottom:10px; line-height:1.6; }
+    .coupang-banner-mo { display:none; }
+
+    @media (max-width:640px) {
+      .preview-wrap { grid-template-columns:1fr; }
+      .upload-zone { padding:40px 20px; }
+      .hero-title { font-size:24px; }
+      .size-inputs { flex-direction:column; align-items:flex-start; }
+      .size-sep { margin-top:0; }
+      .coupang-banner-pc { display:none; }
+      .coupang-banner-mo { display:block; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="container">
+      <a href="../index.html" class="header-brand">
+        <span class="header-brand-icon">🧰</span>
+        <span class="header-brand-text">BrowserKit</span>
+      </a>
+      <a href="../index.html" class="header-back">← BrowserKit 홈으로</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+
+      <div class="hero">
+        <div class="hero-icon">🖼️</div>
+        <div class="hero-title">FitImage</div>
+        <p class="hero-desc">이미지 크기 조정, 형식 변환, 용량 압축을 브라우저에서 무료로 처리하는 도구</p>
+        <div class="hero-badges">
+          <span class="hero-badge">🔒 완전 로컬 처리</span>
+          <span class="hero-badge">⚡ 무료 사용</span>
+          <span class="hero-badge">🛡️ 서버 전송 없음</span>
+          <span class="hero-badge">📦 설치 불필요</span>
+        </div>
+      </div>
+
+      <!-- 기능 탭 -->
+      <div class="tab-wrap">
+        <button class="tab-btn active" data-tab="resize">📐 크기 조정</button>
+        <button class="tab-btn" data-tab="convert">🔄 형식 변환</button>
+        <button class="tab-btn" data-tab="compress">📦 용량 압축</button>
+      </div>
+
+      <!-- 업로드 존 -->
+      <div class="upload-zone" id="uploadZone">
+        <input type="file" id="fileInput" accept="image/png,image/jpeg,image/webp,image/gif" hidden />
+        <div class="upload-icon">🖼️</div>
+        <p class="upload-title">이미지를 드래그하여 놓으세요</p>
+        <p class="upload-sub">또는 클릭하여 파일 선택</p>
+        <p class="upload-formats">PNG, JPG, WEBP, GIF 지원</p>
+        <p class="upload-safe">✓ 파일이 서버로 전송되지 않습니다</p>
+      </div>
+
+      <!-- 탭 패널: 크기 조정 -->
+      <div class="tab-panel active" id="panel-resize">
+        <div class="panel-title">크기 조정</div>
+        <div class="size-inputs">
+          <div class="size-input-group">
+            <label>가로 (px)</label>
+            <input type="number" class="size-input" id="inputWidth" placeholder="1920" min="1" />
+          </div>
+          <span class="size-sep">×</span>
+          <div class="size-input-group">
+            <label>세로 (px)</label>
+            <input type="number" class="size-input" id="inputHeight" placeholder="1080" min="1" />
+          </div>
+        </div>
+        <label class="ratio-lock">
+          <input type="checkbox" id="ratioLock" checked />
+          비율 유지
+        </label>
+        <div class="shortcut-btns">
+          <button class="shortcut-btn" data-resize="50%">50%</button>
+          <button class="shortcut-btn" data-resize="75%">75%</button>
+          <button class="shortcut-btn" data-resize="1280">1280px</button>
+          <button class="shortcut-btn" data-resize="800">800px</button>
+          <button class="shortcut-btn" data-resize="640">640px</button>
+        </div>
+      </div>
+
+      <!-- 탭 패널: 형식 변환 -->
+      <div class="tab-panel" id="panel-convert">
+        <div class="panel-title">형식 변환</div>
+        <div class="format-btns">
+          <button class="format-btn active" data-format="png">
+            PNG<small>투명 지원 · 무손실</small>
+          </button>
+          <button class="format-btn" data-format="jpeg">
+            JPG<small>파일 작음 · 배경 흰색</small>
+          </button>
+          <button class="format-btn" data-format="webp">
+            WEBP<small>최신 형식 · 고압축</small>
+          </button>
+        </div>
+        <p class="format-notice" id="formatNotice">PNG — 투명 배경을 지원하며 무손실 저장됩니다.</p>
+      </div>
+
+      <!-- 탭 패널: 용량 압축 -->
+      <div class="tab-panel" id="panel-compress">
+        <div class="panel-title">용량 압축</div>
+        <div class="quality-wrap">
+          <div class="quality-label">
+            <span>품질</span>
+            <span class="quality-value" id="qualityValue">80%</span>
+          </div>
+          <input type="range" class="quality-slider" id="qualitySlider" min="1" max="100" value="80" />
+        </div>
+        <div class="shortcut-btns">
+          <button class="shortcut-btn" data-quality="90">고화질 90%</button>
+          <button class="shortcut-btn" data-quality="75">표준 75%</button>
+          <button class="shortcut-btn" data-quality="50">최소 50%</button>
+        </div>
+        <p class="compress-info" id="compressInfo">이미지를 업로드하면 예상 용량을 확인할 수 있습니다.</p>
+      </div>
+
+      <!-- 미리보기 -->
+      <div class="preview-wrap" id="previewWrap">
+        <div class="preview-panel">
+          <div class="preview-label">원본</div>
+          <canvas id="originalCanvas"></canvas>
+          <div class="file-info" id="originalInfo">—</div>
+        </div>
+        <div class="preview-panel">
+          <div class="preview-label">결과</div>
+          <canvas id="resultCanvas"></canvas>
+          <div class="file-info" id="resultInfo">—</div>
+        </div>
+      </div>
+
+      <!-- 액션 버튼 -->
+      <div class="action-wrap" id="actionWrap">
+        <button class="btn-download" id="downloadBtn">⬇ 이미지 다운로드</button>
+        <button class="btn-reset" id="resetBtn">↺ 처음부터</button>
+      </div>
+
+      <!-- 쿠팡 파트너스 배너 -->
+      <div class="coupang-banner coupang-banner-pc">
+        <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+        <script src="https://ads-partners.coupang.com/g.js"></script>
+        <script>new PartnersCoupang.G({"id":996719,"template":"carousel","trackingCode":"AF9398669","width":"728","height":"120","tsource":""});</script>
+      </div>
+      <div class="coupang-banner coupang-banner-mo">
+        <p class="coupang-notice">이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
+        <script src="https://ads-partners.coupang.com/g.js"></script>
+        <script>new PartnersCoupang.G({"id":996719,"template":"carousel","trackingCode":"AF9398669","width":"320","height":"50","tsource":""});</script>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="footer-copy">© 2026 BrowserKit. 모든 처리는 브라우저 내에서 이루어집니다.</p>
+      <nav class="footer-nav">
+        <a href="../maskprivacy/privacy.html">개인정보 처리방침</a>
+        <a href="../maskprivacy/terms.html">이용약관</a>
+        <a href="../maskprivacy/about.html">서비스 소개</a>
+        <a href="../maskprivacy/blog/index.html">블로그</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script>
+    // =============================================
+    // 상태 변수
+    // =============================================
+    let originalImage = null;  // 원본 Image 객체
+    let originalFile  = null;  // 원본 File 객체
+    let currentTab    = 'resize'; // 현재 탭 (resize / convert / compress)
+    let currentFormat = 'png';    // 형식 변환 선택값
+    let currentRatio  = 1;        // 원본 가로/세로 비율
+
+    const uploadZone     = document.getElementById('uploadZone');
+    const fileInput      = document.getElementById('fileInput');
+    const previewWrap    = document.getElementById('previewWrap');
+    const actionWrap     = document.getElementById('actionWrap');
+    const originalCanvas = document.getElementById('originalCanvas');
+    const resultCanvas   = document.getElementById('resultCanvas');
+    const originalInfo   = document.getElementById('originalInfo');
+    const resultInfo     = document.getElementById('resultInfo');
+    const downloadBtn    = document.getElementById('downloadBtn');
+    const resetBtn       = document.getElementById('resetBtn');
+
+    // =============================================
+    // 탭 전환
+    // =============================================
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        btn.classList.add('active');
+        currentTab = btn.dataset.tab;
+        document.getElementById('panel-' + currentTab).classList.add('active');
+        if (originalImage) applyAndPreview();
+      });
+    });
+
+    // =============================================
+    // 업로드 이벤트
+    // =============================================
+    uploadZone.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', e => { if (e.target.files[0]) handleFile(e.target.files[0]); });
+    uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('drag-over'); });
+    uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('drag-over'));
+    uploadZone.addEventListener('drop', e => {
+      e.preventDefault(); uploadZone.classList.remove('drag-over');
+      const file = e.dataTransfer.files[0];
+      if (file && file.type.startsWith('image/')) handleFile(file);
+    });
+
+    function handleFile(file) {
+      originalFile = file;
+      const reader = new FileReader();
+      reader.onload = e => {
+        const img = new Image();
+        img.onload = () => {
+          originalImage = img;
+          currentRatio  = img.width / img.height;
+          // 입력 필드 초기값 세팅
+          document.getElementById('inputWidth').value  = img.width;
+          document.getElementById('inputHeight').value = img.height;
+          // 원본 Canvas 렌더링
+          originalCanvas.width  = img.width;
+          originalCanvas.height = img.height;
+          originalCanvas.getContext('2d').drawImage(img, 0, 0);
+          // 원본 파일 정보 표시
+          originalInfo.textContent = img.width + ' × ' + img.height + ' / ' + formatBytes(file.size);
+          // UI 표시
+          uploadZone.style.display  = 'none';
+          previewWrap.style.display = 'grid';
+          actionWrap.style.display  = 'flex';
+          applyAndPreview();
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // =============================================
+    // 결과 적용 및 미리보기 (탭별 분기) — Step 3~5에서 채움
+    // =============================================
+    function applyAndPreview() {
+      // TODO: Step 3(resize) / Step 4(convert) / Step 5(compress) 구현
+    }
+
+    // =============================================
+    // 다운로드 — Step 6에서 채움
+    // =============================================
+    downloadBtn.addEventListener('click', () => {
+      // TODO: Step 6에서 구현
+    });
+
+    // =============================================
+    // 초기화
+    // =============================================
+    resetBtn.addEventListener('click', () => {
+      originalImage = null;
+      originalFile  = null;
+      fileInput.value = '';
+      uploadZone.style.display  = 'block';
+      previewWrap.style.display = 'none';
+      actionWrap.style.display  = 'none';
+      originalCanvas.getContext('2d').clearRect(0, 0, originalCanvas.width, originalCanvas.height);
+      resultCanvas.getContext('2d').clearRect(0, 0, resultCanvas.width, resultCanvas.height);
+      originalInfo.textContent = '—';
+      resultInfo.textContent   = '—';
+      document.getElementById('inputWidth').value  = '';
+      document.getElementById('inputHeight').value = '';
+      document.getElementById('qualitySlider').value = 80;
+      document.getElementById('qualityValue').textContent = '80%';
+      document.getElementById('compressInfo').textContent = '이미지를 업로드하면 예상 용량을 확인할 수 있습니다.';
+    });
+
+    // =============================================
+    // 유틸
+    // =============================================
+    function formatBytes(bytes) {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+      return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    // 품질 슬라이더 실시간 표시
+    document.getElementById('qualitySlider').addEventListener('input', e => {
+      document.getElementById('qualityValue').textContent = e.target.value + '%';
+      if (originalImage) applyAndPreview();
+    });
+
+    // 압축 단축 버튼
+    document.querySelectorAll('[data-quality]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const q = btn.dataset.quality;
+        document.getElementById('qualitySlider').value = q;
+        document.getElementById('qualityValue').textContent = q + '%';
+        if (originalImage) applyAndPreview();
+      });
+    });
+
+    // 형식 버튼
+    const formatNotices = {
+      png:  'PNG — 투명 배경을 지원하며 무손실 저장됩니다.',
+      jpeg: 'JPG — 파일 크기가 작습니다. 투명 배경은 흰색으로 자동 변환됩니다.',
+      webp: 'WEBP — 최신 포맷으로 JPG 대비 작은 용량에 높은 화질을 제공합니다.'
+    };
+    document.querySelectorAll('[data-format]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('[data-format]').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFormat = btn.dataset.format;
+        document.getElementById('formatNotice').textContent = formatNotices[currentFormat];
+        if (originalImage) applyAndPreview();
+      });
+    });
+  </script>
+
+</body>
+</html>
