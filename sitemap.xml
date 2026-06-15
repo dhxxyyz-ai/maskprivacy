@@ -47,6 +47,14 @@
     <priority>0.90</priority>
   </url>
 
+  <!-- FitImage 서비스 -->
+  <url>
+    <loc>https://browserkit.pages.dev/image-tools/</loc>
+    <lastmod>2026-06-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+
   <!-- MaskPrivacy 블로그 -->
   <url>
     <loc>https://browserkit.pages.dev/maskprivacy/blog/index.html</loc>
