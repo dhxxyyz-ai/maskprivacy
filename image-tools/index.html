@@ -476,10 +476,47 @@
     });
 
     // =============================================
-    // 다운로드 — Step 6에서 채움
+    // 다운로드 — 탭/형식별 파일명 자동 생성 후 Blob 다운로드
     // =============================================
+    // MIME / 확장자 매핑
+    const downloadMimeMap = { png: 'image/png', jpeg: 'image/jpeg', webp: 'image/webp' };
+    const downloadExtMap  = { png: 'png', jpeg: 'jpg', webp: 'webp' };
+
+    // 현재 탭/형식에 따른 다운로드 파일명 생성
+    function getDownloadFilename() {
+      const ext = downloadExtMap[currentFormat] || 'png';
+      if (currentTab === 'resize') {
+        return 'fitimage_' + resultCanvas.width + 'x' + resultCanvas.height + '.' + ext;
+      } else if (currentTab === 'compress') {
+        return 'fitimage_compressed.' + ext;
+      }
+      return 'fitimage_converted.' + ext;
+    }
+
     downloadBtn.addEventListener('click', () => {
-      // TODO: Step 6에서 구현
+      if (!originalImage) return;
+
+      const mime = downloadMimeMap[currentFormat] || 'image/png';
+      const quality = (parseInt(document.getElementById('qualitySlider').value, 10) || 80) / 100;
+      const filename = getDownloadFilename();
+
+      const onBlobReady = blob => {
+        if (!blob) return;
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      };
+
+      if (mime === 'image/png') {
+        resultCanvas.toBlob(onBlobReady, mime);
+      } else {
+        resultCanvas.toBlob(onBlobReady, mime, quality);
+      }
     });
 
     // =============================================
@@ -489,6 +526,10 @@
       originalImage = null;
       originalFile  = null;
       isGifInput    = false;
+      currentFormat = 'png';
+      document.querySelectorAll('[data-format]').forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-format="png"]').classList.add('active');
+      updateFormatNotice();
       fileInput.value = '';
       uploadZone.style.display  = 'block';
       previewWrap.style.display = 'none';
