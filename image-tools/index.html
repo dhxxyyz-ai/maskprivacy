@@ -274,6 +274,7 @@
     let currentTab    = 'resize'; // 현재 탭 (resize / convert / compress)
     let currentFormat = 'png';    // 형식 변환 선택값
     let currentRatio  = 1;        // 원본 가로/세로 비율
+    let isGifInput    = false;     // GIF 원본 여부
 
     const uploadZone     = document.getElementById('uploadZone');
     const fileInput      = document.getElementById('fileInput');
@@ -285,6 +286,9 @@
     const resultInfo     = document.getElementById('resultInfo');
     const downloadBtn    = document.getElementById('downloadBtn');
     const resetBtn       = document.getElementById('resetBtn');
+    const inputWidthEl   = document.getElementById('inputWidth');
+    const inputHeightEl  = document.getElementById('inputHeight');
+    const ratioLockEl    = document.getElementById('ratioLock');
 
     // =============================================
     // 탭 전환
@@ -315,6 +319,7 @@
 
     function handleFile(file) {
       originalFile = file;
+      isGifInput   = (file.type === 'image/gif');
       const reader = new FileReader();
       reader.onload = e => {
         const img = new Image();
@@ -328,12 +333,18 @@
           originalCanvas.width  = img.width;
           originalCanvas.height = img.height;
           originalCanvas.getContext('2d').drawImage(img, 0, 0);
-          // 원본 파일 정보 표시
-          originalInfo.textContent = img.width + ' × ' + img.height + ' / ' + formatBytes(file.size);
+          // 원본 파일 정보 표시 (해상도 / 용량 / 형식)
+          originalInfo.textContent = img.width + ' × ' + img.height + ' · ' + formatBytes(file.size) + ' · ' + getFormatLabel(file);
+          // 결과 Canvas 초기 렌더링 (원본과 동일하게 시작, Step 3~5에서 갱신됨)
+          resultCanvas.width  = img.width;
+          resultCanvas.height = img.height;
+          resultCanvas.getContext('2d').drawImage(img, 0, 0);
+          resultInfo.textContent = img.width + ' × ' + img.height + ' · ' + formatBytes(file.size) + ' · ' + getFormatLabel(file);
           // UI 표시
           uploadZone.style.display  = 'none';
           previewWrap.style.display = 'grid';
           actionWrap.style.display  = 'flex';
+          updateFormatNotice();
           applyAndPreview();
         };
         img.src = e.target.result;
@@ -342,11 +353,127 @@
     }
 
     // =============================================
-    // 결과 적용 및 미리보기 (탭별 분기) — Step 3~5에서 채움
+    // 결과 적용 및 미리보기 (탭별 분기) — Step 3 (크기 조정) 구현, Step 4~5에서 형식/압축 추가
     // =============================================
     function applyAndPreview() {
-      // TODO: Step 3(resize) / Step 4(convert) / Step 5(compress) 구현
+      if (!originalImage) return;
+
+      let targetW = parseInt(inputWidthEl.value, 10);
+      let targetH = parseInt(inputHeightEl.value, 10);
+
+      // 입력값이 없거나 0 이하인 경우 원본 크기 사용
+      if (!targetW || targetW <= 0) targetW = originalImage.width;
+      if (!targetH || targetH <= 0) targetH = originalImage.height;
+
+      // 결과 Canvas 크기 설정 및 리샘플링
+      resultCanvas.width  = targetW;
+      resultCanvas.height = targetH;
+      const ctx = resultCanvas.getContext('2d');
+      ctx.clearRect(0, 0, targetW, targetH);
+
+      // JPG/WEBP 배경을 하얀 색으로 채움
+      if (currentFormat === 'jpeg' || currentFormat === 'webp') {
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, targetW, targetH);
+      }
+
+      ctx.drawImage(originalImage, 0, 0, targetW, targetH);
+
+      updateResultInfo(targetW, targetH);
     }
+
+    // 결과 파일 정보 갱신 (해상도 / 용량 추정 / 형식 / 원본과의 차이 %)
+    function updateResultInfo(w, h) {
+      const mimeMap = { png: 'image/png', jpeg: 'image/jpeg', webp: 'image/webp' };
+      const mime = mimeMap[currentFormat] || 'image/png';
+      const quality = (parseInt(document.getElementById('qualitySlider').value, 10) || 80) / 100;
+
+      const dataUrl = (mime === 'image/png')
+        ? resultCanvas.toDataURL(mime)
+        : resultCanvas.toDataURL(mime, quality);
+
+      const base64 = dataUrl.slice(dataUrl.indexOf(',') + 1);
+      const estimatedBytes = Math.round(base64.length * 0.75);
+      const formatLabel = currentFormat.toUpperCase() === 'JPEG' ? 'JPG' : currentFormat.toUpperCase();
+
+      let infoText = w + ' × ' + h + ' · ' + formatBytes(estimatedBytes) + ' · ' + formatLabel;
+
+      // 원본과의 용량 차이 % 계산
+      let diffHtml = '';
+      if (originalFile && originalFile.size > 0) {
+        const diffPercent = Math.round((1 - estimatedBytes / originalFile.size) * 100);
+        if (diffPercent > 0) {
+          diffHtml = ' (<span class="diff">-' + diffPercent + '%</span>)';
+        } else if (diffPercent < 0) {
+          diffHtml = ' (<span class="diff up">+' + Math.abs(diffPercent) + '%</span>)';
+        }
+      }
+
+      resultInfo.innerHTML = infoText + diffHtml;
+
+      // 압축 탭 안내 영역(#compressInfo) 갱신
+      updateCompressInfo(estimatedBytes, diffHtml);
+    }
+
+    // 압축 탭 안내 갱신 — PNG는 품질 설정이 반영되지 않으므로 안내 문구, 그 외 형식은 예상 용량/감소율 표시
+    function updateCompressInfo(estimatedBytes, diffHtml) {
+      const compressInfoEl = document.getElementById('compressInfo');
+      if (currentFormat === 'png') {
+        compressInfoEl.textContent = 'PNG는 무손실 형식이라 품질 설정이 적용되지 않습니다. JPG 또는 WEBP로 변환 후 압축해보세요.';
+      } else {
+        compressInfoEl.innerHTML = '예상 용량: ' + formatBytes(estimatedBytes) + diffHtml;
+      }
+    }
+
+    // =============================================
+    // 크기 조정 — 가로/세로 입력, 한쪽 입력 시 다른 쪽 자동 계산
+    // =============================================
+    inputWidthEl.addEventListener('input', () => {
+      if (!originalImage) return;
+      const w = parseInt(inputWidthEl.value, 10);
+      if (ratioLockEl.checked && w > 0) {
+        inputHeightEl.value = Math.round(w / currentRatio);
+      }
+      applyAndPreview();
+    });
+
+    inputHeightEl.addEventListener('input', () => {
+      if (!originalImage) return;
+      const h = parseInt(inputHeightEl.value, 10);
+      if (ratioLockEl.checked && h > 0) {
+        inputWidthEl.value = Math.round(h * currentRatio);
+      }
+      applyAndPreview();
+    });
+
+    // 크기 조정 단축 버튼 (50% / 75% / 1280px / 800px / 640px)
+    document.querySelectorAll('[data-resize]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!originalImage) return;
+        const val = btn.dataset.resize;
+        let targetW, targetH;
+
+        if (val.endsWith('%')) {
+          const percent = parseInt(val, 10) / 100;
+          targetW = Math.round(originalImage.width  * percent);
+          targetH = Math.round(originalImage.height * percent);
+        } else {
+          // px 값은 긴 쪽 기준 리사이즈
+          const px = parseInt(val, 10);
+          if (originalImage.width >= originalImage.height) {
+            targetW = px;
+            targetH = Math.round(px / currentRatio);
+          } else {
+            targetH = px;
+            targetW = Math.round(px * currentRatio);
+          }
+        }
+
+        inputWidthEl.value  = targetW;
+        inputHeightEl.value = targetH;
+        applyAndPreview();
+      });
+    });
 
     // =============================================
     // 다운로드 — Step 6에서 채움
@@ -361,12 +488,17 @@
     resetBtn.addEventListener('click', () => {
       originalImage = null;
       originalFile  = null;
+      isGifInput    = false;
       fileInput.value = '';
       uploadZone.style.display  = 'block';
       previewWrap.style.display = 'none';
       actionWrap.style.display  = 'none';
       originalCanvas.getContext('2d').clearRect(0, 0, originalCanvas.width, originalCanvas.height);
       resultCanvas.getContext('2d').clearRect(0, 0, resultCanvas.width, resultCanvas.height);
+      originalCanvas.width  = 0;
+      originalCanvas.height = 0;
+      resultCanvas.width  = 0;
+      resultCanvas.height = 0;
       originalInfo.textContent = '—';
       resultInfo.textContent   = '—';
       document.getElementById('inputWidth').value  = '';
@@ -383,6 +515,21 @@
       if (bytes < 1024) return bytes + ' B';
       if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
       return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+    }
+
+    // MIME 타입 → 표시용 포맷 단어 (PNG / JPG / WEBP / GIF)
+    function getFormatLabel(file) {
+      const map = {
+        'image/png':  'PNG',
+        'image/jpeg': 'JPG',
+        'image/jpg':  'JPG',
+        'image/webp': 'WEBP',
+        'image/gif':  'GIF'
+      };
+      if (map[file.type]) return map[file.type];
+      // type이 미제공되는 경우 파일명 확장자로 보완
+      const ext = (file.name.split('.').pop() || '').toUpperCase();
+      return ext === 'JPEG' ? 'JPG' : (ext || '이미지');
     }
 
     // 품질 슬라이더 실시간 표시
@@ -407,12 +554,21 @@
       jpeg: 'JPG — 파일 크기가 작습니다. 투명 배경은 흰색으로 자동 변환됩니다.',
       webp: 'WEBP — 최신 포맷으로 JPG 대비 작은 용량에 높은 화질을 제공합니다.'
     };
+
+    const gifNotice = ' GIF 이미지는 변환 시 애니메이션이 사라지고 첫 프레임만 저장됩니다.';
+
+    function updateFormatNotice() {
+      let text = formatNotices[currentFormat];
+      if (isGifInput) text += gifNotice;
+      document.getElementById('formatNotice').textContent = text;
+    }
+
     document.querySelectorAll('[data-format]').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('[data-format]').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
         currentFormat = btn.dataset.format;
-        document.getElementById('formatNotice').textContent = formatNotices[currentFormat];
+        updateFormatNotice();
         if (originalImage) applyAndPreview();
       });
     });
